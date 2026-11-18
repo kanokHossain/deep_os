@@ -1,13 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { dispatch, useStore, type InboxItem } from "../lib/store";
 import { dayKey, dayLabel, formatTime } from "../lib/time";
-import { CardsIcon, CopyIcon, LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
+import { LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
 import { toast } from "./Toast";
 
 export function InboxView({ goFocus }: { goFocus: () => void }) {
   const inbox = useStore((s) => s.inbox);
   const hasActive = useStore((s) => s.active !== null);
-  const [triage, setTriage] = useState(false);
   const [text, setText] = useState("");
 
   // Older saves may hold "later" items; they simply show with the rest now.
@@ -29,34 +28,13 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
     return true;
   };
 
-  if (triage && fresh.length) return <Triage items={fresh} onAct={act} onExit={() => setTriage(false)} />;
-
-  const copy = async () => {
-    const lines = fresh.map((i) => `- [ ] ${i.text}`).join("\n");
-    try {
-      await navigator.clipboard.writeText(lines);
-      toast("Copied as a checklist");
-    } catch {
-      toast("Your browser blocked copying");
-    }
-  };
 
   return (
     <div className="page">
       <header className="page-head">
         <div>
           <h1>Brain dump</h1>
-          <p className="hint">Everything you dumped lives here, so your mind doesn't have to carry it. Sort it when you're ready.</p>
-        </div>
-        <div className="row">
-          {fresh.length > 0 && (
-            <button type="button" className="primary" onClick={() => setTriage(true)}>
-              <CardsIcon /> Sort one by one
-            </button>
-          )}
-          <button type="button" className="ghost small" onClick={copy} disabled={!inbox.length}>
-            <CopyIcon /> Copy as list
-          </button>
+          <p className="hint">Everything you dumped lives here, so your mind doesn't have to carry it. Start one when you're ready, or let it go.</p>
         </div>
       </header>
 
@@ -136,47 +114,5 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-/** One card at a time, so every parked thought gets a real decision. */
-function Triage({ items, onAct, onExit }: { items: InboxItem[]; onAct: ActFn; onExit: () => void }) {
-  const [total] = useState(items.length);
-  const [skipped, setSkipped] = useState<string[]>([]);
-  const queue = items.filter((i) => !skipped.includes(i.id));
-  const item = queue[0];
-  const done = total - queue.length;
-  useEffect(() => {
-    if (!item) onExit();
-  }, [item, onExit]);
-  if (!item) return null;
-
-  return (
-    <section className="card triage" aria-labelledby="triage-heading">
-      <div className="toolbar">
-        <span className="eyebrow" id="triage-heading">
-          Thought {done + 1} of {total}
-        </span>
-        <button type="button" className="ghost small" onClick={onExit}>
-          Stop sorting
-        </button>
-      </div>
-      <div className="bar">
-        <i style={{ width: `${(done / total) * 100}%` }} />
-      </div>
-      <p className="triage-text">{item.text}</p>
-      <p className="hint">{source(item)}</p>
-      <div className="triage-actions">
-        <button type="button" className="primary" onClick={() => onAct(item, "focus")}>
-          <PlayIcon /> Start now
-        </button>
-        <button type="button" className="ghost" onClick={() => setSkipped((k) => [...k, item.id])}>
-          Skip for now
-        </button>
-        <button type="button" className="ghost" onClick={() => onAct(item, "drop")}>
-          <LeafIcon /> Let it go
-        </button>
-      </div>
-    </section>
   );
 }

@@ -1,12 +1,5 @@
 <p align="center">
-  <img src="docs/logo.svg" width="96" height="96" alt="DeepOS logo">
-</p>
-
-<h1 align="center">DeepOS</h1>
-
-<p align="center">
-  <b>Focus now, sort later.</b><br>
-  A free, open-source focus timer with a brain dump for every thought that tries to pull you away.
+  <a href="https://deepos-ashy.vercel.app"><img src="docs/banner.png" alt="DeepOS. One task, a clear head. Dump the noise, keep working." width="900"></a>
 </p>
 
 <p align="center">
@@ -30,7 +23,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 
 1. **Pick one thing.** Type the task right on the timer screen, choose 15, 25 or 45 minutes (or an open session) and press Start.
 2. **Dump what buzzes.** A thought shows up mid-task? Press `P`, type it, press `Enter`. It's saved, and you're back on your task.
-3. **Sort it later.** After the session, open your brain dump and decide for each thought: start it now, or let it go.
+3. **Deal with it later.** After the session, open your brain dump and decide for each thought: start it now, or let it go.
 
 <p align="center">
   <img src="docs/session-dark.jpg" alt="A running session with the dump box below the timer" width="49%">
@@ -40,7 +33,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 ## Features
 
 - **Timer-first home.** The task, the dial and the lengths are on one screen. Nothing else in the way.
-- **Brain dump.** Every thought remembers when it came up and which task you were on. Sort them one by one, or copy them all as a checklist.
+- **Brain dump.** Every thought remembers when it came up and which task you were on. Start it when you're ready, or let it go.
 - **Pop out.** A small floating window with the timer and its own dump box stays on top of your other apps, so you always see what you're working on. Works in Chrome and Edge on desktop.
 - **Analytics.** Today's focused time, a 7-day chart, and every past session with a **Resume** button that fills in the task and length for you.
 - **Accurate timer.** Time is calculated from timestamps, so background tabs, sleep and refreshes don't skew it. Paused time isn't counted.

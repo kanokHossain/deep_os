@@ -131,11 +131,19 @@ export const UploadIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12 16V5M7 10l5-5 5 5M5 20h14" />
   </svg>
 );
+/** The DeepOS app icon: a focus ring with one thought drifting out of it. */
 export const LogoMark = ({ size = 28 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-    <path d="M45.77 30.40A15 15 0 1 1 33.60 18.23" fill="none" stroke="var(--accent)" strokeWidth="6" strokeLinecap="round" />
-    <circle cx="31" cy="33" r="5" fill="var(--accent)" />
-    <circle cx="45.14" cy="18.86" r="2.3" fill="var(--sun)" />
-    <circle cx="49.74" cy="14.26" r="4.6" fill="var(--sun)" />
+    <defs>
+      <linearGradient id="deepos-logo-bg" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stopColor="#2F8A77" />
+        <stop offset="1" stopColor="#17463D" />
+      </linearGradient>
+    </defs>
+    <rect width="64" height="64" rx="15" fill="url(#deepos-logo-bg)" />
+    <path d="M45.77 30.40A15 15 0 1 1 33.60 18.23" fill="none" stroke="#fff" strokeWidth="5.5" strokeLinecap="round" />
+    <circle cx="31" cy="33" r="4.6" fill="#fff" />
+    <circle cx="45.14" cy="18.86" r="2" fill="#F4BE68" />
+    <circle cx="49.74" cy="14.26" r="4.3" fill="#F4BE68" />
   </svg>
 );

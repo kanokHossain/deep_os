@@ -134,10 +134,11 @@ export default function App() {
       </div>
       <header className="topbar">
         <a className="brand" href="#focus" onClick={() => go("focus")} aria-label="DeepOS home">
-          <LogoMark size={30} />
+          <LogoMark size={36} />
           <span className="brand-text">
             <span>DeepOS</span>
-            <small>Focus now, sort later</small>
+            <small>One task, a clear head.</small>
+            <small>Dump the noise, keep working.</small>
           </span>
         </a>
         <nav className="tabs" aria-label="Sections">
