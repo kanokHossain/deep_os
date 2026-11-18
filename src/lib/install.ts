@@ -153,3 +153,13 @@ export const GUIDES: Record<Platform, InstallGuide> = {
     ],
   },
 };
+
+/** Where the Share button is on iPhone/iPad, so the hint can point right at it. */
+export type IosSpot = "top-right" | "bottom-center" | "bottom-right";
+export function iosShareSpot(ua = navigator.userAgent): { spot: IosSpot; how: string } {
+  const iPad = /iPad/.test(ua) || (/Macintosh/.test(ua) && typeof navigator !== "undefined" && navigator.maxTouchPoints > 1);
+  if (/CriOS|EdgiOS/.test(ua)) return { spot: "top-right", how: "Tap Share in the address bar" };
+  if (/FxiOS/.test(ua)) return { spot: "bottom-right", how: "Tap the menu, then Share" };
+  if (iPad) return { spot: "top-right", how: "Tap Share at the top" };
+  return { spot: "bottom-center", how: "Tap Share below (or ••• then Share)" };
+}

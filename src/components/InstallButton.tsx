@@ -10,6 +10,7 @@ import {
   type Platform,
 } from "../lib/install";
 import { DownloadIcon } from "./Icons";
+import { IosInstallHint } from "./IosInstallHint";
 import { toast } from "./Toast";
 
 /** "Install app" for every browser: one click where supported, clear steps everywhere else. */
@@ -17,6 +18,7 @@ export function InstallButton() {
   const deferred = useSyncExternalStore(subscribeInstall, getDeferredPrompt);
   const [installed, setInstalled] = useState(isInstalled);
   const [help, setHelp] = useState(false);
+  const [iosHint, setIosHint] = useState(false);
   const [platform] = useState<Platform>(() => detectPlatform());
 
   useEffect(() => subscribeInstall(() => setInstalled(isInstalled())), []);
@@ -26,7 +28,8 @@ export function InstallButton() {
   const install = async () => {
     const prompt = getDeferredPrompt();
     if (!prompt) {
-      setHelp(true);
+      if (platform === "ios") setIosHint(true);
+      else setHelp(true);
       return;
     }
     await prompt.prompt();
@@ -49,6 +52,15 @@ export function InstallButton() {
         <DownloadIcon />
         <span>Install app</span>
       </button>
+      {iosHint && (
+        <IosInstallHint
+          onClose={() => setIosHint(false)}
+          onMore={() => {
+            setIosHint(false);
+            setHelp(true);
+          }}
+        />
+      )}
       {help &&
         createPortal(
         <div className="overlay" onClick={() => setHelp(false)}>

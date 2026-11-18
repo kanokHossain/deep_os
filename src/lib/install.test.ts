@@ -30,3 +30,9 @@ describe("install help picks the right browser", () => {
     expect(GUIDES[platform].steps.length).toBeGreaterThan(0);
   });
 });
+
+import { iosShareSpot } from "./install";
+describe("iPhone hint points at the Share button", () => {
+  it("Chrome on iPhone: top right", () => expect(iosShareSpot(UA.iphoneChrome).spot).toBe("top-right"));
+  it("Safari on iPhone: bottom", () => expect(iosShareSpot(UA.iphoneSafari).spot).toBe("bottom-center"));
+});

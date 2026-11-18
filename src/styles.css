@@ -361,3 +361,30 @@ button svg { width: 18px; height: 18px; flex: none; }
 .small-guide h3 { font-size: 14px; margin-bottom: 4px; }
 .small-guide .steps { font-size: 13px; color: var(--muted); gap: 4px; }
 @media (max-width: 760px) { .install span { display: none; } .install { width: 38px; height: 38px; padding: 0; } }
+
+/* ---------- iPhone install hint: points at the real Share button ---------- */
+.ios-hint-layer { position: fixed; inset: 0; z-index: 75; background: rgba(15, 20, 19, 0.25); animation: fade 0.2s; }
+.ios-hint {
+  position: absolute; left: 12px; right: 12px; max-width: 420px; margin: 0 auto;
+  padding: 16px 18px 12px; border-radius: 20px; background: var(--surface); color: var(--ink);
+  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.45); animation: rise 0.3s ease-out;
+}
+.ios-top-right { top: calc(34px + env(safe-area-inset-top)); }
+.ios-top-right .ios-hint, .ios-hint.ios-top-right { margin-right: 0; }
+.ios-bottom-center, .ios-bottom-right { bottom: calc(14px + env(safe-area-inset-bottom)); }
+.ios-arrow { position: absolute; width: 18px; height: 18px; background: var(--surface); transform: rotate(45deg); border-radius: 3px; }
+.ios-top-right .ios-arrow { top: -8px; right: 26px; }
+.ios-bottom-center .ios-arrow { bottom: -8px; left: calc(50% - 9px); }
+.ios-bottom-right .ios-arrow { bottom: -8px; right: 26px; }
+.ios-hint::after { content: ""; position: absolute; width: 4px; height: 26px; border-radius: 2px; background: var(--accent); animation: nudge 1.2s ease-in-out infinite; }
+.ios-top-right::after { top: -30px; right: 33px; height: 22px; }
+.ios-bottom-center::after { bottom: -40px; left: calc(50% - 2px); }
+.ios-bottom-right::after { bottom: -40px; right: 33px; }
+@keyframes nudge { 50% { transform: translateY(-6px); } }
+.ios-bottom-center::after, .ios-bottom-right::after { animation-name: nudge-down; }
+@keyframes nudge-down { 50% { transform: translateY(6px); } }
+.ios-steps { position: relative; display: flex; flex-direction: column; gap: 10px; }
+.ios-steps p { margin: 0; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 600; line-height: 1.6; }
+.ios-steps b { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-size: 13px; flex: none; }
+.ios-glyph { display: inline-grid; place-items: center; width: 28px; height: 28px; margin-left: 4px; vertical-align: middle; border-radius: 8px; background: var(--bg); color: #0a84ff; }
+.ios-actions { position: relative; display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
