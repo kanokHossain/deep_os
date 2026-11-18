@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "One task at a time. Park every other thought, review it later.",
+  "description": "Focus now, sort later. A free, open-source focus timer with a brain dump.",
   "license": "MIT",
   "scripts": {
     "dev": "vite",
