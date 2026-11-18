@@ -79,6 +79,7 @@ src/
   lib/time.ts         time formatting
   lib/install.ts      PWA install prompts per browser
   components/         Focus, Dump box, Brain dump, Analytics, pop-out window
+scripts/readme-shots.py   retakes the README screenshots in docs/
 ```
 
 ## Known limits
@@ -88,7 +89,7 @@ src/
 
 ## Contributing
 
-Issues and pull requests are welcome. The goal is to stay small: a feature should help someone stay on one task, not give them more to manage.
+Issues and pull requests are welcome. Read [AGENTS.md](AGENTS.md) first: it covers wording, design and the rule that every change updates this README and its screenshots (`python3 scripts/readme-shots.py`). The goal is to stay small: a feature should help someone stay on one task, not give them more to manage.
 
 ## License
 

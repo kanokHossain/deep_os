@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { FocusIcon, HistoryIcon, KeyboardIcon, LogoMark, PopoutIcon, ThoughtIcon } from "./components/Icons";
+import { CodeIcon, DocIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
@@ -134,11 +134,12 @@ export default function App() {
       </div>
       <header className="topbar">
         <a className="brand" href="#focus" onClick={() => go("focus")} aria-label="DeepOS home">
-          <LogoMark size={36} />
-          <span className="brand-text">
-            <span>DeepOS</span>
-            <small>One task, a clear head.</small>
-            <small>Dump the noise, keep working.</small>
+          <LogoMark size={30} />
+          <span className="brand-name">DeepOS</span>
+          <span className="brand-tag">
+            One task, a clear head.
+            <br />
+            Dump the noise, keep working.
           </span>
         </a>
         <nav className="tabs" aria-label="Sections">
@@ -194,15 +195,23 @@ export default function App() {
       <footer className="foot">
         <SyncVote compact />
         <div className="foot-row">
-        <span>Free and open source. Your thoughts never leave your device.</span>
-        <nav className="foot-links" aria-label="About DeepOS">
-          <a href="#privacy">Privacy</a>
-          <a href="#terms">Terms</a>
-          <a href="https://github.com/kanokHossain/deep_os">Source</a>
-        </nav>
-        <span className="foot-keys">
-          Press <kbd>?</kbd> for shortcuts
+        <span className="foot-note">
+          <LockIcon /> Free and open source. Your thoughts never leave your device.
         </span>
+        <nav className="foot-links" aria-label="About DeepOS">
+          <a href="#privacy">
+            <ShieldIcon /> Privacy
+          </a>
+          <a href="#terms">
+            <DocIcon /> Terms
+          </a>
+          <a href="https://github.com/kanokHossain/deep_os">
+            <CodeIcon /> Source
+          </a>
+          <button type="button" className="foot-link-btn" onClick={() => setHelp(true)}>
+            <KeyboardIcon /> Shortcuts <kbd>?</kbd>
+          </button>
+        </nav>
         </div>
       </footer>
 
