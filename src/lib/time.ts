@@ -9,11 +9,10 @@ export function formatClock(ms: number): string {
   return h ? `${h}:${pad(m)}:${pad(sec)}` : `${pad(m)}:${pad(sec)}`;
 }
 
-/** 47 min, 1 h 5 min */
+/** Always in hours and minutes: 0h 47m, 1h 05m */
 export function formatDuration(ms: number): string {
   const m = Math.round(ms / 60000);
-  if (m < 60) return `${m} min`;
-  return `${Math.floor(m / 60)} h ${m % 60} min`;
+  return `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`;
 }
 
 export function formatTime(ts: number): string {

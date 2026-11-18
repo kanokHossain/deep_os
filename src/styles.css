@@ -138,10 +138,16 @@ kbd { font: 700 11px var(--font); padding: 2px 6px; border-radius: 6px; border: 
 
 /* ---------- start ---------- */
 .start { display: flex; flex-direction: column; gap: 8px; padding-top: 5vh; }
-.hello-row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px 18px; flex-wrap: wrap; }
 .hello { margin: 0; color: var(--muted); font-weight: 600; }
-.today { margin: 0; color: var(--muted); font-size: 14px; }
-.today b { color: var(--ink); font-weight: 700; }
+/* Today so far: one wide tile with a bar made of today's sessions, plus two small tiles. */
+.today-tiles { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; margin-top: 8px; animation: rise 0.45s ease-out; }
+.tile { display: flex; flex-direction: column; gap: 4px; padding: 16px 18px; border-radius: 22px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); backdrop-filter: blur(16px); }
+.tile-label { color: var(--muted); font-size: 13px; font-weight: 700; }
+.tile-value { font-weight: 300; font-size: 34px; line-height: 1.1; letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
+.tile-main .tile-value { color: var(--accent); }
+.tile-sun .tile-value { color: var(--sun); }
+.tile-bar { display: flex; gap: 3px; height: 8px; margin-top: 8px; }
+.tile-bar i { min-width: 6px; border-radius: 4px; background: linear-gradient(90deg, var(--dial-a), var(--dial-b)); }
 .start-form { display: flex; flex-direction: column; gap: 22px; margin-top: 26px; padding: 24px 26px; border-radius: 28px; background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); backdrop-filter: blur(18px); }
 .task-input { width: 100%; background: transparent; border: 0; border-bottom: 2px solid var(--line); font-weight: 600; font-size: clamp(19px, 2.6vw, 24px); padding: 6px 2px 12px; transition: border-color 0.3s; }
 .task-input::placeholder { color: var(--muted); opacity: 0.55; }
@@ -310,6 +316,8 @@ ul.list li:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
   .surface-msg { grid-template-columns: auto 1fr; }
   .surface-msg .row { grid-column: 1 / -1; }
   .triage-actions, .stats { grid-template-columns: 1fr; }
+  .today-tiles { grid-template-columns: 1fr 1fr; }
+  .tile-main { grid-column: 1 / -1; }
   .dive { width: 100%; }
   .start-form { padding: 18px; }
   .tabs a { padding: 7px 12px; }

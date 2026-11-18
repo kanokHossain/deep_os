@@ -150,20 +150,8 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </div>
       )}
 
-      <div className="hello-row">
-        <p className="hello">{greeting(Date.now())}. Let the rest wait.</p>
-        {todays.length > 0 && (
-          <p className="today">
-            Today <b>{formatDuration(todayMs)}</b> focused across <b>{todays.length}</b> session{todays.length > 1 ? "s" : ""}
-            {todayParked ? (
-              <>
-                , <b>{todayParked}</b> thought{todayParked > 1 ? "s" : ""} parked
-              </>
-            ) : null}
-          </p>
-        )}
-      </div>
-      <h1 id="start-heading">What's the one thing?</h1>
+      <p className="hello">{greeting(Date.now())}. Everything else can wait.</p>
+      <h1 id="start-heading">What deserves your focus now?</h1>
 
       <form
         className="start-form"
@@ -222,6 +210,31 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           )}
         </div>
       </form>
+
+      {todays.length > 0 && (
+        <section className="today-tiles" aria-label="Today so far">
+          <div className="tile tile-main">
+            <span className="tile-label">Focused today</span>
+            <b className="tile-value">{formatDuration(todayMs)}</b>
+            <div className="tile-bar" aria-hidden="true">
+              {todays
+                .slice()
+                .reverse()
+                .map((l) => (
+                  <i key={l.id} style={{ flexGrow: Math.max(1, Math.round(l.focusedMs / 60000)) }} title={`${l.task}: ${formatDuration(l.focusedMs)}`} />
+                ))}
+            </div>
+          </div>
+          <div className="tile">
+            <span className="tile-label">Sessions</span>
+            <b className="tile-value">{todays.length}</b>
+          </div>
+          <div className="tile tile-sun">
+            <span className="tile-label">Thoughts parked</span>
+            <b className="tile-value">{todayParked}</b>
+          </div>
+        </section>
+      )}
 
       {firstVisit && (
         <ol className="how">
