@@ -44,12 +44,45 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
   };
 
   return (
-    <section className="card">
-      <div className="toolbar">
+    <div className="split">
+      <aside className="card split-side">
         <h1>Brain dump</h1>
-        <div className="row">
+        <p className="hint">
+          Everything you parked lives here, so your mind doesn't have to carry it. Sort it when you're ready: start it, keep it for
+          later, or let it go.
+        </p>
+
+        <form
+          className="unload"
+          autoComplete="off"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!text.trim()) return;
+            dispatch({ type: "addInbox", text, now: Date.now() });
+            setText("");
+          }}
+        >
+          <label htmlFor="add-input">Anything else buzzing in your mind?</label>
+          <input id="add-input" type="text" maxLength={280} placeholder="Write it down and let it go" value={text} onChange={(e) => setText(e.target.value)} />
+          <button type="submit" className="ghost">
+            <ThoughtIcon /> Unload
+          </button>
+        </form>
+
+        <div className="side-counts">
+          <div>
+            <b>{fresh.length}</b>
+            <span>Waiting</span>
+          </div>
+          <div>
+            <b>{later.length}</b>
+            <span>Kept for later</span>
+          </div>
+        </div>
+
+        <div className="side-actions">
           {fresh.length > 0 && (
-            <button type="button" className="primary small" onClick={() => setTriage(true)}>
+            <button type="button" className="primary" onClick={() => setTriage(true)}>
               <CardsIcon /> Sort one by one
             </button>
           )}
@@ -57,42 +90,32 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
             <CopyIcon /> Copy as list
           </button>
         </div>
-      </div>
-      <p className="hint">Everything you parked lives here, so your mind doesn't have to carry it. Sort it when you're ready: start it, keep it for later, or let it go.</p>
+      </aside>
 
-      <form
-        className="row align-end"
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (!text.trim()) return;
-          dispatch({ type: "addInbox", text, now: Date.now() });
-          setText("");
-        }}
-      >
-        <div className="field grow">
-          <label htmlFor="add-input">Anything else buzzing in your mind?</label>
-          <input id="add-input" type="text" maxLength={280} placeholder="Write it down and let it go" value={text} onChange={(e) => setText(e.target.value)} />
-        </div>
-        <button type="submit" className="ghost">
-          <ThoughtIcon /> Unload
-        </button>
-      </form>
+      <section className="card split-main" aria-labelledby="waiting-heading">
+        <h2 id="waiting-heading">
+          Waiting for you <span className="count-inline">{fresh.length}</span>
+        </h2>
+        {fresh.length ? (
+          <ItemList items={fresh} onAct={act} />
+        ) : (
+          <div className="empty-big">
+            <ThoughtIcon />
+            <b>Your mind is clear.</b>
+            <span>When something buzzes during a focus session, park it and it lands here.</span>
+          </div>
+        )}
 
-      <h2>
-        Waiting for you <span className="count-inline">{fresh.length}</span>
-      </h2>
-      {fresh.length ? <ItemList items={fresh} onAct={act} /> : <p className="empty">Your mind is clear. Nothing is waiting.</p>}
-
-      {later.length > 0 && (
-        <>
-          <h2>
-            Kept for later <span className="count-inline">{later.length}</span>
-          </h2>
-          <ItemList items={later} onAct={act} />
-        </>
-      )}
-    </section>
+        {later.length > 0 && (
+          <>
+            <h2>
+              Kept for later <span className="count-inline">{later.length}</span>
+            </h2>
+            <ItemList items={later} onAct={act} />
+          </>
+        )}
+      </section>
+    </div>
   );
 }
 

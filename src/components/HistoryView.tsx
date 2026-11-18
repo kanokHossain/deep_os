@@ -66,12 +66,13 @@ export function HistoryView({ now }: { now: number }) {
         </div>
       </div>
 
-      <section className="card" aria-labelledby="week-heading">
+      <div className="history-grid">
+      <section className="card hg-chart" aria-labelledby="week-heading">
         <h2 id="week-heading">Last 7 days</h2>
-        <div className="week" role="img" aria-label={`Focused minutes per day: ${week.mins.join(", ")}`}>
+        <div className="week" role="img" aria-label={`Focused time per day: ${week.mins.map(shortHours).join(", ")}`}>
           {week.days.map((d, i) => (
             <div className="week-col" key={d}>
-              <span className="week-val">{week.mins[i] || ""}</span>
+              <span className="week-val">{week.mins[i] ? shortHours(week.mins[i]) : ""}</span>
               <div className="week-track">
                 <i className={d === today ? "today" : ""} style={{ height: `${(week.mins[i] / week.max) * 100}%` }} />
               </div>
@@ -79,10 +80,10 @@ export function HistoryView({ now }: { now: number }) {
             </div>
           ))}
         </div>
-        <p className="hint">Minutes of focused time per day.</p>
+        <p className="hint">Focused time per day.</p>
       </section>
 
-      <section className="card">
+      <section className="card hg-sessions">
         <div className="toolbar">
           <h1>Sessions</h1>
           {log.length > 0 &&
@@ -135,7 +136,7 @@ export function HistoryView({ now }: { now: number }) {
         )}
       </section>
 
-      <section className="card">
+      <section className="card hg-data">
         <h2>Your data</h2>
         <p className="hint">
           Everything stays in this browser. There's no account and nothing is sent anywhere. Download a backup to move to another device.
@@ -150,6 +151,15 @@ export function HistoryView({ now }: { now: number }) {
           </label>
         </div>
       </section>
+      </div>
     </>
   );
+}
+
+/** 45 → "45m", 90 → "1h 30m", 120 → "2h" */
+function shortHours(min: number) {
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  if (!h) return `${m}m`;
+  return m ? `${h}h ${m}m` : `${h}h`;
 }
