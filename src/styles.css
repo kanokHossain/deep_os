@@ -632,3 +632,15 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 /* the warm action buttons stay readable while empty */
 .composer .primary:disabled { opacity: 1; background: color-mix(in srgb, var(--sun) 22%, var(--surface)); color: color-mix(in srgb, var(--ink) 50%, transparent); box-shadow: none; }
 .sr-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* brain dump list scrolls inside its card once it gets long */
+.columns.single ul.list {
+  max-height: min(62vh, 600px); overflow-y: auto; overscroll-behavior: contain;
+  padding: 2px 8px 2px 2px; margin-right: -8px;
+  scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--muted) 45%, transparent) transparent;
+}
+.columns.single ul.list::-webkit-scrollbar { width: 8px; }
+.columns.single ul.list::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 8px; }
+.columns.single ul.list::-webkit-scrollbar-track { background: transparent; }
+.columns.single ul.list li:hover { transform: none; }
+@media (max-width: 600px) { .columns.single ul.list { max-height: 65vh; } }
+.columns.single ul.list { padding-bottom: 28px; -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent); mask-image: linear-gradient(to bottom, #000 calc(100% - 36px), transparent); }
