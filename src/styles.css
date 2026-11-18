@@ -410,7 +410,7 @@ button svg { width: 18px; height: 18px; flex: none; }
 
 
 /* ---------- pages: one header pattern everywhere ---------- */
-.stage-inbox, .stage-history, .stage-privacy, .stage-terms { max-width: 1160px; }
+.stage-inbox, .stage-analytics, .stage-privacy, .stage-terms { max-width: 1160px; }
 .stage-privacy, .stage-terms { align-items: center; }
 .page { display: flex; flex-direction: column; gap: 20px; }
 .page-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px 24px; flex-wrap: wrap; padding: 8px 4px 4px; }
@@ -497,3 +497,46 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
   .composer input::placeholder { font-size: 14px; }
   .page-head .row { width: 100%; }
 }
+
+/* ---------- one frame for every page: 8 of 12 columns on desktop, 10 on tablet, full on phones ---------- */
+.stage, .stage-inbox, .stage-analytics, .stage-privacy, .stage-terms, .foot { max-width: none; width: calc(100% * 8 / 12); max-width: 1600px; }
+@media (max-width: 1199px) { .stage, .stage-inbox, .stage-analytics, .stage-privacy, .stage-terms, .foot { width: calc(100% * 10 / 12); } }
+@media (max-width: 767px) { .stage, .stage-inbox, .stage-analytics, .stage-privacy, .stage-terms, .foot { width: 100%; } }
+.stage-focus .session { width: 100%; }
+.legal { max-width: none; }
+.legal > p, .legal > ul, .legal > h2 { max-width: 72ch; }
+
+/* ---------- timer-first home: idle state mirrors the running session ---------- */
+.session.idle { gap: 20px; }
+.status.ready { color: var(--muted); font-weight: 600; }
+.title-input {
+  width: 100%; max-width: 760px; text-align: center; background: transparent; border: 0;
+  border-bottom: 2px solid transparent; padding: 4px 8px 8px; color: var(--ink);
+  font-family: var(--serif); font-weight: 600; font-size: clamp(26px, 3.6vw, 38px); letter-spacing: -0.02em;
+  transition: border-color 0.25s;
+}
+.title-input::placeholder { color: var(--muted); opacity: 0.5; }
+.title-input:hover { border-bottom-color: var(--line); }
+.title-input:focus { outline: none; border-bottom-color: var(--accent); }
+.title-hint { margin: 0; color: var(--muted); font-size: 13.5px; font-weight: 600; }
+.session.idle .ring .clock { opacity: 0.92; }
+.presets { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.presets .chip { background: var(--glass); border-color: var(--glass-line); backdrop-filter: blur(10px); padding: 9px 16px; }
+.presets .chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.start-btn { min-width: 220px; }
+.session.idle .start-extra { justify-content: center; gap: 10px 24px; }
+.today-line { list-style: none; margin: 6px 0 0; padding: 10px 14px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; border-radius: 999px; background: var(--glass); border: 1px solid var(--glass-line); backdrop-filter: blur(12px); color: var(--muted); font-size: 14px; }
+.today-line li { display: inline-flex; align-items: center; gap: 7px; }
+.today-line b { color: var(--ink); font-weight: 700; font-variant-numeric: tabular-nums; }
+.today-line svg { width: 16px; height: 16px; color: var(--accent); }
+.today-line .sun svg { color: var(--sun); }
+.session.idle .how { width: 100%; max-width: 860px; text-align: left; }
+.session .surface-msg { width: 100%; max-width: 760px; text-align: left; }
+@media (max-width: 600px) {
+  .today-line { border-radius: 18px; flex-direction: column; align-items: flex-start; }
+  .start-btn { width: 100%; }
+  .title-input { font-size: 24px; }
+}
+
+.title-input::-webkit-calendar-picker-indicator, .title-input::-webkit-list-button { display: none !important; opacity: 0; }
+.session.idle .session-head { gap: 6px; width: 100%; max-width: 860px; }

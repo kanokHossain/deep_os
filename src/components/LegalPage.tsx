@@ -18,7 +18,7 @@ export function PrivacyPage() {
       </p>
       <ul>
         <li>Clearing your browser data, or uninstalling the app, deletes everything.</li>
-        <li>Data does not sync between devices. Use History → Download backup to move it yourself.</li>
+        <li>Data does not sync between devices. Use Analytics → Download backup to move it yourself.</li>
         <li>If you install DeepOS as an app, your browser also keeps a copy of the app's files so it works offline. This contains no personal data.</li>
       </ul>
 
@@ -101,7 +101,7 @@ export function TermsPage() {
       <h2>Your data is your responsibility</h2>
       <p>
         Everything you write stays on your device (see the <a href="#privacy">Privacy Policy</a>). Because we never hold a copy, we can't
-        restore lost data. Download a backup from History if your data matters to you.
+        restore lost data. Download a backup from Analytics if your data matters to you.
       </p>
 
       <h2>Use it fairly</h2>

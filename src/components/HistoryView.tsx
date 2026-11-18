@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
 import { dispatch, parseState, useStore, getState, type LogEntry } from "../lib/store";
 import { dayKey, dayLabel, formatDuration, formatTime } from "../lib/time";
-import { ClockIcon, DownloadIcon, LayersIcon, ThoughtIcon, UploadIcon } from "./Icons";
+import { ClockIcon, DownloadIcon, LayersIcon, PlayIcon, ThoughtIcon, UploadIcon } from "./Icons";
 import { LineChart, shortHours } from "./LineChart";
 import { toast } from "./Toast";
 import { trackEvent } from "../lib/analytics";
 
-export function HistoryView({ now }: { now: number }) {
+export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void }) {
   const log = useStore((s) => s.log);
+  const hasActive = useStore((s) => s.active !== null);
   const [confirming, setConfirming] = useState(false);
   const [justBackedUp, setJustBackedUp] = useState(false);
   const today = dayKey(now);
@@ -64,8 +65,8 @@ export function HistoryView({ now }: { now: number }) {
     <div className="page">
       <header className="page-head">
         <div>
-          <h1>History</h1>
-          <p className="hint">How your focus is going, day by day.</p>
+          <h1>Analytics</h1>
+          <p className="hint">How your focus is going, day by day. Pick up any past task with Resume.</p>
         </div>
       </header>
 
@@ -152,6 +153,21 @@ export function HistoryView({ now }: { now: number }) {
                           {l.plannedMin ? ` of ${l.plannedMin} planned` : ""} · {l.parked} parked
                         </small>
                       </div>
+                      <button
+                        type="button"
+                        className="ghost small"
+                        onClick={() => {
+                          if (hasActive) {
+                            toast("Finish or stop your current task first");
+                            return;
+                          }
+                          dispatch({ type: "setDraft", task: l.task, plannedMin: l.plannedMin });
+                          goFocus();
+                          toast(`Ready to resume: ${l.task}`);
+                        }}
+                      >
+                        <PlayIcon /> Resume
+                      </button>
                     </li>
                   ))}
                 </ul>

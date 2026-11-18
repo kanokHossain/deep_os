@@ -10,11 +10,11 @@ const PRESETS = [15, 25, 45, 60, 90, 0];
 
 // Example tasks for the empty task box; one is picked per visit.
 const EXAMPLES = [
-  "Start focusing on product requirement preparation",
-  "Start focusing on the client proposal draft",
-  "Start focusing on reviewing pull requests",
-  "Start focusing on the weekly status report",
-  "Start focusing on sprint planning notes",
+  "Product requirement preparation",
+  "Client proposal draft",
+  "Review pull requests",
+  "Weekly status report",
+  "Sprint planning notes",
 ];
 
 export function FocusView({ now, goInbox }: { now: number; goInbox: () => void }) {
@@ -127,6 +127,8 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const todays = log.filter((l) => dayKey(l.startedAt) === today);
   const todayMs = todays.reduce((sum, l) => sum + l.focusedMs, 0);
   const todayParked = todays.reduce((sum, l) => sum + l.parked, 0);
+  // Recent task names, newest first, for one-tap suggestions while typing.
+  const recent = [...new Set(log.map((l) => l.task))].slice(0, 8);
 
   useEffect(() => {
     taskRef.current?.focus();
@@ -149,7 +151,15 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   };
 
   return (
-    <section className="start" aria-labelledby="start-heading">
+    <form
+      className="session idle"
+      aria-label="Start a focus session"
+      autoComplete="off"
+      onSubmit={(e) => {
+        e.preventDefault();
+        start();
+      }}
+    >
       {showSummary && (
         <div className="surface-msg" role="status">
           <CheckIcon />
@@ -159,7 +169,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             </strong>
             <span>
               {last.parked
-                ? ` ${last.parked} thought${last.parked > 1 ? "s" : ""} parked instead of chased. They're waiting in your brain dump.`
+                ? ` ${last.parked} thought${last.parked > 1 ? "s" : ""} parked instead of chased.`
                 : " Nothing pulled you away. Clear mind."}
             </span>
           </div>
@@ -176,90 +186,86 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </div>
       )}
 
-      <p className="hello">{greeting(Date.now())}. Everything else can wait.</p>
-      <h1 id="start-heading">What deserves your focus now?</h1>
-
-      <form
-        className="start-form"
-        autoComplete="off"
-        onSubmit={(e) => {
-          e.preventDefault();
-          start();
-        }}
-      >
+      <header className="session-head">
+        <span className="status ready">{greeting(Date.now())}. Everything else can wait.</span>
+        <label htmlFor="task-input" className="title-hint">
+          What deserves your focus now?
+        </label>
         <input
           ref={taskRef}
           id="task-input"
-          className="task-input"
+          className="title-input"
           type="text"
           maxLength={160}
-          aria-label="Task"
+          list="recent-tasks"
           placeholder={example}
           value={draft.task}
           onChange={(e) => dispatch({ type: "setDraft", task: e.target.value })}
         />
+        <datalist id="recent-tasks">
+          {recent.map((t) => (
+            <option key={t} value={t} />
+          ))}
+        </datalist>
+      </header>
 
-        <div className="dive-row">
-          <div className="chips" role="group" aria-label="Session length">
-            {PRESETS.map((m) => (
-              <button
-                key={m}
-                type="button"
-                className="chip"
-                aria-pressed={draft.plannedMin === m}
-                onClick={() => dispatch({ type: "setDraft", plannedMin: m })}
-              >
-                {m ? `${m}m` : "Open"}
-              </button>
-            ))}
-          </div>
-          <button type="submit" className="primary big dive">
-            <PlayIcon /> Start focus
+      <Ring progress={0}>
+        <div className="clock" aria-label="Planned length">
+          {draft.plannedMin ? formatClock(draft.plannedMin * 60000) : "00:00"}
+        </div>
+        <div className="clock-sub">{draft.plannedMin ? "Ready when you are" : "Open session, counts up"}</div>
+      </Ring>
+
+      <div className="presets" role="group" aria-label="Session length">
+        {PRESETS.map((m) => (
+          <button
+            key={m}
+            type="button"
+            className="chip"
+            aria-pressed={draft.plannedMin === m}
+            onClick={() => dispatch({ type: "setDraft", plannedMin: m })}
+          >
+            {m ? `${m}m` : "Open"}
           </button>
-        </div>
+        ))}
+      </div>
 
-        <div className="start-extra">
-          {showTime ? (
-            <label className="inline-time">
-              Started at
-              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-            </label>
-          ) : (
-            <button type="button" className="link" onClick={() => setShowTime(true)}>
-              Already started? Set an earlier start time
-            </button>
-          )}
-          {waiting > 0 && !showSummary && (
-            <button type="button" className="link" onClick={goInbox}>
-              {waiting} thought{waiting > 1 ? "s" : ""} waiting in your brain dump
-            </button>
-          )}
-        </div>
-      </form>
+      <div className="controls">
+        <button type="submit" className="primary big start-btn">
+          <PlayIcon /> Start focus
+        </button>
+      </div>
+
+      <div className="start-extra">
+        {showTime ? (
+          <label className="inline-time">
+            Started at
+            <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+          </label>
+        ) : (
+          <button type="button" className="link" onClick={() => setShowTime(true)}>
+            Already started? Set an earlier start time
+          </button>
+        )}
+        {waiting > 0 && !showSummary && (
+          <button type="button" className="link" onClick={goInbox}>
+            {waiting} thought{waiting > 1 ? "s" : ""} waiting in your brain dump
+          </button>
+        )}
+      </div>
 
       {todays.length > 0 && (
-        <section className="today-tiles" aria-label="Today so far">
-          <div className="tile tile-main">
-            <span className="tile-label"><ClockIcon /> Focused today</span>
-            <b className="tile-value">{formatDuration(todayMs)}</b>
-            <div className="tile-bar" aria-hidden="true">
-              {todays
-                .slice()
-                .reverse()
-                .map((l) => (
-                  <i key={l.id} style={{ flexGrow: Math.max(1, Math.round(l.focusedMs / 60000)) }} title={`${l.task}: ${formatDuration(l.focusedMs)}`} />
-                ))}
-            </div>
-          </div>
-          <div className="tile">
-            <span className="tile-label"><LayersIcon /> Sessions</span>
-            <b className="tile-value">{todays.length}</b>
-          </div>
-          <div className="tile tile-sun">
-            <span className="tile-label"><ThoughtIcon /> Thoughts parked</span>
-            <b className="tile-value">{todayParked}</b>
-          </div>
-        </section>
+        <ul className="today-line" aria-label="Today so far">
+          <li>
+            <ClockIcon /> <b>{formatDuration(todayMs)}</b> focused today
+          </li>
+          <li>
+            <LayersIcon /> <b>{todays.length}</b> session{todays.length > 1 ? "s" : ""}
+          </li>
+          <li className="sun">
+            <ThoughtIcon /> <b>{todayParked}</b> thought{todayParked === 1 ? "" : "s"} parked
+          </li>
+        </ul>
       )}
 
       {firstVisit && (
@@ -281,6 +287,6 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           </li>
         </ol>
       )}
-    </section>
+    </form>
   );
 }

@@ -9,7 +9,7 @@ export const SHORTCUTS: { keys: string[]; label: string }[] = [
   { keys: ["O"], label: "Pop out the mini timer" },
   { keys: ["1"], label: "Go to Focus" },
   { keys: ["2"], label: "Go to Brain dump" },
-  { keys: ["3"], label: "Go to History" },
+  { keys: ["3"], label: "Go to Analytics" },
   { keys: ["?"], label: "Show these shortcuts" },
   { keys: ["Esc"], label: "Close or leave a text box" },
 ];

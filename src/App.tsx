@@ -14,15 +14,16 @@ import { useTimeUpChime } from "./hooks/useTimeUpChime";
 import { dispatch, elapsedMs, getState, useStore } from "./lib/store";
 import { formatClock } from "./lib/time";
 
-const VIEWS = ["focus", "inbox", "history"] as const;
+const VIEWS = ["focus", "inbox", "analytics"] as const;
 const PAGES = ["privacy", "terms"] as const;
 type View = (typeof VIEWS)[number] | (typeof PAGES)[number];
 type Tab = (typeof VIEWS)[number];
-const LABELS: Record<Tab, string> = { focus: "Focus", inbox: "Brain dump", history: "History" };
-const TAB_ICONS: Record<Tab, typeof FocusIcon> = { focus: FocusIcon, inbox: ThoughtIcon, history: HistoryIcon };
+const LABELS: Record<Tab, string> = { focus: "Focus", inbox: "Brain dump", analytics: "Analytics" };
+const TAB_ICONS: Record<Tab, typeof FocusIcon> = { focus: FocusIcon, inbox: ThoughtIcon, analytics: HistoryIcon };
 
 function readHash(): View {
-  const h = window.location.hash.slice(1);
+  const raw = window.location.hash.slice(1);
+  const h = raw === "history" ? "analytics" : raw; // old links keep working
   return ([...VIEWS, ...PAGES] as readonly string[]).includes(h) ? (h as View) : "focus";
 }
 
@@ -111,7 +112,7 @@ export default function App() {
   useEffect(() => {
     const titles: Partial<Record<View, string>> = {
       inbox: "Brain dump · DeepOS",
-      history: "History · DeepOS",
+      analytics: "Analytics · DeepOS",
       privacy: "Privacy Policy · DeepOS",
       terms: "Terms of Use · DeepOS",
     };
@@ -181,7 +182,7 @@ export default function App() {
       <main className={`stage stage-${view}`}>
         {view === "focus" && <FocusView now={now} goInbox={() => go("inbox")} />}
         {view === "inbox" && <InboxView goFocus={() => go("focus")} />}
-        {view === "history" && <HistoryView now={now} />}
+        {view === "analytics" && <HistoryView now={now} goFocus={() => go("focus")} />}
         {view === "privacy" && <PrivacyPage />}
         {view === "terms" && <TermsPage />}
       </main>
