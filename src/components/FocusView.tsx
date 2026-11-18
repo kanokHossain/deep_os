@@ -73,6 +73,22 @@ function ActiveSessionView({ active, now }: { active: ActiveSession; now: number
         </button>
       </div>
 
+      {over && (
+        <div className="timesup" role="status">
+          <p>
+            <b>Time's up.</b> Wrap up, or give yourself a little longer.
+          </p>
+          <div className="row">
+            <button type="button" className="ghost small" onClick={() => dispatch({ type: "extend", minutes: 5 })}>
+              +5 min
+            </button>
+            <button type="button" className="ghost small" onClick={() => dispatch({ type: "extend", minutes: 15 })}>
+              +15 min
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="session-meta">
         Started {formatTime(active.startedAt)}
         {active.plannedMin ? ` for ${active.plannedMin} min` : ""}

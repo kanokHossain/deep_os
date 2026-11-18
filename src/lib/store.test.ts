@@ -86,3 +86,16 @@ describe("time helpers", () => {
     expect(startFromTimeInput("13:00", now)).toBe(now);
   });
 });
+
+describe("extend", () => {
+  it("adds minutes and lets the chime play again", () => {
+    let s = started();
+    s = reduce(s, { type: "chimed" });
+    s = reduce(s, { type: "extend", minutes: 5 });
+    expect(s.active).toMatchObject({ plannedMin: 30, chimed: false });
+  });
+  it("does nothing for open sessions", () => {
+    const s = reduce(emptyState(), { type: "start", task: "x", startedAt: T, plannedMin: 0, now: T });
+    expect(reduce(s, { type: "extend", minutes: 5 })).toBe(s);
+  });
+});

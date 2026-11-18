@@ -131,7 +131,7 @@ export function HistoryView({ now }: { now: number }) {
             </div>
           ))
         ) : (
-          <p className="empty">No sessions yet. Start one from Focus.</p>
+          <p className="empty">Your focus history starts with your first session. Pick one task on Focus and begin.</p>
         )}
       </section>
 

@@ -53,7 +53,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
       {!compact && (
         <label htmlFor="park-input" className="park-label">
           <ThoughtIcon className="label-icon" />
-          Something buzzing in your mind? Park it here. Your head doesn't have to hold it. <kbd>P</kbd>
+          Something buzzing in your mind? Park it here and let it go. <kbd>P</kbd>
         </label>
       )}
       <form

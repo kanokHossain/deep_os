@@ -4,6 +4,7 @@ import { HistoryView } from "./components/HistoryView";
 import { FocusIcon, HistoryIcon, KeyboardIcon, LogoMark, PopoutIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
+import { PrivacyPage, TermsPage } from "./components/LegalPage";
 import { ShortcutsDialog } from "./components/Shortcuts";
 import { toast, Toaster } from "./components/Toast";
 import { useFloatingWindow } from "./hooks/useFloatingWindow";
@@ -13,13 +14,15 @@ import { dispatch, elapsedMs, getState, useStore } from "./lib/store";
 import { formatClock } from "./lib/time";
 
 const VIEWS = ["focus", "inbox", "history"] as const;
-type View = (typeof VIEWS)[number];
-const LABELS: Record<View, string> = { focus: "Focus", inbox: "Brain dump", history: "History" };
-const TAB_ICONS: Record<View, typeof FocusIcon> = { focus: FocusIcon, inbox: ThoughtIcon, history: HistoryIcon };
+const PAGES = ["privacy", "terms"] as const;
+type View = (typeof VIEWS)[number] | (typeof PAGES)[number];
+type Tab = (typeof VIEWS)[number];
+const LABELS: Record<Tab, string> = { focus: "Focus", inbox: "Brain dump", history: "History" };
+const TAB_ICONS: Record<Tab, typeof FocusIcon> = { focus: FocusIcon, inbox: ThoughtIcon, history: HistoryIcon };
 
 function readHash(): View {
   const h = window.location.hash.slice(1);
-  return (VIEWS as readonly string[]).includes(h) ? (h as View) : "focus";
+  return ([...VIEWS, ...PAGES] as readonly string[]).includes(h) ? (h as View) : "focus";
 }
 
 function isTyping() {
@@ -105,8 +108,18 @@ export default function App() {
 
   // The tab title doubles as a timer you can see from other tabs.
   useEffect(() => {
-    document.title = active ? `${formatClock(elapsedMs(active, now))} · ${active.task}` : "DeepOS";
-  }, [active, now]);
+    const titles: Partial<Record<View, string>> = {
+      inbox: "Brain dump · DeepOS",
+      history: "History · DeepOS",
+      privacy: "Privacy Policy · DeepOS",
+      terms: "Terms of Use · DeepOS",
+    };
+    document.title = active ? `${formatClock(elapsedMs(active, now))} · ${active.task}` : titles[view] ?? "DeepOS: one task, a clear head";
+  }, [active, now, view]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [view]);
 
   const waiting = inbox.filter((i) => i.status === "new").length;
 
@@ -168,11 +181,17 @@ export default function App() {
         {view === "focus" && <FocusView now={now} goInbox={() => go("inbox")} />}
         {view === "inbox" && <InboxView goFocus={() => go("focus")} />}
         {view === "history" && <HistoryView now={now} />}
+        {view === "privacy" && <PrivacyPage />}
+        {view === "terms" && <TermsPage />}
       </main>
 
       <footer className="foot">
-        Free and open source. Your data stays in this browser.{" "}
-        <a href="https://github.com/kanokHossain/deep_os">Source</a>
+        <span>Free and open source. Your thoughts never leave your device.</span>
+        <nav className="foot-links" aria-label="About DeepOS">
+          <a href="#privacy">Privacy</a>
+          <a href="#terms">Terms</a>
+          <a href="https://github.com/kanokHossain/deep_os">Source</a>
+        </nav>
         <span className="foot-keys">
           Press <kbd>?</kbd> for shortcuts
         </span>

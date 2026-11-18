@@ -47,6 +47,7 @@ export type Action =
   | { type: "resume"; now: number }
   | { type: "end"; outcome: LogEntry["outcome"]; now: number }
   | { type: "chimed" }
+  | { type: "extend"; minutes: number }
   | { type: "park"; text: string; now: number }
   | { type: "addInbox"; text: string; now: number }
   | { type: "later"; id: string }
@@ -115,6 +116,11 @@ export function reduce(state: State, action: Action): State {
         outcome: action.outcome,
       };
       return { ...state, active: null, log: [entry, ...state.log].slice(0, 1000) };
+    }
+    case "extend": {
+      const a = state.active;
+      if (!a || !a.plannedMin) return state;
+      return { ...state, active: { ...a, plannedMin: a.plannedMin + action.minutes, chimed: false } };
     }
     case "chimed":
       if (!state.active) return state;
