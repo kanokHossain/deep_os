@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 export const SHORTCUTS: { keys: string[]; label: string }[] = [
   { keys: ["N"], label: "Start a new task" },
-  { keys: ["P"], label: "Unload a thought" },
+  { keys: ["P"], label: "Dump a thought" },
   { keys: ["Space"], label: "Pause or resume" },
   { keys: ["D"], label: "Mark task done" },
   { keys: ["S"], label: "Stop for now" },

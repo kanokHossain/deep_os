@@ -46,7 +46,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
       <header className="page-head">
         <div>
           <h1>Brain dump</h1>
-          <p className="hint">Everything you parked lives here, so your mind doesn't have to carry it. Sort it when you're ready.</p>
+          <p className="hint">Everything you dumped lives here, so your mind doesn't have to carry it. Sort it when you're ready.</p>
         </div>
         <div className="row">
           {fresh.length > 0 && (
@@ -83,7 +83,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
           onChange={(e) => setText(e.target.value)}
         />
         <button type="submit" className="primary small" disabled={!text.trim()}>
-          Unload
+          Dump
         </button>
       </form>
 

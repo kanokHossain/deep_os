@@ -235,7 +235,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             <LayersIcon /> <b>{todays.length}</b> session{todays.length > 1 ? "s" : ""}
           </li>
           <li className="sun">
-            <ThoughtIcon /> <b>{todayParked}</b> thought{todayParked === 1 ? "" : "s"} unloaded
+            <ThoughtIcon /> <b>{todayParked}</b> thought{todayParked === 1 ? "" : "s"} dumped
           </li>
         </ul>
       )}
@@ -249,7 +249,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           </li>
           <li>
             <ThoughtIcon className="how-icon sun" />
-            <b>Unload what buzzes</b>
+            <b>Dump what buzzes</b>
             <span>A worry, a to-do, an idea? Type it once and let it go. It's saved.</span>
           </li>
           <li>

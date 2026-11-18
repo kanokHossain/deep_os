@@ -594,3 +594,41 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .waiting-go { margin-left: 6px; padding: 7px 14px; border-radius: 999px; background: var(--surface); font-weight: 700; font-size: 13.5px; color: var(--sun); }
 /* unload button stays readable while empty */
 .park button:disabled { opacity: 1; background: color-mix(in srgb, var(--sun) 28%, var(--surface)); color: color-mix(in srgb, var(--ink) 55%, transparent); }
+
+/* ---------- sessions: quiet rows, hairlines, resume on hover ---------- */
+.hg-sessions .day-group { gap: 0; }
+.hg-sessions .day-group + .day-group { margin-top: 18px; }
+.hg-sessions .day-group h3 { display: flex; justify-content: space-between; align-items: baseline; margin: 0 0 4px; padding: 0 4px 8px; font-size: 13px; font-weight: 700; color: var(--muted); border-bottom: 1px solid var(--line); }
+.day-total { font-variant-numeric: tabular-nums; font-weight: 600; }
+.session-rows { list-style: none; margin: 0; padding: 0; }
+.session-rows li { display: grid; grid-template-columns: 78px 1fr auto auto; gap: 14px; align-items: center; padding: 12px 4px; border-bottom: 1px solid color-mix(in srgb, var(--line) 60%, transparent); border-radius: 12px; transition: background 0.15s; }
+.session-rows li:last-child { border-bottom: 0; }
+.session-rows li:hover { background: color-mix(in srgb, var(--surface) 55%, transparent); }
+.sr-time { white-space: nowrap; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; padding-left: 6px; }
+.sr-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.sr-task { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 15px; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sr-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
+.sr-dot.paused { background: var(--sun); }
+.sr-main small { color: var(--muted); font-size: 12.5px; padding-left: 16px; }
+.sr-dur { font-variant-numeric: tabular-nums; font-weight: 600; font-size: 15px; color: var(--ink); min-width: 56px; text-align: right; }
+.sr-resume { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--accent); font-weight: 700; font-size: 13px; opacity: 0.35; transition: opacity 0.15s, background 0.15s, border-color 0.15s; }
+.sr-resume svg { width: 12px; height: 12px; }
+.session-rows li:hover .sr-resume, .sr-resume:focus-visible { opacity: 1; background: var(--accent-soft); }
+@media (hover: none) { .sr-resume { opacity: 1; } }
+.pager { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.pager-info { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pager-btns, .pager-group { display: flex; align-items: center; gap: 4px; }
+.pager-btn { min-width: 32px; height: 32px; padding: 0 8px; border-radius: 10px; background: transparent; border: 1px solid transparent; color: var(--muted); font-weight: 700; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.pager-btn:hover:not(:disabled) { color: var(--ink); background: color-mix(in srgb, var(--surface) 60%, transparent); }
+.pager-btn[aria-current="page"] { color: var(--ink); background: var(--surface); border-color: var(--line); }
+.pager-gap { color: var(--muted); padding: 0 2px; }
+@media (max-width: 600px) {
+  .session-rows li { grid-template-columns: 1fr auto auto; gap: 2px 10px; }
+  .sr-time { grid-column: 1 / -1; padding-left: 16px; font-size: 12px; }
+  .sr-resume span { display: none; }
+  .sr-resume { padding: 9px; }
+  .sr-dur { min-width: 0; font-size: 14px; }
+}
+/* the warm action buttons stay readable while empty */
+.composer .primary:disabled { opacity: 1; background: color-mix(in srgb, var(--sun) 22%, var(--surface)); color: color-mix(in srgb, var(--ink) 50%, transparent); box-shadow: none; }
+.sr-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -89,8 +89,8 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           type="text"
           maxLength={280}
           value={text}
-          aria-label="Unload a thought"
-          placeholder={compact ? "Anything buzzing? Unload it" : "Call the bank, reply to Rafi, that idea for later…"}
+          aria-label="Dump a thought"
+          placeholder={compact ? "Anything buzzing? Dump it here" : "Call the bank, reply to Rafi, that idea for later…"}
           onChange={(e) => {
             setText(e.target.value);
             if (note) setNote("");
@@ -99,12 +99,12 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
             if (e.key === "Escape") e.currentTarget.blur();
           }}
         />
-        <button type="submit" aria-label="Unload this thought" disabled={!text.trim()}>
+        <button type="submit" aria-label="Dump this thought" disabled={!text.trim()}>
           {compact ? (
-            "Unload"
+            "Dump"
           ) : (
             <>
-              <ArrowUpIcon /> Unload
+              <ArrowUpIcon /> Dump
             </>
           )}
         </button>
@@ -113,7 +113,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
         <div className="park-note" aria-live="polite">
           {note ||
             (parked > 0
-              ? `${parked} thought${parked > 1 ? "s" : ""} unloaded this session. Your mind is lighter.`
+              ? `${parked} thought${parked > 1 ? "s" : ""} dumped this session. Your mind is lighter.`
               : "")}
         </div>
       )}

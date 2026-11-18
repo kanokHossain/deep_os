@@ -6,6 +6,8 @@ import { LineChart, shortHours } from "./LineChart";
 import { toast } from "./Toast";
 import { trackEvent } from "../lib/analytics";
 
+const PAGE_SIZE = 8;
+
 export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void }) {
   const log = useStore((s) => s.log);
   const hasActive = useStore((s) => s.active !== null);
@@ -26,14 +28,32 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
     return { days, mins, total, avg: activeDays ? Math.round(total / activeDays) : 0, best: mins[best] ? best : -1 };
   }, [log, now]);
 
+  const [page, setPage] = useState(0);
+  const pages = Math.max(1, Math.ceil(log.length / PAGE_SIZE));
+  const current = Math.min(page, pages - 1);
+  const dayTotals = useMemo(() => {
+    const t = new Map<string, number>();
+    log.forEach((l) => t.set(dayKey(l.startedAt), (t.get(dayKey(l.startedAt)) ?? 0) + l.focusedMs));
+    return t;
+  }, [log]);
   const groups = useMemo(() => {
     const g = new Map<string, LogEntry[]>();
-    log.slice(0, 300).forEach((l) => {
+    log.slice(current * PAGE_SIZE, (current + 1) * PAGE_SIZE).forEach((l) => {
       const k = dayKey(l.startedAt);
       g.set(k, [...(g.get(k) ?? []), l]);
     });
     return [...g.entries()];
-  }, [log]);
+  }, [log, current]);
+
+  const resume = (l: LogEntry) => {
+    if (hasActive) {
+      toast("Finish or stop your current task first");
+      return;
+    }
+    dispatch({ type: "setDraft", task: l.task, plannedMin: l.plannedMin });
+    goFocus();
+    toast(`Ready to resume: ${l.task}`);
+  };
 
   const download = () => {
     const blob = new Blob([JSON.stringify(getState(), null, 2)], { type: "application/json" });
@@ -80,7 +100,7 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
           <b>{todays.length}</b>
         </div>
         <div className="stat">
-          <span><ThoughtIcon /> Thoughts parked today</span>
+          <span><ThoughtIcon /> Thoughts dumped today</span>
           <b>{parked}</b>
         </div>
       </div>
@@ -139,40 +159,69 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
               ))}
           </div>
           {groups.length ? (
-            groups.map(([k, entries]) => (
-              <div key={k} className="day-group">
-                <h3>{dayLabel(k, now)}</h3>
-                <ul className="list">
-                  {entries.map((l) => (
-                    <li key={l.id}>
-                      <div className="item-text">
-                        {l.task}
-                        <span className={l.outcome === "done" ? "tag" : "tag muted"}>{l.outcome === "done" ? "Done" : "Paused"}</span>
-                        <small className="mono">
-                          {formatTime(l.startedAt)}–{formatTime(l.endedAt)} · {formatDuration(l.focusedMs)}
-                          {l.plannedMin ? ` of ${l.plannedMin} planned` : ""} · {l.parked} parked
-                        </small>
-                      </div>
-                      <button
-                        type="button"
-                        className="ghost small"
-                        onClick={() => {
-                          if (hasActive) {
-                            toast("Finish or stop your current task first");
-                            return;
-                          }
-                          dispatch({ type: "setDraft", task: l.task, plannedMin: l.plannedMin });
-                          goFocus();
-                          toast(`Ready to resume: ${l.task}`);
-                        }}
-                      >
-                        <PlayIcon /> Resume
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))
+            <>
+              {groups.map(([k, entries]) => (
+                <div key={k} className="day-group">
+                  <h3>
+                    <span>{dayLabel(k, now)}</span>
+                    <span className="day-total">{shortHours(Math.round((dayTotals.get(k) ?? 0) / 60000))}</span>
+                  </h3>
+                  <ul className="session-rows">
+                    {entries.map((l) => (
+                      <li key={l.id}>
+                        <time className="sr-time">{formatTime(l.startedAt)}</time>
+                        <div className="sr-main">
+                          <span className="sr-task">
+                            <i className={l.outcome === "done" ? "sr-dot" : "sr-dot paused"} aria-hidden="true" />
+                            <span className="sr-name" title={l.task}>{l.task}</span>
+                          </span>
+                          <small>
+                            {l.outcome === "done" ? "Done" : "Paused"}
+                            {l.plannedMin ? ` · ${l.plannedMin}m planned` : " · Open session"}
+                            {l.parked ? ` · ${l.parked} dumped` : ""}
+                          </small>
+                        </div>
+                        <span className="sr-dur">{shortHours(Math.round(l.focusedMs / 60000))}</span>
+                        <button type="button" className="sr-resume" onClick={() => resume(l)} aria-label={`Resume ${l.task}`} title="Resume">
+                          <PlayIcon />
+                          <span>Resume</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+              {pages > 1 && (
+                <nav className="pager" aria-label="Session pages">
+                  <span className="pager-info">
+                    {current * PAGE_SIZE + 1}–{Math.min(log.length, (current + 1) * PAGE_SIZE)} of {log.length}
+                  </span>
+                  <div className="pager-btns">
+                    <button type="button" className="pager-btn" disabled={current === 0} onClick={() => setPage(current - 1)} aria-label="Newer sessions">
+                      ‹
+                    </button>
+                    {Array.from({ length: pages }, (_, i) => i)
+                      .filter((i) => i === 0 || i === pages - 1 || Math.abs(i - current) <= 1)
+                      .map((i, idx, arr) => (
+                        <span key={i} className="pager-group">
+                          {idx > 0 && i - arr[idx - 1] > 1 && <span className="pager-gap">…</span>}
+                          <button
+                            type="button"
+                            className="pager-btn"
+                            aria-current={i === current ? "page" : undefined}
+                            onClick={() => setPage(i)}
+                          >
+                            {i + 1}
+                          </button>
+                        </span>
+                      ))}
+                    <button type="button" className="pager-btn" disabled={current >= pages - 1} onClick={() => setPage(current + 1)} aria-label="Older sessions">
+                      ›
+                    </button>
+                  </div>
+                </nav>
+              )}
+            </>
           ) : (
             <p className="empty">Your focus history starts with your first session. Pick one task on Focus and begin.</p>
           )}
