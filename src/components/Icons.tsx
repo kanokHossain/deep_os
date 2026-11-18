@@ -133,8 +133,9 @@ export const UploadIcon = (p: SVGProps<SVGSVGElement>) => (
 );
 export const LogoMark = ({ size = 28 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-    <circle cx="32" cy="32" r="22" fill="none" stroke="var(--accent)" strokeOpacity="0.25" strokeWidth="7" />
-    <path d="M32 10a22 22 0 0 1 22 22" fill="none" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round" />
-    <circle cx="32" cy="32" r="6" fill="var(--sun)" />
+    <path d="M45.77 30.40A15 15 0 1 1 33.60 18.23" fill="none" stroke="var(--accent)" strokeWidth="6" strokeLinecap="round" />
+    <circle cx="31" cy="33" r="5" fill="var(--accent)" />
+    <circle cx="45.14" cy="18.86" r="2.3" fill="var(--sun)" />
+    <circle cx="49.74" cy="14.26" r="4.6" fill="var(--sun)" />
   </svg>
 );
