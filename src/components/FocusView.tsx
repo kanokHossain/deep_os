@@ -8,6 +8,15 @@ import { Ring } from "./Ring";
 
 const PRESETS = [15, 25, 45, 60, 90, 0];
 
+// Example tasks for the empty task box; one is picked per visit.
+const EXAMPLES = [
+  "Start focusing on product requirement preparation",
+  "Start focusing on the client proposal draft",
+  "Start focusing on reviewing pull requests",
+  "Start focusing on the weekly status report",
+  "Start focusing on sprint planning notes",
+];
+
 export function FocusView({ now, goInbox }: { now: number; goInbox: () => void }) {
   const active = useStore((s) => s.active);
   return active ? <ActiveSessionView active={active} now={now} /> : <StartScreen goInbox={goInbox} />;
@@ -92,6 +101,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const [showTime, setShowTime] = useState(false);
   const [dismissed, setDismissed] = useState<string | null>(null);
   const taskRef = useRef<HTMLInputElement>(null);
+  const [example] = useState(() => EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)]);
 
   const last = log[0];
   const showSummary = last && last.endedAt >= mountedAt - 1000 && dismissed !== last.id;
@@ -168,7 +178,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           type="text"
           maxLength={160}
           aria-label="Task"
-          placeholder="Write the proposal intro"
+          placeholder={example}
           value={draft.task}
           onChange={(e) => dispatch({ type: "setDraft", task: e.target.value })}
         />
