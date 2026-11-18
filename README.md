@@ -24,6 +24,19 @@ No account. No tracking. Your data never leaves your browser.
 - **Backup and restore** as a JSON file to move between devices.
 - Light and dark themes, keyboard friendly, works on mobile.
 
+## DeepOS for Mac
+
+The website's pop-out stays on one desktop. The Mac app's mini timer follows you everywhere:
+
+- Floats above every app, on **every desktop (Space)**, even over full-screen apps.
+- Press **⌘⇧Space** from any app: the mini timer appears on the screen your mouse is on. Press again to hide.
+- Lives in the menu bar. Click the icon to show or hide the timer; right-click for the menu (open DeepOS, open at login, quit).
+- Uses the same DeepOS web app inside, so the main window and mini timer stay in sync.
+
+**Install:** download the latest `.dmg` from [Releases](https://github.com/kanokHossain/deep_os/releases), drag DeepOS to Applications and open it. The app isn't signed yet, so the first time right-click it and choose **Open** (or allow it in System Settings → Privacy & Security).
+
+**Build it yourself:** `cd desktop && npm install && npm start` to run, `npm run dist` to make a `.dmg`.
+
 ## Run it locally
 
 ```bash

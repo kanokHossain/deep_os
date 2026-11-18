@@ -10,6 +10,7 @@ import { useNow } from "./hooks/useNow";
 import { useTimeUpChime } from "./hooks/useTimeUpChime";
 import { dispatch, elapsedMs, getState, useStore } from "./lib/store";
 import { formatClock } from "./lib/time";
+import { desktop } from "./lib/desktop";
 
 const VIEWS = ["focus", "inbox", "history"] as const;
 type View = (typeof VIEWS)[number];
@@ -46,6 +47,10 @@ export default function App() {
   }, []);
 
   const popOut = useCallback(async () => {
+    if (desktop) {
+      desktop.toggleMini();
+      return;
+    }
     if (!floating.supported) {
       toast("Pop out works in Chrome and Edge on a computer");
       return;

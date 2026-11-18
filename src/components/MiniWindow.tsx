@@ -22,7 +22,7 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
   if (!active) {
     return (
       <div className="mini">
-        <p className="mini-task">What's the one thing?</p>
+        <p className="mini-title mini-drag">What's the one thing?</p>
         <form
           className="mini-start"
           autoComplete="off"
@@ -53,7 +53,7 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
 
   return (
     <div className={active.pausedAt ? "mini paused" : "mini"}>
-      <div className="mini-top">
+      <div className="mini-top mini-drag">
         <p className="mini-task" title={active.task}>
           {active.task}
         </p>

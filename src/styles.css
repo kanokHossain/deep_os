@@ -238,6 +238,7 @@ ul.list li { display: flex; gap: 14px; align-items: center; justify-content: spa
 .mini-top { display: flex; align-items: center; gap: 8px; }
 .mini-task { margin: 0; flex: 1; min-width: 0; font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mini-actions { display: flex; gap: 6px; }
+.mini-title { margin: 0; font-weight: 800; font-size: 15px; }
 .small-round { width: 34px; height: 34px; box-shadow: none; }
 .small-round svg { width: 16px; height: 16px; }
 .small-round.done { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -255,6 +256,11 @@ ul.list li { display: flex; gap: 14px; align-items: center; justify-content: spa
 .park-compact form { border-radius: 12px; padding: 4px; box-shadow: none; }
 .park-compact input { font-size: 14px; padding: 7px 8px; }
 .park-compact button { font-size: 13px; padding: 0 12px; border-radius: 9px; }
+
+/* desktop app: frameless window, drag from the title row */
+.desktop-mini .mini { min-height: 100vh; border-radius: 14px; }
+.desktop-mini .mini-drag { -webkit-app-region: drag; cursor: grab; }
+.desktop-mini .mini-drag button, .desktop-mini input, .desktop-mini button { -webkit-app-region: no-drag; }
 
 /* ---------- responsive ---------- */
 @media (max-width: 760px) {

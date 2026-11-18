@@ -1,0 +1,31 @@
+{
+  "name": "deepos-desktop",
+  "productName": "DeepOS",
+  "version": "0.1.0",
+  "description": "DeepOS for Mac: a floating focus timer and thought parking box that follows you to every desktop.",
+  "author": "Kanok Hossain",
+  "license": "MIT",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac dmg zip --universal"
+  },
+  "devDependencies": {
+    "electron": "33.2.0",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "com.kanokhossain.deepos",
+    "productName": "DeepOS",
+    "files": ["main.cjs", "preload.cjs", "assets/**"],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "build/icon.png",
+      "target": ["dmg", "zip"],
+      "identity": null,
+      "extendInfo": { "LSUIElement": true }
+    },
+    "dmg": { "title": "DeepOS" },
+    "artifactName": "DeepOS-${version}-mac-${arch}.${ext}"
+  }
+}
