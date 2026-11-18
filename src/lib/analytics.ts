@@ -1,4 +1,4 @@
-import { inject, track } from "@vercel/analytics";
+import { inject, pageview, track } from "@vercel/analytics";
 
 /**
  * Anonymous, cookieless usage counts through Vercel Web Analytics.
@@ -28,6 +28,9 @@ export function startAnalytics() {
 export function trackEvent(name: EventName, data?: Record<string, string | number | boolean>) {
   try {
     track(name, data);
+    // Custom events need a paid Vercel plan to read. Page views are free, so a vote is also
+    // counted as a visit to a virtual page: Vercel Analytics > Pages > /vote/sync.
+    if (name === "Sync vote") pageview({ route: "/vote/sync", path: "/vote/sync" });
   } catch {
     /* ignore */
   }

@@ -29,7 +29,7 @@ export function PrivacyPage() {
       </p>
       <ul>
         <li>a focus session started or completed, and its planned length</li>
-        <li>a thought parked (only that it happened, not what it says)</li>
+        <li>a thought dumped (only that it happened, not what it says)</li>
         <li>a backup downloaded or restored</li>
         <li>the app installed</li>
         <li>a vote for sync across devices</li>
