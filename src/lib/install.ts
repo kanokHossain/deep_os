@@ -1,3 +1,5 @@
+import { trackEvent } from "./analytics";
+
 /**
  * Install support for every browser.
  * Chrome, Edge, Samsung Internet, Opera and Brave fire `beforeinstallprompt`, often before React
@@ -19,6 +21,7 @@ if (typeof window !== "undefined") {
     notify();
   });
   window.addEventListener("appinstalled", () => {
+    trackEvent("App installed");
     deferred = null;
     installedFlag = true;
     notify();

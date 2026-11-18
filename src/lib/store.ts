@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from "react";
+import { trackEvent } from "./analytics";
 
 export interface ActiveSession {
   id: string;
@@ -209,12 +210,21 @@ export function dispatch(action: Action) {
   const next = reduce(state, action);
   if (next === state) return;
   state = next;
+  count(action);
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
   } catch {
     /* storage full or blocked: keep working in memory */
   }
   listeners.forEach((l) => l());
+}
+
+/** Anonymous counts only: which kind of thing happened, never its text. */
+function count(action: Action) {
+  if (action.type === "start") trackEvent("Session started", { minutes: action.plannedMin || "open" });
+  else if (action.type === "end") trackEvent("Session completed", { outcome: action.outcome });
+  else if (action.type === "park") trackEvent("Thought parked", { where: "focus" });
+  else if (action.type === "addInbox") trackEvent("Thought parked", { where: "brain dump" });
 }
 
 export function subscribe(l: () => void) {

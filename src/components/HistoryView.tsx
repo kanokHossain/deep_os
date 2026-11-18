@@ -2,11 +2,14 @@ import { useMemo, useState } from "react";
 import { dispatch, parseState, useStore, getState, type LogEntry } from "../lib/store";
 import { dayKey, dayLabel, formatDuration, formatTime } from "../lib/time";
 import { ClockIcon, DownloadIcon, LayersIcon, ThoughtIcon, UploadIcon } from "./Icons";
+import { SyncVote } from "./SyncVote";
 import { toast } from "./Toast";
+import { trackEvent } from "../lib/analytics";
 
 export function HistoryView({ now }: { now: number }) {
   const log = useStore((s) => s.log);
   const [confirming, setConfirming] = useState(false);
+  const [justBackedUp, setJustBackedUp] = useState(false);
   const today = dayKey(now);
 
   const todays = log.filter((l) => dayKey(l.startedAt) === today);
@@ -35,6 +38,8 @@ export function HistoryView({ now }: { now: number }) {
     a.download = `deepos-backup-${today}.json`;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    trackEvent("Backup downloaded");
+    setJustBackedUp(true);
   };
 
   const restore = async (file: File | undefined) => {
@@ -43,6 +48,7 @@ export function HistoryView({ now }: { now: number }) {
       const parsed = parseState(JSON.parse(await file.text()));
       if (!parsed) throw new Error("bad file");
       dispatch({ type: "replace", state: parsed });
+      trackEvent("Backup restored");
       toast("Backup restored");
     } catch {
       toast("That file isn't a DeepOS backup");
@@ -139,7 +145,7 @@ export function HistoryView({ now }: { now: number }) {
       <section className="card hg-data">
         <h2>Your data</h2>
         <p className="hint">
-          Everything stays in this browser. There's no account and nothing is sent anywhere. Download a backup to move to another device.
+          Everything you write stays in this browser. There's no account, and your tasks and thoughts are never sent anywhere. Download a backup to move to another device.
         </p>
         <div className="row">
           <button type="button" className="ghost small" onClick={download}>
@@ -150,7 +156,11 @@ export function HistoryView({ now }: { now: number }) {
             <input type="file" accept="application/json,.json" onChange={(e) => restore(e.target.files?.[0])} />
           </label>
         </div>
+        {justBackedUp && <p className="hint">Moving to another device? Vote below so we know sync is wanted.</p>}
       </section>
+      <div className="hg-vote">
+        <SyncVote />
+      </div>
       </div>
     </>
   );

@@ -426,7 +426,8 @@ button svg { width: 18px; height: 18px; flex: none; }
 .empty-big svg { width: 44px; height: 44px; padding: 10px; border-radius: 16px; background: var(--surface); color: var(--accent); margin-bottom: 6px; box-sizing: content-box; }
 .empty-big b { color: var(--ink); font-size: 18px; }
 .empty-big span { max-width: 36ch; font-size: 14.5px; }
-.history-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); grid-template-rows: auto 1fr; grid-template-areas: "chart sessions" "data sessions"; gap: 20px; align-items: start; }
+.history-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); grid-template-rows: auto auto 1fr; grid-template-areas: "chart sessions" "data sessions" "vote sessions"; gap: 20px; align-items: start; }
+.hg-vote { grid-area: vote; }
 .hg-sessions ul.list li { padding-left: 16px; }
 .hg-sessions ul.list li::before { display: none; }
 .hg-chart { grid-area: chart; }
@@ -436,5 +437,14 @@ button svg { width: 18px; height: 18px; flex: none; }
   .split { grid-template-columns: 1fr; }
   .split-side { position: static; }
   .split-main { min-height: 0; }
-  .history-grid { grid-template-columns: 1fr; grid-template-areas: "chart" "sessions" "data"; }
+  .history-grid { grid-template-columns: 1fr; grid-template-rows: none; grid-template-areas: "chart" "data" "vote" "sessions"; }
 }
+
+/* ---------- sync vote ---------- */
+.sync-vote { display: grid; grid-template-columns: auto 1fr; gap: 12px 14px; align-items: start; background: linear-gradient(135deg, var(--accent-soft), var(--glass) 70%); }
+.sync-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--surface); color: var(--accent); }
+.sync-body h2 { font-size: 16px; }
+.sync-body p { margin: 4px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+.sync-vote > button, .sync-done { grid-column: 2; justify-self: start; }
+.sync-done { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; color: var(--accent); }
+.sync-done svg { width: 16px; height: 16px; }

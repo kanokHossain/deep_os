@@ -4,7 +4,7 @@
 
 A free, open-source focus timer built around one habit: when a stray thought shows up mid-task, don't chase it. Park it in one line and keep working. Review everything you parked after the session.
 
-No account. No tracking. Your data never leaves your browser.
+No account. No cookies. What you write never leaves your browser. Only anonymous usage counts (Vercel Web Analytics) are collected; see the Privacy Policy in the app.
 
 ## How it works
 

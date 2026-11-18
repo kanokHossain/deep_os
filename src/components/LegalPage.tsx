@@ -22,12 +22,29 @@ export function PrivacyPage() {
         <li>If you install DeepOS as an app, your browser also keeps a copy of the app's files so it works offline. This contains no personal data.</li>
       </ul>
 
+      <h2>Anonymous usage counts</h2>
+      <p>
+        To learn whether DeepOS is useful, we use <b>Vercel Web Analytics</b>. It uses no cookies and doesn't identify you. It counts
+        page visits (with country, device type and the page that sent you) and a few actions:
+      </p>
+      <ul>
+        <li>a focus session started or completed, and its planned length</li>
+        <li>a thought parked (only that it happened, not what it says)</li>
+        <li>a backup downloaded or restored</li>
+        <li>the app installed</li>
+        <li>a vote for sync across devices</li>
+      </ul>
+      <p>
+        These counts never include anything you type: no task names, no thoughts, no history. Your vote for sync is remembered only on
+        your device, so it's counted once.
+      </p>
+
       <h2>What we don't do</h2>
       <ul>
         <li>No accounts, logins or passwords.</li>
-        <li>No analytics, tracking pixels or advertising.</li>
-        <li>No cookies.</li>
-        <li>No selling or sharing of data, because we don't collect any.</li>
+        <li>No cookies, advertising or tracking across other websites.</li>
+        <li>No collecting of what you write.</li>
+        <li>No selling or sharing of data.</li>
       </ul>
 
       <h2>Third parties involved in loading the app</h2>
@@ -37,11 +54,14 @@ export function PrivacyPage() {
           browser type) to deliver the page and keep the service secure.
         </li>
         <li>
+          <b>Vercel Web Analytics</b> receives the anonymous counts described above.
+        </li>
+        <li>
           <b>Google Fonts</b> provides the typefaces. Your browser requests the fonts from Google, which receives your IP address. After
           the first visit, an installed app uses its saved copy.
         </li>
       </ul>
-      <p>Neither of them receives anything you type into DeepOS.</p>
+      <p>None of them receives anything you type into DeepOS.</p>
 
       <h2>Children</h2>
       <p>DeepOS collects no personal information from anyone, including children.</p>
