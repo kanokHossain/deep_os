@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
 import { formatClock, formatDuration, formatTime, startFromTimeInput, timeInputValue } from "../lib/time";
+import { CheckIcon, FloatIcon, PauseIcon, PlayIcon, StopIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
+import { Ring } from "./Ring";
 import { toast } from "./Toast";
 
 const PRESETS = [15, 25, 45, 60, 90, 0];
@@ -15,105 +17,107 @@ interface Floating {
 
 export function FocusView({ now, floating, goInbox }: { now: number; floating: Floating; goInbox: () => void }) {
   const active = useStore((s) => s.active);
-  return active ? (
-    <ActiveSessionCard active={active} now={now} floating={floating} />
-  ) : (
-    <StartScreen goInbox={goInbox} />
-  );
+  return active ? <ActiveSessionView active={active} now={now} floating={floating} /> : <StartScreen goInbox={goInbox} />;
 }
 
-function ActiveSessionCard({ active, now, floating }: { active: ActiveSession; now: number; floating: Floating }) {
+function isTyping() {
+  return /INPUT|TEXTAREA|SELECT/.test((document.activeElement?.tagName ?? "").toUpperCase());
+}
+
+function ActiveSessionView({ active, now, floating }: { active: ActiveSession; now: number; floating: Floating }) {
   const parkRef = useRef<HTMLInputElement>(null);
   const el = elapsedMs(active, now);
   const planned = active.plannedMin * 60000;
   const left = planned - el;
+  const over = planned > 0 && left < 0;
   const paused = active.pausedAt !== null;
+  // Open sessions loop the ring once an hour.
+  const progress = planned ? el / planned : (el % 3600000) / 3600000;
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement?.tagName ?? "").toUpperCase());
-      if (typing || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (isTyping() || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.key === "p" || e.key === "P") {
         e.preventDefault();
         parkRef.current?.focus();
+      } else if (e.key === " ") {
+        e.preventDefault();
+        dispatch({ type: active.pausedAt ? "resume" : "pause", now: Date.now() });
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [active.pausedAt]);
 
   return (
-    <section className="card session" aria-labelledby="task-heading">
-      <div>
-        <div className="eyebrow">{paused ? "Paused" : "Working on"}</div>
+    <section className="session" aria-labelledby="task-heading">
+      <header className="session-head">
+        <span className={paused ? "status paused" : "status live"}>{paused ? "Paused" : "Focusing"}</span>
         <h1 id="task-heading">{active.task}</h1>
-      </div>
-      <div className={paused ? "clock paused" : "clock"} aria-label="Focused time">
-        {formatClock(el)}
-      </div>
-      {planned > 0 && (
-        <div className={left < 0 ? "bar over" : "bar"}>
-          <i style={{ width: `${Math.min(100, (el / planned) * 100)}%` }} />
+      </header>
+
+      <Ring progress={progress} over={over} paused={paused}>
+        <div className="clock" aria-label="Focused time">
+          {formatClock(el)}
         </div>
-      )}
-      <div className="meta">
-        <span>
-          Started <strong>{formatTime(active.startedAt)}</strong>
-        </span>
-        {planned > 0 ? (
-          left >= 0 ? (
-            <span>
-              <strong>{formatClock(left)}</strong> left of {active.plannedMin} min
-            </span>
-          ) : (
-            <span>
-              Over plan by <strong>{formatClock(-left)}</strong>
-            </span>
-          )
-        ) : (
-          <span>Open session</span>
-        )}
-        <span>
-          Parked <strong>{active.parked}</strong>
-        </span>
-      </div>
+        <div className="clock-sub">
+          {planned ? (over ? `${formatClock(-left)} over plan` : `${formatClock(left)} left`) : "Open session"}
+        </div>
+      </Ring>
 
-      <ParkBox ref={parkRef} task={active.task} />
-
-      <div className="row">
-        <button type="button" className="primary" onClick={() => dispatch({ type: "end", outcome: "done", now: Date.now() })}>
-          Task done
+      <div className="controls">
+        <button
+          type="button"
+          className="round"
+          aria-label={paused ? "Resume" : "Pause"}
+          title={paused ? "Resume (Space)" : "Pause (Space)"}
+          onClick={() => dispatch({ type: paused ? "resume" : "pause", now: Date.now() })}
+        >
+          {paused ? <PlayIcon /> : <PauseIcon />}
         </button>
-        {paused ? (
-          <button type="button" className="ghost" onClick={() => dispatch({ type: "resume", now: Date.now() })}>
-            Resume
-          </button>
-        ) : (
-          <button type="button" className="ghost" onClick={() => dispatch({ type: "pause", now: Date.now() })}>
-            Pause
-          </button>
-        )}
-        <button type="button" className="ghost" onClick={() => dispatch({ type: "end", outcome: "stopped", now: Date.now() })}>
-          Stop for now
+        <button type="button" className="primary big" onClick={() => dispatch({ type: "end", outcome: "done", now: Date.now() })}>
+          <CheckIcon /> Task done
+        </button>
+        <button
+          type="button"
+          className="round"
+          aria-label="Stop for now"
+          title="Stop for now"
+          onClick={() => dispatch({ type: "end", outcome: "stopped", now: Date.now() })}
+        >
+          <StopIcon />
         </button>
         {floating.supported && !floating.isOpen && (
           <button
             type="button"
-            className="ghost"
+            className="round"
+            aria-label="Float on top"
+            title="Float a mini timer above your other apps"
             onClick={async () => {
               if (!(await floating.open())) toast("Your browser blocked the floating window");
             }}
           >
-            Float on top
+            <FloatIcon />
           </button>
         )}
       </div>
-      <p className="hint">
-        Press <kbd>P</kbd> to park a thought.
-        {floating.supported ? " Float on top keeps a mini timer above your other apps." : ""}
-      </p>
+
+      <div className="session-meta">
+        Started {formatTime(active.startedAt)}
+        {active.plannedMin ? ` for ${active.plannedMin} min` : ""}. {active.parked} thought{active.parked === 1 ? "" : "s"} parked.
+      </div>
+
+      <ParkBox ref={parkRef} task={active.task} />
     </section>
   );
+}
+
+function greeting(now: number) {
+  const h = new Date(now).getHours();
+  if (h < 5) return "Late night";
+  if (h < 12) return "Good morning";
+  if (h < 17) return "Good afternoon";
+  return "Good evening";
 }
 
 function StartScreen({ goInbox }: { goInbox: () => void }) {
@@ -122,6 +126,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const inbox = useStore((s) => s.inbox);
   const [mountedAt] = useState(() => Date.now());
   const [startTime, setStartTime] = useState(() => timeInputValue(Date.now()));
+  const [showTime, setShowTime] = useState(false);
   const [dismissed, setDismissed] = useState<string | null>(null);
   const taskRef = useRef<HTMLInputElement>(null);
 
@@ -131,109 +136,130 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const firstVisit = log.length === 0 && inbox.length === 0;
 
   useEffect(() => {
-    if (draft.task) taskRef.current?.focus();
-  }, [draft.task]);
+    taskRef.current?.focus();
+  }, [draft.task === ""]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const start = () => {
+    if (!draft.task.trim()) {
+      taskRef.current?.focus();
+      return;
+    }
+    unlockAudio();
+    const n = Date.now();
+    dispatch({
+      type: "start",
+      task: draft.task,
+      startedAt: showTime ? startFromTimeInput(startTime, n) : n,
+      plannedMin: draft.plannedMin,
+      now: n,
+    });
+  };
 
   return (
-    <>
+    <section className="start" aria-labelledby="start-heading">
       {showSummary && (
-        <section className="card summary">
-          <h2>
-            {last.outcome === "done" ? "Done." : "Paused."} {formatDuration(last.focusedMs)} on {last.task}
-          </h2>
-          <p className="hint">
-            {last.parked
-              ? `You parked ${last.parked} thought${last.parked > 1 ? "s" : ""} instead of chasing ${last.parked > 1 ? "them" : "it"}.`
-              : "No thoughts parked. Clean session."}
-          </p>
+        <div className="surface-msg" role="status">
+          <CheckIcon />
+          <div>
+            <strong>
+              {last.outcome === "done" ? "Done" : "Paused"}: {formatDuration(last.focusedMs)} on {last.task}.
+            </strong>
+            <span>
+              {last.parked
+                ? ` You parked ${last.parked} thought${last.parked > 1 ? "s" : ""} instead of chasing ${last.parked > 1 ? "them" : "it"}.`
+                : " No thoughts parked. Clean session."}
+            </span>
+          </div>
           <div className="row">
             {waiting > 0 && (
               <button type="button" className="ghost small" onClick={goInbox}>
-                Review inbox ({waiting})
+                Review {waiting}
               </button>
             )}
             <button type="button" className="ghost small" onClick={() => setDismissed(last.id)}>
               Dismiss
             </button>
           </div>
-        </section>
+        </div>
       )}
 
-      <section className="card" aria-labelledby="start-heading">
-        <h1 id="start-heading">What's the one thing?</h1>
-        <form
-          className="stack"
-          autoComplete="off"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!draft.task.trim()) return;
-            unlockAudio();
-            const n = Date.now();
-            dispatch({ type: "start", task: draft.task, startedAt: startFromTimeInput(startTime, n), plannedMin: draft.plannedMin, now: n });
-          }}
-        >
-          <div className="field">
-            <label htmlFor="task-input">Task</label>
-            <input
-              ref={taskRef}
-              id="task-input"
-              type="text"
-              required
-              maxLength={160}
-              placeholder="e.g. Draft the release notes"
-              value={draft.task}
-              onChange={(e) => dispatch({ type: "setDraft", task: e.target.value })}
-            />
+      <p className="hello">{greeting(Date.now())}.</p>
+      <h1 id="start-heading">What's the one thing?</h1>
+
+      <form
+        className="start-form"
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          start();
+        }}
+      >
+        <input
+          ref={taskRef}
+          id="task-input"
+          className="task-input"
+          type="text"
+          maxLength={160}
+          aria-label="Task"
+          placeholder="Write the proposal intro"
+          value={draft.task}
+          onChange={(e) => dispatch({ type: "setDraft", task: e.target.value })}
+        />
+
+        <div className="dive-row">
+          <div className="chips" role="group" aria-label="Session length">
+            {PRESETS.map((m) => (
+              <button
+                key={m}
+                type="button"
+                className="chip"
+                aria-pressed={draft.plannedMin === m}
+                onClick={() => dispatch({ type: "setDraft", plannedMin: m })}
+              >
+                {m ? `${m}m` : "Open"}
+              </button>
+            ))}
           </div>
-          <div className="row align-end">
-            <div className="field">
-              <label htmlFor="start-input">Start time</label>
-              <input id="start-input" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-            </div>
-            <div className="field grow">
-              <span className="label" id="plan-label">
-                Planned length
-              </span>
-              <div className="chips" role="group" aria-labelledby="plan-label">
-                {PRESETS.map((m) => (
-                  <button
-                    key={m}
-                    type="button"
-                    className="chip"
-                    aria-pressed={draft.plannedMin === m}
-                    onClick={() => dispatch({ type: "setDraft", plannedMin: m })}
-                  >
-                    {m ? `${m} min` : "Open"}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <button type="submit" className="primary">
-              Start focusing
+          <button type="submit" className="primary big dive">
+            Start focus
+          </button>
+        </div>
+
+        <div className="start-extra">
+          {showTime ? (
+            <label className="inline-time">
+              Started at
+              <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+            </label>
+          ) : (
+            <button type="button" className="link" onClick={() => setShowTime(true)}>
+              Already started? Set an earlier start time
             </button>
-            <p className="hint grow">Started already? Set the start time earlier.</p>
-          </div>
-        </form>
-      </section>
+          )}
+          {waiting > 0 && !showSummary && (
+            <button type="button" className="link" onClick={goInbox}>
+              {waiting} parked thought{waiting > 1 ? "s" : ""} waiting
+            </button>
+          )}
+        </div>
+      </form>
 
       {firstVisit && (
-        <section className="how" aria-label="How it works">
-          <div>
-            <b>1. Pick one task</b>
-            <span>Name it and start the clock. Only this task matters now.</span>
-          </div>
-          <div>
-            <b>2. Park every other thought</b>
-            <span>An idea or to-do pops up? Type it into the park box and get back to work.</span>
-          </div>
-          <div>
-            <b>3. Review later</b>
-            <span>After the session, go through your inbox: focus on it, keep it for later, or drop it.</span>
-          </div>
-        </section>
+        <ol className="how">
+          <li>
+            <b>Pick one task</b>
+            <span>Name it and start. Only this task matters now.</span>
+          </li>
+          <li>
+            <b>Park every other thought</b>
+            <span>Something pops up? Type it in the park box. It floats to your inbox.</span>
+          </li>
+          <li>
+            <b>Review later</b>
+            <span>After the session, decide each one: do it now, keep it for later, or drop it.</span>
+          </li>
+        </ol>
       )}
-    </>
+    </section>
   );
 }
