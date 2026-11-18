@@ -123,7 +123,7 @@ export default function App() {
     window.scrollTo({ top: 0 });
   }, [view]);
 
-  const waiting = inbox.filter((i) => i.status === "new").length;
+  const waiting = inbox.length;
 
   return (
     <div className={active && view === "focus" ? "shell zen" : "shell"}>

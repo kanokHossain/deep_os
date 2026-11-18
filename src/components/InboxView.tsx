@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { dispatch, useStore, type InboxItem } from "../lib/store";
 import { dayKey, dayLabel, formatTime } from "../lib/time";
-import { BookmarkIcon, CardsIcon, CopyIcon, LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
+import { CardsIcon, CopyIcon, LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
 import { toast } from "./Toast";
 
 export function InboxView({ goFocus }: { goFocus: () => void }) {
@@ -10,13 +10,11 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
   const [triage, setTriage] = useState(false);
   const [text, setText] = useState("");
 
-  const fresh = inbox.filter((i) => i.status === "new");
-  const later = inbox.filter((i) => i.status === "later");
+  // Older saves may hold "later" items; they simply show with the rest now.
+  const fresh = inbox;
 
-  const act = (item: InboxItem, action: "focus" | "later" | "drop") => {
-    if (action === "later") {
-      dispatch({ type: "later", id: item.id });
-    } else if (action === "drop") {
+  const act = (item: InboxItem, action: "focus" | "drop") => {
+    if (action === "drop") {
       const index = inbox.findIndex((i) => i.id === item.id);
       dispatch({ type: "drop", id: item.id });
       toast("Let go", () => dispatch({ type: "restore", item, index }));
@@ -34,7 +32,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
   if (triage && fresh.length) return <Triage items={fresh} onAct={act} onExit={() => setTriage(false)} />;
 
   const copy = async () => {
-    const lines = [...fresh, ...later].map((i) => `- [ ] ${i.text}`).join("\n");
+    const lines = fresh.map((i) => `- [ ] ${i.text}`).join("\n");
     try {
       await navigator.clipboard.writeText(lines);
       toast("Copied as a checklist");
@@ -89,7 +87,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
         </button>
       </form>
 
-      <div className="columns">
+      <div className="columns single">
         <section className="card column" aria-labelledby="waiting-heading">
           <div className="column-head">
             <h2 id="waiting-heading">Waiting for you</h2>
@@ -106,21 +104,6 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
           )}
         </section>
 
-        <section className="card column" aria-labelledby="later-heading">
-          <div className="column-head">
-            <h2 id="later-heading">Kept for later</h2>
-            <span className="pill">{later.length}</span>
-          </div>
-          {later.length ? (
-            <ItemList items={later} onAct={act} />
-          ) : (
-            <div className="empty-big quiet">
-              <BookmarkIcon />
-              <b>Nothing saved for later.</b>
-              <span>Choose “Later” on a thought to keep it here without it nagging you.</span>
-            </div>
-          )}
-        </section>
       </div>
     </div>
   );
@@ -131,7 +114,7 @@ function source(i: InboxItem) {
   return i.fromTask ? `Came up ${when} while you were on “${i.fromTask}”` : `Added ${when}`;
 }
 
-type ActFn = (item: InboxItem, action: "focus" | "later" | "drop") => boolean | undefined;
+type ActFn = (item: InboxItem, action: "focus" | "drop") => boolean | undefined;
 
 function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
   return (
@@ -146,11 +129,6 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
             <button type="button" className="primary small" onClick={() => onAct(i, "focus")}>
               <PlayIcon /> Start now
             </button>
-            {i.status === "new" && (
-              <button type="button" className="ghost small" onClick={() => onAct(i, "later")}>
-                <BookmarkIcon /> Later
-              </button>
-            )}
             <button type="button" className="ghost small" onClick={() => onAct(i, "drop")}>
               <LeafIcon /> Let it go
             </button>
@@ -164,8 +142,14 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
 /** One card at a time, so every parked thought gets a real decision. */
 function Triage({ items, onAct, onExit }: { items: InboxItem[]; onAct: ActFn; onExit: () => void }) {
   const [total] = useState(items.length);
-  const item = items[0];
-  const done = total - items.length;
+  const [skipped, setSkipped] = useState<string[]>([]);
+  const queue = items.filter((i) => !skipped.includes(i.id));
+  const item = queue[0];
+  const done = total - queue.length;
+  useEffect(() => {
+    if (!item) onExit();
+  }, [item, onExit]);
+  if (!item) return null;
 
   return (
     <section className="card triage" aria-labelledby="triage-heading">
@@ -186,8 +170,8 @@ function Triage({ items, onAct, onExit }: { items: InboxItem[]; onAct: ActFn; on
         <button type="button" className="primary" onClick={() => onAct(item, "focus")}>
           <PlayIcon /> Start now
         </button>
-        <button type="button" className="ghost" onClick={() => onAct(item, "later")}>
-          <BookmarkIcon /> Keep for later
+        <button type="button" className="ghost" onClick={() => setSkipped((k) => [...k, item.id])}>
+          Skip for now
         </button>
         <button type="button" className="ghost" onClick={() => onAct(item, "drop")}>
           <LeafIcon /> Let it go

@@ -14,7 +14,7 @@ import { ParkBox } from "./ParkBox";
 export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
   const active = useStore((s) => s.active);
   const draft = useStore((s) => s.draft);
-  const waiting = useStore((s) => s.inbox.filter((i) => i.status === "new").length);
+  const waiting = useStore((s) => s.inbox.length);
   const now = useNow(win);
   const [task, setTask] = useState(draft.task);
   useTimeUpChime(active, now);

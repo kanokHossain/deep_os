@@ -540,3 +540,8 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 
 .title-input::-webkit-calendar-picker-indicator, .title-input::-webkit-list-button { display: none !important; opacity: 0; }
 .session.idle .session-head { gap: 6px; width: 100%; max-width: 860px; }
+
+.columns.single { grid-template-columns: 1fr; }
+/* Before a session starts the task line always shows it's a field to type in */
+.title-input { border-bottom: 2px solid var(--line); }
+.title-input:hover { border-bottom-color: var(--muted); }

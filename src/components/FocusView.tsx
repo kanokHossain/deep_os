@@ -6,7 +6,7 @@ import { CheckIcon, ClockIcon, FocusIcon, LayersIcon, LeafIcon, PauseIcon, PlayI
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
 
-const PRESETS = [15, 25, 45, 60, 90, 0];
+const PRESETS = [15, 25, 45, 0];
 
 // Example tasks for the empty task box; one is picked per visit.
 const EXAMPLES = [
@@ -121,7 +121,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
 
   const last = log[0];
   const showSummary = last && last.endedAt >= mountedAt - 1000 && dismissed !== last.id;
-  const waiting = inbox.filter((i) => i.status === "new").length;
+  const waiting = inbox.length;
   const firstVisit = log.length === 0 && inbox.length === 0;
   const today = dayKey(Date.now());
   const todays = log.filter((l) => dayKey(l.startedAt) === today);
@@ -283,7 +283,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           <li>
             <LeafIcon className="how-icon" />
             <b>Sort it later</b>
-            <span>When you're done, go through your brain dump: start it, keep it, or let it go.</span>
+            <span>When you're done, go through your brain dump: start it or let it go.</span>
           </li>
         </ol>
       )}
