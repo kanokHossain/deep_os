@@ -137,8 +137,6 @@ export default function App() {
           <LogoMark size={30} />
           <span className="brand-name">DeepOS</span>
           <span className="brand-tag">
-            One task, a clear head.
-            <br />
             Dump the noise, keep working.
           </span>
         </a>
