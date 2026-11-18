@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
-import { formatClock, formatDuration, formatTime, startFromTimeInput, timeInputValue } from "../lib/time";
+import { dayKey, formatClock, formatDuration, formatTime, startFromTimeInput, timeInputValue } from "../lib/time";
 import { CheckIcon, PauseIcon, PlayIcon, StopIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
@@ -97,6 +97,10 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const showSummary = last && last.endedAt >= mountedAt - 1000 && dismissed !== last.id;
   const waiting = inbox.filter((i) => i.status === "new").length;
   const firstVisit = log.length === 0 && inbox.length === 0;
+  const today = dayKey(Date.now());
+  const todays = log.filter((l) => dayKey(l.startedAt) === today);
+  const todayMs = todays.reduce((sum, l) => sum + l.focusedMs, 0);
+  const todayParked = todays.reduce((sum, l) => sum + l.parked, 0);
 
   useEffect(() => {
     taskRef.current?.focus();
@@ -146,7 +150,19 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </div>
       )}
 
-      <p className="hello">{greeting(Date.now())}. Let the rest wait.</p>
+      <div className="hello-row">
+        <p className="hello">{greeting(Date.now())}. Let the rest wait.</p>
+        {todays.length > 0 && (
+          <p className="today">
+            Today <b>{formatDuration(todayMs)}</b> focused across <b>{todays.length}</b> session{todays.length > 1 ? "s" : ""}
+            {todayParked ? (
+              <>
+                , <b>{todayParked}</b> thought{todayParked > 1 ? "s" : ""} parked
+              </>
+            ) : null}
+          </p>
+        )}
+      </div>
       <h1 id="start-heading">What's the one thing?</h1>
 
       <form

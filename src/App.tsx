@@ -3,6 +3,7 @@ import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
 import { KeyboardIcon, LogoMark, PopoutIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
+import { InstallButton } from "./components/InstallButton";
 import { ShortcutsDialog } from "./components/Shortcuts";
 import { toast, Toaster } from "./components/Toast";
 import { useFloatingWindow } from "./hooks/useFloatingWindow";
@@ -10,7 +11,6 @@ import { useNow } from "./hooks/useNow";
 import { useTimeUpChime } from "./hooks/useTimeUpChime";
 import { dispatch, elapsedMs, getState, useStore } from "./lib/store";
 import { formatClock } from "./lib/time";
-import { desktop } from "./lib/desktop";
 
 const VIEWS = ["focus", "inbox", "history"] as const;
 type View = (typeof VIEWS)[number];
@@ -47,10 +47,6 @@ export default function App() {
   }, []);
 
   const popOut = useCallback(async () => {
-    if (desktop) {
-      desktop.toggleMini();
-      return;
-    }
     if (!floating.supported) {
       toast("Pop out works in Chrome and Edge on a computer");
       return;
@@ -115,6 +111,11 @@ export default function App() {
 
   return (
     <div className={active && view === "focus" ? "shell zen" : "shell"}>
+      <div className="aurora" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+      </div>
       <header className="topbar">
         <a className="brand" href="#focus" onClick={() => go("focus")} aria-label="DeepOS home">
           <LogoMark size={26} />
@@ -136,6 +137,7 @@ export default function App() {
           ))}
         </nav>
         <div className="top-actions">
+          <InstallButton />
           <button
             type="button"
             className="ghost small icon-btn"
