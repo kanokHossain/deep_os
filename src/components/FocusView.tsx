@@ -211,7 +211,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
       </div>
 
       {waiting > 0 && (
-        <button type="button" className="waiting-chip" onClick={goInbox}>
+        <button type="button" className="waiting-chip" onClick={goInbox} aria-label={`Open brain dump, ${waiting} thought${waiting > 1 ? "s" : ""} waiting`}>
           <span className="waiting-icon" aria-hidden="true">
             <ThoughtIcon />
             <i>{waiting}</i>
@@ -222,7 +222,11 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             </b>
             <small>In your brain dump, ready when you are</small>
           </span>
-          <span className="waiting-go">Open</span>
+          <span className="waiting-go" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </span>
         </button>
       )}
 
