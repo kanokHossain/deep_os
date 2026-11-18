@@ -3,7 +3,7 @@ import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
 import { dayKey, formatClock, formatDuration, formatTime } from "../lib/time";
 import { toast } from "./Toast";
-import { CheckIcon, ClockIcon, FocusIcon, LayersIcon, LeafIcon, PauseIcon, PlayIcon, StopIcon, ThoughtIcon } from "./Icons";
+import { CheckIcon, ClockIcon, LayersIcon, PauseIcon, PlayIcon, StopIcon, ThoughtIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
 
@@ -122,7 +122,6 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const [example] = useState(() => EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)]);
 
   const waiting = inbox.length;
-  const firstVisit = log.length === 0 && inbox.length === 0;
   const today = dayKey(Date.now());
   const todays = log.filter((l) => dayKey(l.startedAt) === today);
   const todayMs = todays.reduce((sum, l) => sum + l.focusedMs, 0);
@@ -244,25 +243,6 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </ul>
       )}
 
-      {firstVisit && (
-        <ol className="how">
-          <li>
-            <FocusIcon className="how-icon" />
-            <b>Pick one thing</b>
-            <span>Name it and start. For now, nothing else needs you.</span>
-          </li>
-          <li>
-            <ThoughtIcon className="how-icon sun" />
-            <b>Dump what buzzes</b>
-            <span>A worry, a to-do, an idea? Type it once and let it go. It's saved.</span>
-          </li>
-          <li>
-            <LeafIcon className="how-icon" />
-            <b>Sort it later</b>
-            <span>When you're done, go through your brain dump: start it or let it go.</span>
-          </li>
-        </ol>
-      )}
     </form>
   );
 }
