@@ -1,0 +1,88 @@
+import { elapsedMs, emptyState, parseState, reduce, type State } from "./store";
+import { formatClock, startFromTimeInput } from "./time";
+
+const T = 1_700_000_000_000;
+
+function started(): State {
+  return reduce(emptyState(), { type: "start", task: "Write spec", startedAt: T, plannedMin: 25, now: T });
+}
+
+describe("session timing", () => {
+  it("counts from timestamps, so a throttled tab can't make it drift", () => {
+    const s = started();
+    expect(elapsedMs(s.active!, T + 25 * 60000)).toBe(25 * 60000);
+  });
+
+  it("excludes paused time", () => {
+    let s = started();
+    s = reduce(s, { type: "pause", now: T + 10 * 60000 });
+    expect(elapsedMs(s.active!, T + 20 * 60000)).toBe(10 * 60000);
+    s = reduce(s, { type: "resume", now: T + 20 * 60000 });
+    expect(elapsedMs(s.active!, T + 25 * 60000)).toBe(15 * 60000);
+  });
+
+  it("never starts in the future", () => {
+    const s = reduce(emptyState(), { type: "start", task: "x", startedAt: T + 5000, plannedMin: 0, now: T });
+    expect(s.active!.startedAt).toBe(T);
+  });
+
+  it("ignores an empty task", () => {
+    const s = emptyState();
+    expect(reduce(s, { type: "start", task: "   ", startedAt: T, plannedMin: 25, now: T })).toBe(s);
+  });
+
+  it("logs the focused time and parked count when a session ends", () => {
+    let s = started();
+    s = reduce(s, { type: "park", text: "Call the bank", now: T + 60000 });
+    s = reduce(s, { type: "end", outcome: "done", now: T + 30 * 60000 });
+    expect(s.active).toBeNull();
+    expect(s.log[0]).toMatchObject({ task: "Write spec", focusedMs: 30 * 60000, parked: 1, outcome: "done" });
+  });
+});
+
+describe("inbox", () => {
+  it("records which task a parked thought came from", () => {
+    const s = reduce(started(), { type: "park", text: "  Call the bank ", now: T + 1 });
+    expect(s.inbox[0]).toMatchObject({ text: "Call the bank", fromTask: "Write spec", status: "new" });
+    expect(s.active!.parked).toBe(1);
+  });
+
+  it("promotes a thought into the next task", () => {
+    let s = reduce(emptyState(), { type: "addInbox", text: "Plan Q1", now: T });
+    s = reduce(s, { type: "promote", id: s.inbox[0].id });
+    expect(s.inbox).toHaveLength(0);
+    expect(s.draft.task).toBe("Plan Q1");
+  });
+
+  it("restores a dropped thought in its old place", () => {
+    let s = reduce(emptyState(), { type: "addInbox", text: "a", now: T });
+    s = reduce(s, { type: "addInbox", text: "b", now: T });
+    const item = s.inbox[1];
+    s = reduce(s, { type: "drop", id: item.id });
+    s = reduce(s, { type: "restore", item, index: 1 });
+    expect(s.inbox.map((i) => i.text)).toEqual(["b", "a"]);
+  });
+});
+
+describe("backups", () => {
+  it("rejects files that aren't backups", () => {
+    expect(parseState({ hello: 1 })).toBeNull();
+    expect(parseState(null)).toBeNull();
+  });
+  it("accepts its own state", () => {
+    const s = started();
+    expect(parseState(JSON.parse(JSON.stringify(s)))).toEqual(s);
+  });
+});
+
+describe("time helpers", () => {
+  it("formats clocks", () => {
+    expect(formatClock(65_000)).toBe("01:05");
+    expect(formatClock(3_725_000)).toBe("1:02:05");
+  });
+  it("only lets you backdate a start time", () => {
+    const now = new Date(2026, 10, 18, 12, 0).getTime();
+    expect(startFromTimeInput("11:30", now)).toBe(new Date(2026, 10, 18, 11, 30).getTime());
+    expect(startFromTimeInput("13:00", now)).toBe(now);
+  });
+});
