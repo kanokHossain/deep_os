@@ -61,7 +61,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
               Something buzzing in your mind?
             </label>
             <p className="park-sub">
-              Park it here and let it go. It waits in your brain dump, so you can stay on task.
+              Write it here and let it go. It waits in your brain dump, so you can stay on task.
             </p>
           </div>
           <span className="park-key">
@@ -89,8 +89,8 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           type="text"
           maxLength={280}
           value={text}
-          aria-label="Park a thought"
-          placeholder={compact ? "Anything buzzing? Park it" : "Call the bank, reply to Rafi, that idea for later…"}
+          aria-label="Unload a thought"
+          placeholder={compact ? "Anything buzzing? Unload it" : "Call the bank, reply to Rafi, that idea for later…"}
           onChange={(e) => {
             setText(e.target.value);
             if (note) setNote("");
@@ -99,12 +99,12 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
             if (e.key === "Escape") e.currentTarget.blur();
           }}
         />
-        <button type="submit" aria-label="Park this thought" disabled={!text.trim()}>
+        <button type="submit" aria-label="Unload this thought" disabled={!text.trim()}>
           {compact ? (
-            "Park"
+            "Unload"
           ) : (
             <>
-              <ArrowUpIcon /> Park it
+              <ArrowUpIcon /> Unload
             </>
           )}
         </button>
@@ -113,7 +113,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
         <div className="park-note" aria-live="polite">
           {note ||
             (parked > 0
-              ? `${parked} thought${parked > 1 ? "s" : ""} parked this session. Your mind is lighter.`
+              ? `${parked} thought${parked > 1 ? "s" : ""} unloaded this session. Your mind is lighter.`
               : "")}
         </div>
       )}

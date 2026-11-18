@@ -577,3 +577,20 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
   .park-title { font-size: 18px; }
 }
 @media (prefers-reduced-motion: reduce) { .park:not(.park-compact) { animation: none; } }
+
+/* waiting thoughts: a warm, tappable reminder under Start */
+.waiting-chip {
+  display: inline-flex; align-items: center; gap: 12px; padding: 8px 10px 8px 8px; border-radius: 999px; text-align: left;
+  background: color-mix(in srgb, var(--sun-soft) 80%, var(--glass)); border: 1px solid color-mix(in srgb, var(--sun) 40%, transparent);
+  color: var(--ink); backdrop-filter: blur(12px); transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+.waiting-chip:hover { transform: translateY(-1px); border-color: var(--sun); box-shadow: 0 12px 30px -14px var(--sun); }
+.waiting-icon { position: relative; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; background: var(--sun); color: #fff; flex: none; }
+.waiting-icon svg { width: 19px; height: 19px; }
+.waiting-icon i { position: absolute; top: -4px; right: -6px; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 999px; background: var(--ink); color: var(--bg); font: 700 11.5px/20px var(--font); font-style: normal; text-align: center; box-shadow: 0 0 0 2px var(--bg); }
+.waiting-text { display: flex; flex-direction: column; line-height: 1.25; }
+.waiting-text b { font-size: 15px; }
+.waiting-text small { font-size: 12.5px; color: var(--muted); font-weight: 500; }
+.waiting-go { margin-left: 6px; padding: 7px 14px; border-radius: 999px; background: var(--surface); font-weight: 700; font-size: 13.5px; color: var(--sun); }
+/* unload button stays readable while empty */
+.park button:disabled { opacity: 1; background: color-mix(in srgb, var(--sun) 28%, var(--surface)); color: color-mix(in srgb, var(--ink) 55%, transparent); }

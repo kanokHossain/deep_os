@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
-import { dayKey, formatClock, formatDuration, formatTime, startFromTimeInput, timeInputValue } from "../lib/time";
+import { dayKey, formatClock, formatDuration, formatTime } from "../lib/time";
+import { toast } from "./Toast";
 import { CheckIcon, ClockIcon, FocusIcon, LayersIcon, LeafIcon, PauseIcon, PlayIcon, StopIcon, ThoughtIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
@@ -59,7 +60,10 @@ function ActiveSessionView({ active, now }: { active: ActiveSession; now: number
         >
           {paused ? <PlayIcon /> : <PauseIcon />}
         </button>
-        <button type="button" className="primary big" onClick={() => dispatch({ type: "end", outcome: "done", now: Date.now() })}>
+        <button type="button" className="primary big" onClick={() => {
+            dispatch({ type: "end", outcome: "done", now: Date.now() });
+            toast("Done. Nice work.");
+          }}>
           <CheckIcon /> Done
         </button>
         <button
@@ -67,7 +71,10 @@ function ActiveSessionView({ active, now }: { active: ActiveSession; now: number
           className="round"
           aria-label="Stop for now"
           title="Stop for now (S)"
-          onClick={() => dispatch({ type: "end", outcome: "stopped", now: Date.now() })}
+          onClick={() => {
+            dispatch({ type: "end", outcome: "stopped", now: Date.now() });
+            toast("Stopped for now");
+          }}
         >
           <StopIcon />
         </button>
@@ -111,15 +118,9 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   const draft = useStore((s) => s.draft);
   const log = useStore((s) => s.log);
   const inbox = useStore((s) => s.inbox);
-  const [mountedAt] = useState(() => Date.now());
-  const [startTime, setStartTime] = useState(() => timeInputValue(Date.now()));
-  const [showTime, setShowTime] = useState(false);
-  const [dismissed, setDismissed] = useState<string | null>(null);
   const taskRef = useRef<HTMLInputElement>(null);
   const [example] = useState(() => EXAMPLES[Math.floor(Math.random() * EXAMPLES.length)]);
 
-  const last = log[0];
-  const showSummary = last && last.endedAt >= mountedAt - 1000 && dismissed !== last.id;
   const waiting = inbox.length;
   const firstVisit = log.length === 0 && inbox.length === 0;
   const today = dayKey(Date.now());
@@ -143,7 +144,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
     dispatch({
       type: "start",
       task: draft.task,
-      startedAt: showTime ? startFromTimeInput(startTime, n) : n,
+      startedAt: n,
       plannedMin: draft.plannedMin,
       now: n,
     });
@@ -159,32 +160,6 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         start();
       }}
     >
-      {showSummary && (
-        <div className="surface-msg" role="status">
-          <CheckIcon />
-          <div>
-            <strong>
-              {last.outcome === "done" ? "Done" : "Paused"}: {formatDuration(last.focusedMs)} on {last.task}.
-            </strong>
-            <span>
-              {last.parked
-                ? ` ${last.parked} thought${last.parked > 1 ? "s" : ""} parked instead of chased.`
-                : " Nothing pulled you away. Clear mind."}
-            </span>
-          </div>
-          <div className="row">
-            {waiting > 0 && (
-              <button type="button" className="ghost small" onClick={goInbox}>
-                Sort them now
-              </button>
-            )}
-            <button type="button" className="ghost small" onClick={() => setDismissed(last.id)}>
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
-
       <header className="session-head">
         <span className="status ready">{greeting(Date.now())}. Everything else can wait.</span>
         <label htmlFor="task-input" className="title-hint">
@@ -235,23 +210,21 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </button>
       </div>
 
-      <div className="start-extra">
-        {showTime ? (
-          <label className="inline-time">
-            Started at
-            <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
-          </label>
-        ) : (
-          <button type="button" className="link" onClick={() => setShowTime(true)}>
-            Already started? Set an earlier start time
-          </button>
-        )}
-        {waiting > 0 && !showSummary && (
-          <button type="button" className="link" onClick={goInbox}>
-            {waiting} thought{waiting > 1 ? "s" : ""} waiting in your brain dump
-          </button>
-        )}
-      </div>
+      {waiting > 0 && (
+        <button type="button" className="waiting-chip" onClick={goInbox}>
+          <span className="waiting-icon" aria-hidden="true">
+            <ThoughtIcon />
+            <i>{waiting}</i>
+          </span>
+          <span className="waiting-text">
+            <b>
+              {waiting} thought{waiting > 1 ? "s" : ""} waiting
+            </b>
+            <small>In your brain dump, ready when you are</small>
+          </span>
+          <span className="waiting-go">Open</span>
+        </button>
+      )}
 
       {todays.length > 0 && (
         <ul className="today-line" aria-label="Today so far">
@@ -262,7 +235,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             <LayersIcon /> <b>{todays.length}</b> session{todays.length > 1 ? "s" : ""}
           </li>
           <li className="sun">
-            <ThoughtIcon /> <b>{todayParked}</b> thought{todayParked === 1 ? "" : "s"} parked
+            <ThoughtIcon /> <b>{todayParked}</b> thought{todayParked === 1 ? "" : "s"} unloaded
           </li>
         </ul>
       )}
@@ -276,7 +249,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           </li>
           <li>
             <ThoughtIcon className="how-icon sun" />
-            <b>Park what buzzes</b>
+            <b>Unload what buzzes</b>
             <span>A worry, a to-do, an idea? Type it once and let it go. It's saved.</span>
           </li>
           <li>
