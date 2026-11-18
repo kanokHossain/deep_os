@@ -6,7 +6,7 @@ import { LineChart, shortHours } from "./LineChart";
 import { toast } from "./Toast";
 import { trackEvent } from "../lib/analytics";
 
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 25;
 
 export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void }) {
   const log = useStore((s) => s.log);
@@ -160,6 +160,7 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
           </div>
           {groups.length ? (
             <>
+              <div className="sessions-scroll">
               {groups.map(([k, entries]) => (
                 <div key={k} className="day-group">
                   <h3>
@@ -191,6 +192,7 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
                   </ul>
                 </div>
               ))}
+              </div>
               {pages > 1 && (
                 <nav className="pager" aria-label="Session pages">
                   <span className="pager-info">
@@ -228,11 +230,14 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
         </section>
 
         <section className="card hg-data">
-          <h2>Your data</h2>
-          <p className="hint">
-            Everything you write stays in this browser. There's no account, and your tasks and thoughts are never sent anywhere. Download a
-            backup to move to another device.
-          </p>
+          <div>
+            <h2>Your data</h2>
+            <p className="hint">
+              Everything you write stays in this browser. There's no account, and your tasks and thoughts are never sent anywhere. Download a
+              backup to move to another device.
+            </p>
+            {justBackedUp && <p className="hint">Moving to another device? Vote for sync at the bottom of the page.</p>}
+          </div>
           <div className="row">
             <button type="button" className="ghost small" onClick={download}>
               <DownloadIcon /> Download backup
@@ -242,7 +247,6 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
               <input type="file" accept="application/json,.json" onChange={(e) => restore(e.target.files?.[0])} />
             </label>
           </div>
-          {justBackedUp && <p className="hint">Moving to another device? Vote for sync at the bottom of the page.</p>}
         </section>
       </div>
     </div>
