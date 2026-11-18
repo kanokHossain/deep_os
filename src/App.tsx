@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { CodeIcon, DocIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
+import { DocIcon, GithubIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
@@ -204,7 +204,7 @@ export default function App() {
             <DocIcon /> Terms
           </a>
           <a href="https://github.com/kanokHossain/deep_os">
-            <CodeIcon /> Source
+            <GithubIcon /> Source
           </a>
           <button type="button" className="foot-link-btn" onClick={() => setHelp(true)}>
             <KeyboardIcon /> Shortcuts <kbd>?</kbd>
