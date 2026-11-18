@@ -1,23 +1,47 @@
+import { useState } from "react";
 import { useNow } from "../hooks/useNow";
 import { useTimeUpChime } from "../hooks/useTimeUpChime";
+import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore } from "../lib/store";
 import { formatClock } from "../lib/time";
 import { CheckIcon, PauseIcon, PlayIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 
-/** What the always-on-top floating window shows. */
-export function MiniWindow({ win, onClose }: { win: Window; onClose: () => void }) {
+/**
+ * The pop-out window. It floats above every app on the computer and can be dragged anywhere.
+ * With no task running it lets you start one; during a task it shows the clock and a park box.
+ */
+export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
   const active = useStore((s) => s.active);
+  const draft = useStore((s) => s.draft);
+  const waiting = useStore((s) => s.inbox.filter((i) => i.status === "new").length);
   const now = useNow(win);
+  const [task, setTask] = useState(draft.task);
   useTimeUpChime(active, now);
 
   if (!active) {
     return (
       <div className="mini">
-        <p className="mini-task">Session finished.</p>
-        <button type="button" className="ghost small" onClick={onClose}>
-          Close
-        </button>
+        <p className="mini-task">What's the one thing?</p>
+        <form
+          className="mini-start"
+          autoComplete="off"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (!task.trim()) return;
+            unlockAudio();
+            const n = Date.now();
+            dispatch({ type: "start", task, startedAt: n, plannedMin: draft.plannedMin, now: n });
+            setTask("");
+          }}
+        >
+          <input value={task} onChange={(e) => setTask(e.target.value)} placeholder="Name your task" aria-label="Task" />
+          <button type="submit" className="primary small">
+            Start {draft.plannedMin ? `${draft.plannedMin}m` : ""}
+          </button>
+        </form>
+        <ParkBox task="your day" compact />
+        {waiting > 0 && <p className="mini-note">{waiting} thought{waiting > 1 ? "s" : ""} in your brain dump</p>}
       </div>
     );
   }
@@ -45,7 +69,7 @@ export function MiniWindow({ win, onClose }: { win: Window; onClose: () => void 
           <button
             type="button"
             className="round small-round done"
-            aria-label="Task done"
+            aria-label="Done"
             onClick={() => dispatch({ type: "end", outcome: "done", now: Date.now() })}
           >
             <CheckIcon />

@@ -52,7 +52,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
     <div className={compact ? "park park-compact" : "park"}>
       {!compact && (
         <label htmlFor="park-input" className="park-label">
-          A thought popped up? Park it here and keep going. <kbd>P</kbd>
+          Something buzzing in your mind? Park it here. Your head doesn't have to hold it. <kbd>P</kbd>
         </label>
       )}
       <form
@@ -65,7 +65,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           dispatch({ type: "park", text: value, now: Date.now() });
           if (!compact && formRef.current) floatToInbox(formRef.current, value);
           setText("");
-          setNote(`Parked. Back to ${task}.`);
+          setNote(`Off your mind. Back to ${task}.`);
           (e.currentTarget.querySelector("input") as HTMLInputElement | null)?.blur();
         }}
       >
@@ -76,7 +76,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           maxLength={280}
           value={text}
           aria-label="Park a thought"
-          placeholder={compact ? "Park a thought" : "Call the bank, reply to Rafi, buy milk…"}
+          placeholder={compact ? "Anything buzzing? Park it" : "Call the bank, reply to Rafi, that idea for later…"}
           onChange={(e) => {
             setText(e.target.value);
             if (note) setNote("");

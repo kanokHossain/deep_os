@@ -2,29 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
 import { formatClock, formatDuration, formatTime, startFromTimeInput, timeInputValue } from "../lib/time";
-import { CheckIcon, FloatIcon, PauseIcon, PlayIcon, StopIcon } from "./Icons";
+import { CheckIcon, PauseIcon, PlayIcon, StopIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
-import { toast } from "./Toast";
 
 const PRESETS = [15, 25, 45, 60, 90, 0];
 
-interface Floating {
-  supported: boolean;
-  isOpen: boolean;
-  open: () => Promise<boolean>;
-}
-
-export function FocusView({ now, floating, goInbox }: { now: number; floating: Floating; goInbox: () => void }) {
+export function FocusView({ now, goInbox }: { now: number; goInbox: () => void }) {
   const active = useStore((s) => s.active);
-  return active ? <ActiveSessionView active={active} now={now} floating={floating} /> : <StartScreen goInbox={goInbox} />;
+  return active ? <ActiveSessionView active={active} now={now} /> : <StartScreen goInbox={goInbox} />;
 }
 
-function isTyping() {
-  return /INPUT|TEXTAREA|SELECT/.test((document.activeElement?.tagName ?? "").toUpperCase());
-}
-
-function ActiveSessionView({ active, now, floating }: { active: ActiveSession; now: number; floating: Floating }) {
+function ActiveSessionView({ active, now }: { active: ActiveSession; now: number }) {
   const parkRef = useRef<HTMLInputElement>(null);
   const el = elapsedMs(active, now);
   const planned = active.plannedMin * 60000;
@@ -34,25 +23,11 @@ function ActiveSessionView({ active, now, floating }: { active: ActiveSession; n
   // Open sessions loop the ring once an hour.
   const progress = planned ? el / planned : (el % 3600000) / 3600000;
 
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (isTyping() || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === "p" || e.key === "P") {
-        e.preventDefault();
-        parkRef.current?.focus();
-      } else if (e.key === " ") {
-        e.preventDefault();
-        dispatch({ type: active.pausedAt ? "resume" : "pause", now: Date.now() });
-      }
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [active.pausedAt]);
 
   return (
     <section className="session" aria-labelledby="task-heading">
       <header className="session-head">
-        <span className={paused ? "status paused" : "status live"}>{paused ? "Paused" : "Focusing"}</span>
+        <span className={paused ? "status paused" : "status live"}>{paused ? "Paused. Take a breath." : "In focus"}</span>
         <h1 id="task-heading">{active.task}</h1>
       </header>
 
@@ -76,35 +51,23 @@ function ActiveSessionView({ active, now, floating }: { active: ActiveSession; n
           {paused ? <PlayIcon /> : <PauseIcon />}
         </button>
         <button type="button" className="primary big" onClick={() => dispatch({ type: "end", outcome: "done", now: Date.now() })}>
-          <CheckIcon /> Task done
+          <CheckIcon /> Done
         </button>
         <button
           type="button"
           className="round"
           aria-label="Stop for now"
-          title="Stop for now"
+          title="Stop for now (S)"
           onClick={() => dispatch({ type: "end", outcome: "stopped", now: Date.now() })}
         >
           <StopIcon />
         </button>
-        {floating.supported && !floating.isOpen && (
-          <button
-            type="button"
-            className="round"
-            aria-label="Float on top"
-            title="Float a mini timer above your other apps"
-            onClick={async () => {
-              if (!(await floating.open())) toast("Your browser blocked the floating window");
-            }}
-          >
-            <FloatIcon />
-          </button>
-        )}
       </div>
 
       <div className="session-meta">
         Started {formatTime(active.startedAt)}
-        {active.plannedMin ? ` for ${active.plannedMin} min` : ""}. {active.parked} thought{active.parked === 1 ? "" : "s"} parked.
+        {active.plannedMin ? ` for ${active.plannedMin} min` : ""}
+        {active.parked ? ` · ${active.parked} thought${active.parked === 1 ? "" : "s"} off your mind` : ""}
       </div>
 
       <ParkBox ref={parkRef} task={active.task} />
@@ -166,14 +129,14 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             </strong>
             <span>
               {last.parked
-                ? ` You parked ${last.parked} thought${last.parked > 1 ? "s" : ""} instead of chasing ${last.parked > 1 ? "them" : "it"}.`
-                : " No thoughts parked. Clean session."}
+                ? ` ${last.parked} thought${last.parked > 1 ? "s" : ""} parked instead of chased. They're waiting in your brain dump.`
+                : " Nothing pulled you away. Clear mind."}
             </span>
           </div>
           <div className="row">
             {waiting > 0 && (
               <button type="button" className="ghost small" onClick={goInbox}>
-                Review {waiting}
+                Sort them now
               </button>
             )}
             <button type="button" className="ghost small" onClick={() => setDismissed(last.id)}>
@@ -183,7 +146,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </div>
       )}
 
-      <p className="hello">{greeting(Date.now())}.</p>
+      <p className="hello">{greeting(Date.now())}. Let the rest wait.</p>
       <h1 id="start-heading">What's the one thing?</h1>
 
       <form
@@ -238,7 +201,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           )}
           {waiting > 0 && !showSummary && (
             <button type="button" className="link" onClick={goInbox}>
-              {waiting} parked thought{waiting > 1 ? "s" : ""} waiting
+              {waiting} thought{waiting > 1 ? "s" : ""} waiting in your brain dump
             </button>
           )}
         </div>
@@ -247,16 +210,16 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
       {firstVisit && (
         <ol className="how">
           <li>
-            <b>Pick one task</b>
-            <span>Name it and start. Only this task matters now.</span>
+            <b>Pick one thing</b>
+            <span>Name it and start. For now, nothing else needs you.</span>
           </li>
           <li>
-            <b>Park every other thought</b>
-            <span>Something pops up? Type it in the park box. It floats to your inbox.</span>
+            <b>Park what buzzes</b>
+            <span>A worry, a to-do, an idea? Type it once and let it go. It's saved.</span>
           </li>
           <li>
-            <b>Review later</b>
-            <span>After the session, decide each one: do it now, keep it for later, or drop it.</span>
+            <b>Sort it later</b>
+            <span>When you're done, go through your brain dump: start it, keep it, or let it go.</span>
           </li>
         </ol>
       )}

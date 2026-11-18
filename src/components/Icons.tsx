@@ -66,10 +66,22 @@ export const ArrowUpIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M12 19V5M6 11l6-6 6 6" />
   </svg>
 );
+export const PopoutIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M14 4h6v6M20 4l-8 8" />
+    <path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4" />
+  </svg>
+);
+export const KeyboardIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="3" y="6" width="18" height="12" rx="2" />
+    <path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" />
+  </svg>
+);
 export const LogoMark = ({ size = 28 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
-    <circle cx="32" cy="32" r="22" fill="none" stroke="var(--current)" strokeWidth="7" />
-    <path d="M32 10a22 22 0 0 1 22 22" fill="none" stroke="var(--biolume)" strokeWidth="7" strokeLinecap="round" />
-    <circle cx="32" cy="32" r="6" fill="var(--kelp)" />
+    <circle cx="32" cy="32" r="22" fill="none" stroke="var(--accent)" strokeOpacity="0.25" strokeWidth="7" />
+    <path d="M32 10a22 22 0 0 1 22 22" fill="none" stroke="var(--accent)" strokeWidth="7" strokeLinecap="round" />
+    <circle cx="32" cy="32" r="6" fill="var(--sun)" />
   </svg>
 );

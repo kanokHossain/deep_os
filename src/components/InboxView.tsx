@@ -18,7 +18,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
     } else if (action === "drop") {
       const index = inbox.findIndex((i) => i.id === item.id);
       dispatch({ type: "drop", id: item.id });
-      toast("Dropped", () => dispatch({ type: "restore", item, index }));
+      toast("Let go", () => dispatch({ type: "restore", item, index }));
     } else {
       if (hasActive) {
         toast("Finish or stop your current task first");
@@ -36,7 +36,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
     const lines = [...fresh, ...later].map((i) => `- [ ] ${i.text}`).join("\n");
     try {
       await navigator.clipboard.writeText(lines);
-      toast("Inbox copied as a checklist");
+      toast("Copied as a checklist");
     } catch {
       toast("Your browser blocked copying");
     }
@@ -45,11 +45,11 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
   return (
     <section className="card">
       <div className="toolbar">
-        <h1>Inbox</h1>
+        <h1>Brain dump</h1>
         <div className="row">
           {fresh.length > 0 && (
             <button type="button" className="primary small" onClick={() => setTriage(true)}>
-              Review one by one
+              Sort one by one
             </button>
           )}
           <button type="button" className="ghost small" onClick={copy} disabled={!inbox.length}>
@@ -57,7 +57,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
           </button>
         </div>
       </div>
-      <p className="hint">Everything you parked lands here. Decide each one: focus on it, keep it for later, or drop it.</p>
+      <p className="hint">Everything you parked lives here, so your mind doesn't have to carry it. Sort it when you're ready: start it, keep it for later, or let it go.</p>
 
       <form
         className="row align-end"
@@ -70,23 +70,23 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
         }}
       >
         <div className="field grow">
-          <label htmlFor="add-input">Add a thought</label>
-          <input id="add-input" type="text" maxLength={280} placeholder="Anything on your mind" value={text} onChange={(e) => setText(e.target.value)} />
+          <label htmlFor="add-input">Anything else buzzing in your mind?</label>
+          <input id="add-input" type="text" maxLength={280} placeholder="Write it down and let it go" value={text} onChange={(e) => setText(e.target.value)} />
         </div>
         <button type="submit" className="ghost">
-          Add
+          Unload
         </button>
       </form>
 
       <h2>
-        To review <span className="count-inline">{fresh.length}</span>
+        Waiting for you <span className="count-inline">{fresh.length}</span>
       </h2>
-      {fresh.length ? <ItemList items={fresh} onAct={act} /> : <p className="empty">All clear. Nothing is waiting for a decision.</p>}
+      {fresh.length ? <ItemList items={fresh} onAct={act} /> : <p className="empty">Your mind is clear. Nothing is waiting.</p>}
 
       {later.length > 0 && (
         <>
           <h2>
-            Later <span className="count-inline">{later.length}</span>
+            Kept for later <span className="count-inline">{later.length}</span>
           </h2>
           <ItemList items={later} onAct={act} />
         </>
@@ -97,7 +97,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
 
 function source(i: InboxItem) {
   const when = `${dayLabel(dayKey(i.createdAt)).toLowerCase()} at ${formatTime(i.createdAt)}`;
-  return i.fromTask ? `Parked ${when} while on “${i.fromTask}”` : `Added ${when}`;
+  return i.fromTask ? `Came up ${when} while you were on “${i.fromTask}”` : `Added ${when}`;
 }
 
 type ActFn = (item: InboxItem, action: "focus" | "later" | "drop") => boolean | undefined;
@@ -113,7 +113,7 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
           </div>
           <div className="actions">
             <button type="button" className="primary small" onClick={() => onAct(i, "focus")}>
-              Focus on it
+              Start now
             </button>
             {i.status === "new" && (
               <button type="button" className="ghost small" onClick={() => onAct(i, "later")}>
@@ -121,7 +121,7 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
               </button>
             )}
             <button type="button" className="ghost small" onClick={() => onAct(i, "drop")}>
-              Drop
+              Let it go
             </button>
           </div>
         </li>
@@ -140,10 +140,10 @@ function Triage({ items, onAct, onExit }: { items: InboxItem[]; onAct: ActFn; on
     <section className="card triage" aria-labelledby="triage-heading">
       <div className="toolbar">
         <span className="eyebrow" id="triage-heading">
-          Reviewing {done + 1} of {total}
+          Thought {done + 1} of {total}
         </span>
         <button type="button" className="ghost small" onClick={onExit}>
-          Exit review
+          Stop sorting
         </button>
       </div>
       <div className="bar">
@@ -153,13 +153,13 @@ function Triage({ items, onAct, onExit }: { items: InboxItem[]; onAct: ActFn; on
       <p className="hint">{source(item)}</p>
       <div className="triage-actions">
         <button type="button" className="primary" onClick={() => onAct(item, "focus")}>
-          Focus on it now
+          Start now
         </button>
         <button type="button" className="ghost" onClick={() => onAct(item, "later")}>
           Keep for later
         </button>
         <button type="button" className="ghost" onClick={() => onAct(item, "drop")}>
-          Drop it
+          Let it go
         </button>
       </div>
     </section>
