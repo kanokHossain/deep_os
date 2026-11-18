@@ -92,7 +92,6 @@ function ActiveSessionView({ active, now }: { active: ActiveSession; now: number
       <div className="session-meta">
         Started {formatTime(active.startedAt)}
         {active.plannedMin ? ` for ${active.plannedMin} min` : ""}
-        {active.parked ? ` · ${active.parked} thought${active.parked === 1 ? "" : "s"} off your mind` : ""}
       </div>
 
       <ParkBox ref={parkRef} task={active.task} />

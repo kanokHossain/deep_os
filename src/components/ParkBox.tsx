@@ -1,5 +1,5 @@
 import { forwardRef, useRef, useState } from "react";
-import { dispatch } from "../lib/store";
+import { dispatch, useStore } from "../lib/store";
 import { ArrowUpIcon, ThoughtIcon } from "./Icons";
 
 interface Props {
@@ -47,14 +47,27 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
   const [text, setText] = useState("");
   const [note, setNote] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const parked = useStore((s) => s.active?.parked ?? 0);
 
   return (
     <div className={compact ? "park park-compact" : "park"}>
       {!compact && (
-        <label htmlFor="park-input" className="park-label">
-          <ThoughtIcon className="label-icon" />
-          Something buzzing in your mind? Park it here and let it go. <kbd>P</kbd>
-        </label>
+        <div className="park-head">
+          <span className="park-badge" aria-hidden="true">
+            <ThoughtIcon />
+          </span>
+          <div>
+            <label htmlFor="park-input" className="park-title">
+              Something buzzing in your mind?
+            </label>
+            <p className="park-sub">
+              Park it here and let it go. It waits in your brain dump, so you can stay on task.
+            </p>
+          </div>
+          <span className="park-key">
+            Press <kbd>P</kbd>
+          </span>
+        </div>
       )}
       <form
         ref={formRef}
@@ -87,12 +100,21 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           }}
         />
         <button type="submit" aria-label="Park this thought" disabled={!text.trim()}>
-          {compact ? "Park" : <ArrowUpIcon />}
+          {compact ? (
+            "Park"
+          ) : (
+            <>
+              <ArrowUpIcon /> Park it
+            </>
+          )}
         </button>
       </form>
       {!compact && (
         <div className="park-note" aria-live="polite">
-          {note}
+          {note ||
+            (parked > 0
+              ? `${parked} thought${parked > 1 ? "s" : ""} parked this session. Your mind is lighter.`
+              : "")}
         </div>
       )}
     </div>
