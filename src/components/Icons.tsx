@@ -78,6 +78,59 @@ export const KeyboardIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M7 10h.01M11 10h.01M15 10h.01M7 14h10" />
   </svg>
 );
+export const ClockIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="8.5" />
+    <path d="M12 7.5V12l3 2" />
+  </svg>
+);
+export const LayersIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M12 4l8 4-8 4-8-4z" />
+    <path d="M4 12l8 4 8-4M4 16l8 4 8-4" />
+  </svg>
+);
+/** A thought bubble: used for parked thoughts and the brain dump. */
+export const ThoughtIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M7.5 15.5a4.5 4.5 0 0 1-.6-8.96 5.5 5.5 0 0 1 10.3 1.2A3.75 3.75 0 0 1 16.75 15.5z" />
+    <circle cx="7" cy="19" r="1.3" />
+    <circle cx="4.5" cy="21.2" r="0.8" />
+  </svg>
+);
+export const LeafIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M5 19c0-8 5-13 14-14-1 9-6 14-14 14z" />
+    <path d="M5 19l8-8" />
+  </svg>
+);
+export const BookmarkIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M7 4h10v16l-5-3.5L7 20z" />
+  </svg>
+);
+export const CopyIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="8" y="8" width="11" height="12" rx="2" />
+    <path d="M16 8V6a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h1" />
+  </svg>
+);
+export const CardsIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="5" y="7" width="14" height="13" rx="2" />
+    <path d="M8 4h8" />
+  </svg>
+);
+export const DownloadIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M12 4v11M7 10l5 5 5-5M5 20h14" />
+  </svg>
+);
+export const UploadIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <path d="M12 16V5M7 10l5-5 5 5M5 20h14" />
+  </svg>
+);
 export const LogoMark = ({ size = 28 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 64 64" aria-hidden="true">
     <circle cx="32" cy="32" r="22" fill="none" stroke="var(--accent)" strokeOpacity="0.25" strokeWidth="7" />

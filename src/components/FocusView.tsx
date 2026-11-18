@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
 import { dayKey, formatClock, formatDuration, formatTime, startFromTimeInput, timeInputValue } from "../lib/time";
-import { CheckIcon, PauseIcon, PlayIcon, StopIcon } from "./Icons";
+import { CheckIcon, ClockIcon, FocusIcon, LayersIcon, LeafIcon, PauseIcon, PlayIcon, StopIcon, ThoughtIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
 
@@ -198,7 +198,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             ))}
           </div>
           <button type="submit" className="primary big dive">
-            Start focus
+            <PlayIcon /> Start focus
           </button>
         </div>
 
@@ -224,7 +224,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
       {todays.length > 0 && (
         <section className="today-tiles" aria-label="Today so far">
           <div className="tile tile-main">
-            <span className="tile-label">Focused today</span>
+            <span className="tile-label"><ClockIcon /> Focused today</span>
             <b className="tile-value">{formatDuration(todayMs)}</b>
             <div className="tile-bar" aria-hidden="true">
               {todays
@@ -236,11 +236,11 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             </div>
           </div>
           <div className="tile">
-            <span className="tile-label">Sessions</span>
+            <span className="tile-label"><LayersIcon /> Sessions</span>
             <b className="tile-value">{todays.length}</b>
           </div>
           <div className="tile tile-sun">
-            <span className="tile-label">Thoughts parked</span>
+            <span className="tile-label"><ThoughtIcon /> Thoughts parked</span>
             <b className="tile-value">{todayParked}</b>
           </div>
         </section>
@@ -249,14 +249,17 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
       {firstVisit && (
         <ol className="how">
           <li>
+            <FocusIcon className="how-icon" />
             <b>Pick one thing</b>
             <span>Name it and start. For now, nothing else needs you.</span>
           </li>
           <li>
+            <ThoughtIcon className="how-icon sun" />
             <b>Park what buzzes</b>
             <span>A worry, a to-do, an idea? Type it once and let it go. It's saved.</span>
           </li>
           <li>
+            <LeafIcon className="how-icon" />
             <b>Sort it later</b>
             <span>When you're done, go through your brain dump: start it, keep it, or let it go.</span>
           </li>

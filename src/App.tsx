@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { KeyboardIcon, LogoMark, PopoutIcon } from "./components/Icons";
+import { FocusIcon, HistoryIcon, KeyboardIcon, LogoMark, PopoutIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { ShortcutsDialog } from "./components/Shortcuts";
@@ -15,6 +15,7 @@ import { formatClock } from "./lib/time";
 const VIEWS = ["focus", "inbox", "history"] as const;
 type View = (typeof VIEWS)[number];
 const LABELS: Record<View, string> = { focus: "Focus", inbox: "Brain dump", history: "History" };
+const TAB_ICONS: Record<View, typeof FocusIcon> = { focus: FocusIcon, inbox: ThoughtIcon, history: HistoryIcon };
 
 function readHash(): View {
   const h = window.location.hash.slice(1);
@@ -130,7 +131,11 @@ export default function App() {
               aria-current={view === v ? "page" : undefined}
               onClick={() => setView(v)}
             >
-              {LABELS[v]}
+              {(() => {
+                const Icon = TAB_ICONS[v];
+                return <Icon className="tab-icon" />;
+              })()}
+              <span className="tab-label">{LABELS[v]}</span>
               {v === "focus" && active && <i className="live-dot" aria-label="Session running" />}
               {v === "inbox" && waiting > 0 && <span className="count">{waiting}</span>}
             </a>

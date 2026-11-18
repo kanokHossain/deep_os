@@ -327,3 +327,23 @@ ul.list li:hover { transform: translateY(-1px); box-shadow: var(--shadow); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- icons ---------- */
+button svg { width: 18px; height: 18px; flex: none; }
+.small svg { width: 15px; height: 15px; }
+.big svg { width: 18px; height: 18px; }
+.tab-icon { width: 17px; height: 17px; }
+.tile-label, .stat span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.tile-label svg, .stat span svg { width: 16px; height: 16px; }
+.tile-main .tile-label svg { color: var(--accent); }
+.tile-sun .tile-label svg { color: var(--sun); }
+.how-icon { width: 34px; height: 34px; padding: 7px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); margin-bottom: 8px; }
+.how-icon.sun { background: var(--sun-soft); color: var(--sun); }
+.how li::before { display: none; }
+.label-icon { width: 17px; height: 17px; color: var(--sun); vertical-align: -3px; margin-right: 6px; }
+.file-btn { gap: 6px; }
+.file-btn svg { width: 15px; height: 15px; }
+@media (max-width: 520px) {
+  .tabs a { gap: 5px; }
+  .tab-icon { width: 15px; height: 15px; }
+}

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { dispatch, parseState, useStore, getState, type LogEntry } from "../lib/store";
 import { dayKey, dayLabel, formatDuration, formatTime } from "../lib/time";
+import { ClockIcon, DownloadIcon, LayersIcon, ThoughtIcon, UploadIcon } from "./Icons";
 import { toast } from "./Toast";
 
 export function HistoryView({ now }: { now: number }) {
@@ -53,15 +54,15 @@ export function HistoryView({ now }: { now: number }) {
       <div className="stats">
         <div className="stat">
           <b>{formatDuration(focused)}</b>
-          <span>Focused today</span>
+          <span><ClockIcon /> Focused today</span>
         </div>
         <div className="stat">
           <b>{todays.length}</b>
-          <span>Sessions today</span>
+          <span><LayersIcon /> Sessions today</span>
         </div>
         <div className="stat">
           <b>{parked}</b>
-          <span>Thoughts parked today</span>
+          <span><ThoughtIcon /> Thoughts parked today</span>
         </div>
       </div>
 
@@ -141,10 +142,10 @@ export function HistoryView({ now }: { now: number }) {
         </p>
         <div className="row">
           <button type="button" className="ghost small" onClick={download}>
-            Download backup
+            <DownloadIcon /> Download backup
           </button>
           <label className="ghost small file-btn">
-            Restore backup
+            <UploadIcon /> Restore backup
             <input type="file" accept="application/json,.json" onChange={(e) => restore(e.target.files?.[0])} />
           </label>
         </div>

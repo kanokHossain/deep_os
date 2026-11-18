@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { dispatch, useStore, type InboxItem } from "../lib/store";
 import { dayKey, dayLabel, formatTime } from "../lib/time";
+import { BookmarkIcon, CardsIcon, CopyIcon, LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
 import { toast } from "./Toast";
 
 export function InboxView({ goFocus }: { goFocus: () => void }) {
@@ -49,11 +50,11 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
         <div className="row">
           {fresh.length > 0 && (
             <button type="button" className="primary small" onClick={() => setTriage(true)}>
-              Sort one by one
+              <CardsIcon /> Sort one by one
             </button>
           )}
           <button type="button" className="ghost small" onClick={copy} disabled={!inbox.length}>
-            Copy as list
+            <CopyIcon /> Copy as list
           </button>
         </div>
       </div>
@@ -74,7 +75,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
           <input id="add-input" type="text" maxLength={280} placeholder="Write it down and let it go" value={text} onChange={(e) => setText(e.target.value)} />
         </div>
         <button type="submit" className="ghost">
-          Unload
+          <ThoughtIcon /> Unload
         </button>
       </form>
 
@@ -113,15 +114,15 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
           </div>
           <div className="actions">
             <button type="button" className="primary small" onClick={() => onAct(i, "focus")}>
-              Start now
+              <PlayIcon /> Start now
             </button>
             {i.status === "new" && (
               <button type="button" className="ghost small" onClick={() => onAct(i, "later")}>
-                Later
+                <BookmarkIcon /> Later
               </button>
             )}
             <button type="button" className="ghost small" onClick={() => onAct(i, "drop")}>
-              Let it go
+              <LeafIcon /> Let it go
             </button>
           </div>
         </li>
@@ -153,13 +154,13 @@ function Triage({ items, onAct, onExit }: { items: InboxItem[]; onAct: ActFn; on
       <p className="hint">{source(item)}</p>
       <div className="triage-actions">
         <button type="button" className="primary" onClick={() => onAct(item, "focus")}>
-          Start now
+          <PlayIcon /> Start now
         </button>
         <button type="button" className="ghost" onClick={() => onAct(item, "later")}>
-          Keep for later
+          <BookmarkIcon /> Keep for later
         </button>
         <button type="button" className="ghost" onClick={() => onAct(item, "drop")}>
-          Let it go
+          <LeafIcon /> Let it go
         </button>
       </div>
     </section>

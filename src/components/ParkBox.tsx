@@ -1,6 +1,6 @@
 import { forwardRef, useRef, useState } from "react";
 import { dispatch } from "../lib/store";
-import { ArrowUpIcon } from "./Icons";
+import { ArrowUpIcon, ThoughtIcon } from "./Icons";
 
 interface Props {
   task: string;
@@ -52,6 +52,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
     <div className={compact ? "park park-compact" : "park"}>
       {!compact && (
         <label htmlFor="park-input" className="park-label">
+          <ThoughtIcon className="label-icon" />
           Something buzzing in your mind? Park it here. Your head doesn't have to hold it. <kbd>P</kbd>
         </label>
       )}
