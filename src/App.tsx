@@ -116,7 +116,7 @@ export default function App() {
       privacy: "Privacy Policy · DeepOS",
       terms: "Terms of Use · DeepOS",
     };
-    document.title = active ? `${formatClock(elapsedMs(active, now))} · ${active.task}` : titles[view] ?? "DeepOS: one task, a clear head";
+    document.title = active ? `${formatClock(elapsedMs(active, now))} · ${active.task}` : titles[view] ?? "DeepOS: Free Focus Timer with a Brain Dump";
   }, [active, now, view]);
 
   useEffect(() => {

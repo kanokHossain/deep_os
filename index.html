@@ -3,21 +3,39 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="DeepOS is a free, private focus app. Work on one task at a time, park every buzzing thought, and sort it later. No sign-up." />
-  <link rel="canonical" href="https://deepos-ashy.vercel.app/" />
+  <meta name="description" content="DeepOS is a free, open-source focus timer. Work on one task at a time, dump distracting thoughts into a brain dump, and sort them later. Pomodoro lengths, a floating timer, no sign-up, and your data stays in your browser." />
+  <link rel="canonical" href="https://deepos.app/" />
+  <meta name="robots" content="index, follow" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="DeepOS" />
-  <meta property="og:url" content="https://deepos-ashy.vercel.app/" />
+  <meta property="og:url" content="https://deepos.app/" />
   <meta property="og:title" content="DeepOS: one task, a clear head" />
-  <meta property="og:description" content="Something buzzing in your mind? Park it, keep focusing, and sort it later. Free, no sign-up, private by design." />
-  <meta property="og:image" content="https://deepos-ashy.vercel.app/og-image.png" />
+  <meta property="og:description" content="Dump the noise, keep working. A free, open-source focus timer with a brain dump for every distracting thought. No sign-up." />
+  <meta property="og:image" content="https://deepos.app/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="DeepOS focus timer with a park box for distracting thoughts" />
+  <meta property="og:image:alt" content="DeepOS logo. One task, a clear head. Dump the noise, keep working." />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="DeepOS: one task, a clear head" />
-  <meta name="twitter:description" content="Park every buzzing thought and stay on one task. Free, no sign-up." />
-  <meta name="twitter:image" content="https://deepos-ashy.vercel.app/og-image.png" />
+  <meta name="twitter:description" content="Dump the noise, keep working. A free, open-source focus timer with a brain dump." />
+  <meta name="twitter:image" content="https://deepos.app/og-image.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "DeepOS",
+    "url": "https://deepos.app/",
+    "description": "A free, open-source focus timer. Work on one task at a time, dump distracting thoughts into a brain dump, and sort them later.",
+    "applicationCategory": "ProductivityApplication",
+    "operatingSystem": "Any (runs in the browser)",
+    "browserRequirements": "Requires JavaScript",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "Kanok Hossain" },
+    "codeRepository": "https://github.com/kanokHossain/deep_os",
+    "license": "https://opensource.org/licenses/MIT"
+  }
+  </script>
   <meta name="theme-color" content="#2F7D6D" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -27,10 +45,24 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
-  <title>DeepOS: one task, a clear head</title>
+  <title>DeepOS: Free Focus Timer with a Brain Dump</title>
 </head>
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Shown to search engines and before the app loads; React replaces it. -->
+    <main style="max-width:640px;margin:15vh auto;padding:0 24px;font-family:system-ui,sans-serif">
+      <h1>DeepOS: a free focus timer with a brain dump</h1>
+      <p>Dump the noise, keep working. Pick one task, start a 15, 25 or 45 minute focus session, and when a distracting thought shows up, write it down in one line and get back to work.</p>
+      <h2>How it works</h2>
+      <ul>
+        <li><b>Pick one thing.</b> Type your task on the timer and press Start.</li>
+        <li><b>Dump what buzzes.</b> Any thought, to-do or worry goes into your brain dump in one line.</li>
+        <li><b>Sort it later.</b> After the session, start each thought or let it go.</li>
+      </ul>
+      <p>Pop the timer out so it floats above your other apps, see your focused time in Analytics, and install it as an app. No account, no sign-up: your tasks and thoughts stay in your browser. Free and <a href="https://github.com/kanokHossain/deep_os">open source</a>.</p>
+      <noscript><p>DeepOS needs JavaScript to run.</p></noscript>
+    </main>
+  </div>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

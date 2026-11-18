@@ -1,9 +1,9 @@
 <p align="center">
-  <a href="https://deepos-ashy.vercel.app"><img src="docs/banner.png" alt="DeepOS. One task, a clear head. Dump the noise, keep working." width="900"></a>
+  <a href="https://deepos.app"><img src="docs/banner.png" alt="DeepOS. One task, a clear head. Dump the noise, keep working." width="900"></a>
 </p>
 
 <p align="center">
-  <a href="https://deepos-ashy.vercel.app"><b>Open DeepOS</b></a> ·
+  <a href="https://deepos.app"><b>Open DeepOS</b></a> ·
   <a href="#how-it-works">How it works</a> ·
   <a href="#privacy">Privacy</a> ·
   <a href="#run-it-locally">Run it locally</a>

@@ -4,7 +4,7 @@ Guidance for anyone (human or AI agent) changing DeepOS.
 
 ## What DeepOS is
 
-A free, open-source focus timer. Pick one task, start the timer, dump any distracting thought into the brain dump, and deal with it later. Live at https://deepos-ashy.vercel.app.
+A free, open-source focus timer. Pick one task, start the timer, dump any distracting thought into the brain dump, and deal with it later. Live at https://deepos.app.
 
 Tagline: **One task, a clear head. Dump the noise, keep working.** The header shows only the second line, "Dump the noise, keep working."; the banner and share image use both.
 

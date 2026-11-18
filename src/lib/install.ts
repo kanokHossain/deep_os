@@ -144,7 +144,7 @@ export const GUIDES: Record<Platform, InstallGuide> = {
     browser: "Firefox on your computer",
     steps: [
       "Firefox on desktop can't install web apps yet.",
-      "Open deepos-ashy.vercel.app in Chrome, Edge or Safari and install it from there.",
+      "Open deepos.app in Chrome, Edge or Safari and install it from there.",
       "Or keep using DeepOS right here in Firefox. Everything works the same.",
     ],
   },
