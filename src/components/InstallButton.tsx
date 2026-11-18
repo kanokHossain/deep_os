@@ -1,73 +1,102 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
+import {
+  clearDeferredPrompt,
+  detectPlatform,
+  getDeferredPrompt,
+  GUIDES,
+  isInstalled,
+  subscribeInstall,
+  type Platform,
+} from "../lib/install";
+import { DownloadIcon } from "./Icons";
+import { toast } from "./Toast";
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
-}
-
-const isStandalone = () =>
-  window.matchMedia("(display-mode: standalone)").matches ||
-  (navigator as Navigator & { standalone?: boolean }).standalone === true;
-
-const isIOS = () => /iphone|ipad|ipod/i.test(navigator.userAgent);
-
-/** "Install app" in the top bar: one click on Chrome/Edge/Android, short steps on iPhone. */
+/** "Install app" for every browser: one click where supported, clear steps everywhere else. */
 export function InstallButton() {
-  const [deferred, setDeferred] = useState<BeforeInstallPromptEvent | null>(null);
-  const [installed, setInstalled] = useState(isStandalone);
-  const [iosHelp, setIosHelp] = useState(false);
+  const deferred = useSyncExternalStore(subscribeInstall, getDeferredPrompt);
+  const [installed, setInstalled] = useState(isInstalled);
+  const [help, setHelp] = useState(false);
+  const [platform] = useState<Platform>(() => detectPlatform());
 
-  useEffect(() => {
-    const onPrompt = (e: Event) => {
-      e.preventDefault();
-      setDeferred(e as BeforeInstallPromptEvent);
-    };
-    const onInstalled = () => setInstalled(true);
-    window.addEventListener("beforeinstallprompt", onPrompt);
-    window.addEventListener("appinstalled", onInstalled);
-    return () => {
-      window.removeEventListener("beforeinstallprompt", onPrompt);
-      window.removeEventListener("appinstalled", onInstalled);
-    };
-  }, []);
+  useEffect(() => subscribeInstall(() => setInstalled(isInstalled())), []);
 
-  if (installed || (!deferred && !isIOS())) return null;
+  if (installed) return null;
+
+  const install = async () => {
+    const prompt = getDeferredPrompt();
+    if (!prompt) {
+      setHelp(true);
+      return;
+    }
+    await prompt.prompt();
+    const { outcome } = await prompt.userChoice;
+    clearDeferredPrompt();
+    if (outcome === "accepted") {
+      setInstalled(true);
+      toast("DeepOS is installed");
+    }
+  };
+
+  const guide = GUIDES[platform];
+  const others = (Object.keys(GUIDES) as Platform[]).filter(
+    (p) => p !== platform && p !== "android-other" && p !== "desktop-other",
+  );
 
   return (
     <>
-      <button
-        type="button"
-        className="ghost small install"
-        onClick={async () => {
-          if (deferred) {
-            await deferred.prompt();
-            const { outcome } = await deferred.userChoice;
-            if (outcome === "accepted") setInstalled(true);
-            setDeferred(null);
-          } else {
-            setIosHelp(true);
-          }
-        }}
-      >
-        Install app
+      <button type="button" className={deferred ? "ghost small install ready" : "ghost small install"} onClick={install}>
+        <DownloadIcon />
+        <span>Install app</span>
       </button>
-      {iosHelp && (
-        <div className="overlay" onClick={() => setIosHelp(false)}>
-          <div className="dialog" role="dialog" aria-modal="true" aria-labelledby="ios-title" onClick={(e) => e.stopPropagation()}>
+      {help &&
+        createPortal(
+        <div className="overlay" onClick={() => setHelp(false)}>
+          <div
+            className="dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="install-title"
+            onClick={(e) => e.stopPropagation()}
+            onKeyDown={(e) => {
+              if (e.key === "Escape") setHelp(false);
+            }}
+          >
             <div className="dialog-head">
-              <h2 id="ios-title">Add DeepOS to your Home Screen</h2>
-              <button type="button" className="ghost small" onClick={() => setIosHelp(false)}>
+              <h2 id="install-title">Install DeepOS</h2>
+              <button type="button" className="ghost small" onClick={() => setHelp(false)} autoFocus>
                 Close
               </button>
             </div>
-            <ol className="steps">
-              <li>Tap the Share button at the bottom of Safari.</li>
-              <li>Choose “Add to Home Screen”.</li>
-              <li>Tap Add. DeepOS opens full screen, like any app.</li>
-            </ol>
+            <p className="hint">
+              DeepOS installs from your browser in seconds. No app store, no download file, and your data stays on your device.
+            </p>
+            <div className="guide">
+              <h3>{guide.browser}</h3>
+              <ol className="steps">
+                {guide.steps.map((s) => (
+                  <li key={s}>{s}</li>
+                ))}
+              </ol>
+              {guide.note && <p className="guide-note">{guide.note}</p>}
+            </div>
+            <details className="other-guides">
+              <summary>Using a different browser or device?</summary>
+              {others.map((p) => (
+                <div key={p} className="guide small-guide">
+                  <h3>{GUIDES[p].browser}</h3>
+                  <ol className="steps">
+                    {GUIDES[p].steps.map((s) => (
+                      <li key={s}>{s}</li>
+                    ))}
+                  </ol>
+                </div>
+              ))}
+            </details>
           </div>
-        </div>
-      )}
+        </div>,
+          document.body,
+        )}
     </>
   );
 }
