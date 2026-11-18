@@ -665,3 +665,21 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
   .session-rows li { grid-template-columns: minmax(0, 1fr) auto auto; gap: 2px 10px; }
   .sessions-scroll { max-height: 70vh; }
 }
+/* ---------- park box, calmer: neutral glass, amber only as an accent ---------- */
+.park:not(.park-compact) {
+  max-width: 640px; margin-top: 14px; gap: 12px; padding: 16px 16px 10px; border-radius: 22px;
+  background: var(--glass); border: 1px solid var(--glass-line); box-shadow: var(--shadow); animation: none;
+}
+.park-head { gap: 12px; }
+.park-badge { width: 34px; height: 34px; border-radius: 11px; background: var(--sun-soft); color: var(--sun); box-shadow: none; }
+.park-badge svg { width: 18px; height: 18px; }
+.park-title { font-family: var(--font); font-size: 15.5px; font-weight: 700; letter-spacing: 0; }
+.park-sub { font-size: 13.5px; margin-top: 1px; }
+.park-key { font-size: 12.5px; font-weight: 500; opacity: 0.8; }
+.park:not(.park-compact) form { background: color-mix(in srgb, var(--surface) 70%, transparent); border-color: var(--line); border-radius: 14px; padding: 5px; }
+.park:not(.park-compact) form:focus-within { border-color: color-mix(in srgb, var(--sun) 60%, var(--line)); box-shadow: 0 0 0 3px var(--sun-soft); }
+.park:not(.park-compact) input { font-size: 15px; padding: 10px 12px; }
+.park:not(.park-compact) button { border-radius: 10px; padding: 0 16px; font-size: 14px; box-shadow: none; }
+.park button:disabled { background: transparent; color: var(--muted); opacity: 0.7; }
+.park:not(.park-compact) .park-note { min-height: 0; font-size: 12.5px; font-weight: 600; }
+.park:not(.park-compact) .park-note:empty { display: none; }

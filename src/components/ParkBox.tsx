@@ -61,7 +61,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
               Something buzzing in your mind?
             </label>
             <p className="park-sub">
-              Write it here and let it go. It waits in your brain dump, so you can stay on task.
+              Write it here and let it go. It waits in your brain dump.
             </p>
           </div>
           <span className="park-key">
