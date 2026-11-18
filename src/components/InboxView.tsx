@@ -44,43 +44,13 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
   };
 
   return (
-    <div className="split">
-      <aside className="card split-side">
-        <h1>Brain dump</h1>
-        <p className="hint">
-          Everything you parked lives here, so your mind doesn't have to carry it. Sort it when you're ready: start it, keep it for
-          later, or let it go.
-        </p>
-
-        <form
-          className="unload"
-          autoComplete="off"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!text.trim()) return;
-            dispatch({ type: "addInbox", text, now: Date.now() });
-            setText("");
-          }}
-        >
-          <label htmlFor="add-input">Anything else buzzing in your mind?</label>
-          <input id="add-input" type="text" maxLength={280} placeholder="Write it down and let it go" value={text} onChange={(e) => setText(e.target.value)} />
-          <button type="submit" className="ghost">
-            <ThoughtIcon /> Unload
-          </button>
-        </form>
-
-        <div className="side-counts">
-          <div>
-            <b>{fresh.length}</b>
-            <span>Waiting</span>
-          </div>
-          <div>
-            <b>{later.length}</b>
-            <span>Kept for later</span>
-          </div>
+    <div className="page">
+      <header className="page-head">
+        <div>
+          <h1>Brain dump</h1>
+          <p className="hint">Everything you parked lives here, so your mind doesn't have to carry it. Sort it when you're ready.</p>
         </div>
-
-        <div className="side-actions">
+        <div className="row">
           {fresh.length > 0 && (
             <button type="button" className="primary" onClick={() => setTriage(true)}>
               <CardsIcon /> Sort one by one
@@ -90,31 +60,68 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
             <CopyIcon /> Copy as list
           </button>
         </div>
-      </aside>
+      </header>
 
-      <section className="card split-main" aria-labelledby="waiting-heading">
-        <h2 id="waiting-heading">
-          Waiting for you <span className="count-inline">{fresh.length}</span>
-        </h2>
-        {fresh.length ? (
-          <ItemList items={fresh} onAct={act} />
-        ) : (
-          <div className="empty-big">
-            <ThoughtIcon />
-            <b>Your mind is clear.</b>
-            <span>When something buzzes during a focus session, park it and it lands here.</span>
+      <form
+        className="composer"
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (!text.trim()) return;
+          dispatch({ type: "addInbox", text, now: Date.now() });
+          setText("");
+        }}
+      >
+        <ThoughtIcon className="composer-icon" />
+        <label htmlFor="add-input" className="sr-only">
+          Anything else buzzing in your mind?
+        </label>
+        <input
+          id="add-input"
+          type="text"
+          maxLength={280}
+          placeholder="Anything else buzzing in your mind? Write it down and let it go"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+        />
+        <button type="submit" className="primary small" disabled={!text.trim()}>
+          Unload
+        </button>
+      </form>
+
+      <div className="columns">
+        <section className="card column" aria-labelledby="waiting-heading">
+          <div className="column-head">
+            <h2 id="waiting-heading">Waiting for you</h2>
+            <span className="pill sun">{fresh.length}</span>
           </div>
-        )}
+          {fresh.length ? (
+            <ItemList items={fresh} onAct={act} />
+          ) : (
+            <div className="empty-big">
+              <ThoughtIcon />
+              <b>Your mind is clear.</b>
+              <span>When something buzzes during a focus session, park it and it lands here.</span>
+            </div>
+          )}
+        </section>
 
-        {later.length > 0 && (
-          <>
-            <h2>
-              Kept for later <span className="count-inline">{later.length}</span>
-            </h2>
+        <section className="card column" aria-labelledby="later-heading">
+          <div className="column-head">
+            <h2 id="later-heading">Kept for later</h2>
+            <span className="pill">{later.length}</span>
+          </div>
+          {later.length ? (
             <ItemList items={later} onAct={act} />
-          </>
-        )}
-      </section>
+          ) : (
+            <div className="empty-big quiet">
+              <BookmarkIcon />
+              <b>Nothing saved for later.</b>
+              <span>Choose “Later” on a thought to keep it here without it nagging you.</span>
+            </div>
+          )}
+        </section>
+      </div>
     </div>
   );
 }

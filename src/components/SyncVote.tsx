@@ -26,8 +26,31 @@ export function SyncVote({ compact }: { compact?: boolean }) {
     setVoted(true);
   };
 
+  if (compact) {
+    return (
+      <div className="sync-strip" role="region" aria-label="Vote for sync">
+        <span className="sync-icon small-icon" aria-hidden="true">
+          <LayersIcon />
+        </span>
+        <p>
+          <b>Want DeepOS on all your devices?</b> Sync isn't available yet. If we build it, it will be end-to-end encrypted, so only you can
+          read your tasks.
+        </p>
+        {voted ? (
+          <span className="sync-done" role="status">
+            <CheckIcon /> Thanks, your vote is counted
+          </span>
+        ) : (
+          <button type="button" className="primary small" onClick={vote}>
+            Vote for sync
+          </button>
+        )}
+      </div>
+    );
+  }
+
   return (
-    <section className={compact ? "sync-vote compact" : "card sync-vote"} aria-labelledby="sync-title">
+    <section className="card sync-vote" aria-labelledby="sync-title">
       <div className="sync-icon" aria-hidden="true">
         <LayersIcon />
       </div>

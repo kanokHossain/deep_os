@@ -6,6 +6,7 @@ import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
 import { ShortcutsDialog } from "./components/Shortcuts";
+import { SyncVote } from "./components/SyncVote";
 import { toast, Toaster } from "./components/Toast";
 import { useFloatingWindow } from "./hooks/useFloatingWindow";
 import { useNow } from "./hooks/useNow";
@@ -186,6 +187,8 @@ export default function App() {
       </main>
 
       <footer className="foot">
+        <SyncVote compact />
+        <div className="foot-row">
         <span>Free and open source. Your thoughts never leave your device.</span>
         <nav className="foot-links" aria-label="About DeepOS">
           <a href="#privacy">Privacy</a>
@@ -195,6 +198,7 @@ export default function App() {
         <span className="foot-keys">
           Press <kbd>?</kbd> for shortcuts
         </span>
+        </div>
       </footer>
 
       {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
