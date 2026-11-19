@@ -865,3 +865,24 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 .foot-social a { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--muted); }
 .foot-social a:hover, .foot-social a:focus-visible { color: var(--ink); background: var(--glass); }
 .foot-social svg { width: 15px; height: 15px; }
+
+/* Short screens (13" laptops, browser chrome + dock): fit the whole start flow without scrolling.
+   The dial, title and gaps scale with the viewport height; tall screens are unchanged. */
+.ring { width: min(370px, 82vw, 46svh); }
+.ring .clock { font-size: min(82px, 11vw, 10svh); }
+@media (max-height: 860px) and (min-width: 768px) {
+  .stage { padding-top: 16px; gap: 16px; }
+  .session { gap: 14px; padding-top: 0; }
+  .session.idle { gap: 14px; }
+  .session-head { gap: 6px; }
+  .title-input { font-size: clamp(26px, 5.2svh, 44px); }
+  .ring { width: min(370px, 82vw, 42svh); }
+}
+@media (max-height: 700px) and (min-width: 768px) {
+  .ring { width: min(370px, 82vw, 38svh); }
+  .ring .clock { font-size: min(82px, 9svh); }
+  .clock-sub { font-size: 13px; }
+  .status.ready { display: none; }
+}
+/* Past an hour the clock gains a third group (1:05:22): shrink it to stay inside the dial */
+.ring .clock.long { font-size: min(60px, 12vw, 7.4svh); }

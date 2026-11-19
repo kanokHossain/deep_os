@@ -85,7 +85,7 @@ function ActiveSessionView({ active, now, pop }: { active: ActiveSession; now: n
       </header>
 
       <Ring progress={progress} over={over} paused={paused}>
-        <div className="clock" aria-label="Focused time">
+        <div className={el >= 3600000 ? "clock long" : "clock"} aria-label="Focused time">
           {formatClock(el)}
         </div>
         <div className="clock-sub">
