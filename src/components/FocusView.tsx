@@ -11,11 +11,12 @@ const PRESETS = [15, 25, 45, 0];
 
 // Example tasks for the empty task box; one is picked per visit.
 const EXAMPLES = [
-  "Product requirement preparation",
-  "Client proposal draft",
-  "Review pull requests",
-  "Weekly status report",
-  "Sprint planning notes",
+  "Finish the presentation slides",
+  "Write the project report",
+  "Study for the exam",
+  "Reply to important emails",
+  "Plan next week",
+  "Read chapter 3",
 ];
 
 type PopProps = { canPop: boolean; popOpen: boolean; onPop: () => void };

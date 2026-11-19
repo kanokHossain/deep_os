@@ -19,8 +19,8 @@ def run(*cmd):
 
 
 def demo_state(now):
-    names = ["Product requirement preparation", "Client proposal draft", "Review pull requests",
-             "Weekly status report", "Sprint planning notes"]
+    names = ["Finish the presentation slides", "Client proposal draft", "Write the project report",
+             "Study for the exam", "Plan next week"]
     log = []
     for i, (day, mins) in enumerate([(0, 25), (0, 45), (0, 15), (1, 60), (1, 30), (2, 30), (3, 90),
                                      (3, 25), (4, 40), (5, 50), (6, 20)]):
@@ -29,7 +29,7 @@ def demo_state(now):
                     "focusedMs": mins * 60000, "plannedMin": [25, 45, 15, 0, 25][i % 5], "parked": i % 3,
                     "outcome": "done" if i % 4 else "stopped"})
     thoughts = [("Call the bank about the card", "Client proposal draft"), ("Reply to Rafi about Friday", None),
-                ("Idea: a weekly review template", "Review pull requests"), ("Book the dentist", None)]
+                ("Idea: a weekly review template", "Write the project report"), ("Book the dentist", None)]
     inbox = [{"id": f"i{i}", "text": t, "createdAt": now - (i + 1) * 900000, "fromTask": f, "status": "new"}
              for i, (t, f) in enumerate(thoughts)]
     return {"version": 1, "active": None, "draft": {"task": "", "plannedMin": 25}, "inbox": inbox, "log": log}
@@ -40,7 +40,7 @@ def main():
     src = open(os.path.join(TMP, "app", "index.html")).read()
     now = int(time.time() * 1000)
     idle = demo_state(now)
-    running = {**idle, "active": {"id": "a", "task": "Product requirement preparation", "startedAt": now - 9 * 60000,
+    running = {**idle, "active": {"id": "a", "task": "Finish the presentation slides", "startedAt": now - 9 * 60000,
                                   "plannedMin": 25, "pausedAt": None, "pausedMs": 0, "parked": 1, "chimed": False}}
     # (file name, state, route, dark?, height)
     shots = [("focus", idle, "focus", False, 960), ("session-dark", running, "focus", True, 1000),

@@ -21,6 +21,8 @@ Every change to the app must keep the GitHub README true and current, in the sam
 
 The app is for people under mental pressure, so copy is calm, plain and short.
 
+- **Audience:** anyone who needs to concentrate (office workers, students, writers, freelancers, developers). Examples and demo tasks are everyday ones like "Write the project report" or "Study for the exam", never developer jargon like "Review pull requests" or "Sprint planning".
+
 - The action word for adding a thought is **Dump** (button "Dump", "thoughts dumped"). Don't bring back "park" or "unload".
 - The sections are **Focus**, **Brain dump** and **Analytics**.
 - Session lengths are **15m, 25m, 45m and Open**.
