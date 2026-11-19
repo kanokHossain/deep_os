@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { LockIcon, LogoMark, PopoutIcon, ThoughtIcon, ClockIcon } from "./Icons";
+import { ClockIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ThoughtIcon } from "./Icons";
 
 const SEEN_KEY = "deepos.welcome.seen";
 
@@ -20,7 +20,15 @@ export function markWelcomeSeen() {
 }
 
 /** A one-screen explanation of DeepOS for first-time visitors. Also opened from "How it works". */
-export function WelcomeDialog({ onClose, canPop }: { onClose: () => void; canPop: boolean }) {
+export function WelcomeDialog({
+  onClose,
+  canPop,
+  onShortcuts,
+}: {
+  onClose: () => void;
+  canPop: boolean;
+  onShortcuts?: () => void;
+}) {
   const startRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     startRef.current?.focus();
@@ -83,6 +91,11 @@ export function WelcomeDialog({ onClose, canPop }: { onClose: () => void; canPop
         <p className="welcome-note">
           <LockIcon /> Free, no sign-up. Everything stays in your browser.
         </p>
+        {onShortcuts && (
+          <button type="button" className="welcome-keys" onClick={onShortcuts}>
+            <KeyboardIcon /> Keyboard shortcuts <kbd>?</kbd>
+          </button>
+        )}
       </div>
     </div>
   );

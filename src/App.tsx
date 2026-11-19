@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { AutoThemeIcon, DocIcon, GithubIcon, InfoIcon, LinkedInIcon, XLogoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
+import { AutoThemeIcon, DocIcon, GithubIcon, HelpIcon, InfoIcon, LinkedInIcon, XLogoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
@@ -182,11 +182,11 @@ export default function App() {
           <button
             type="button"
             className="ghost small icon-btn"
-            onClick={() => setHelp(true)}
-            aria-label="Keyboard shortcuts"
-            title="Keyboard shortcuts (?)"
+            onClick={() => setWelcome(true)}
+            aria-label="How it works"
+            title="How it works"
           >
-            <KeyboardIcon />
+            <HelpIcon />
           </button>
           <span className="pop-wrap">
             <button
@@ -257,7 +257,16 @@ export default function App() {
       </footer>
 
       {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
-      {welcome && <WelcomeDialog onClose={closeWelcome} canPop={floating.supported} />}
+      {welcome && (
+        <WelcomeDialog
+          onClose={closeWelcome}
+          canPop={floating.supported}
+          onShortcuts={() => {
+            closeWelcome();
+            setHelp(true);
+          }}
+        />
+      )}
       <Toaster />
     </div>
   );

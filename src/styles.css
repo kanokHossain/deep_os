@@ -886,3 +886,8 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 }
 /* Past an hour the clock gains a third group (1:05:22): shrink it to stay inside the dial */
 .ring .clock.long { font-size: min(60px, 12vw, 7.4svh); }
+
+.welcome-keys { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 10px; border: 0; border-radius: 10px; background: none; color: var(--muted); font: 600 13px var(--font); cursor: pointer; }
+.welcome-keys:hover { color: var(--ink); background: var(--accent-soft); }
+.welcome-keys svg { width: 15px; height: 15px; }
+@media (hover: none) and (pointer: coarse) { .welcome-keys { display: none; } }
