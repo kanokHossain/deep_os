@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://deepos.app"><img src="docs/banner.png" alt="DeepOS. One task, a clear head. Dump the noise, keep working." width="900"></a>
+  <a href="https://deepos.app"><img src="docs/banner.png" alt="DeepOS: one task, a clear head. A focus timer, a brain dump and a floating window." width="900"></a>
 </p>
 
 <p align="center">
