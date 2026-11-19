@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { AutoThemeIcon, DocIcon, GithubIcon, InfoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
+import { AutoThemeIcon, DocIcon, GithubIcon, InfoIcon, LinkedInIcon, XLogoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
@@ -222,9 +222,20 @@ export default function App() {
         <span className="foot-note">
           <LockIcon /> Free and open source. Your thoughts never leave your device.
         </span>
-        <a className="foot-made" href="https://www.linkedin.com/in/kanokhossain">
+        <span className="foot-made">
           Made by Kanok Hossain
-        </a>
+          <span className="foot-social">
+            <a href="https://x.com/kanokhossainhq" aria-label="Follow Kanok on X" title="Follow on X">
+              <XLogoIcon />
+            </a>
+            <a href="https://github.com/kanokHossain" aria-label="Follow Kanok on GitHub" title="Follow on GitHub">
+              <GithubIcon />
+            </a>
+            <a href="https://www.linkedin.com/in/kanokhossain" aria-label="Follow Kanok on LinkedIn" title="Follow on LinkedIn">
+              <LinkedInIcon />
+            </a>
+          </span>
+        </span>
         <nav className="foot-links" aria-label="About DeepOS">
           <a href="#privacy">
             <ShieldIcon /> Privacy

@@ -858,3 +858,10 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 .theme-btn svg { width: 19px; height: 19px; }
 /* Shortcuts need a keyboard: hide that button on touch-only screens to keep the header roomy */
 @media (hover: none) and (pointer: coarse) { .top-actions .icon-btn[aria-label="Keyboard shortcuts"] { display: none; } }
+
+.foot-made { display: inline-flex; align-items: center; gap: 10px; }
+.foot-made:hover { text-decoration: none; color: var(--muted); }
+.foot-social { display: inline-flex; gap: 4px; }
+.foot-social a { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; color: var(--muted); }
+.foot-social a:hover, .foot-social a:focus-visible { color: var(--ink); background: var(--glass); }
+.foot-social svg { width: 15px; height: 15px; }
