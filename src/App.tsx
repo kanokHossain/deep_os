@@ -223,7 +223,7 @@ export default function App() {
           <LockIcon /> Free and open source. Your thoughts never leave your device.
         </span>
         <span className="foot-made">
-          Made by Kanok Hossain
+          Follow
           <span className="foot-social">
             <a href="https://x.com/kanokhossainhq" aria-label="Follow Kanok on X" title="Follow on X">
               <XLogoIcon />
