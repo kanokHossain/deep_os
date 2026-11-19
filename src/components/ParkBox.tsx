@@ -3,7 +3,7 @@ import { dispatch, useStore } from "../lib/store";
 import { ArrowUpIcon, ThoughtIcon } from "./Icons";
 
 interface Props {
-  task: string;
+  task: string | null;
   compact?: boolean;
 }
 
@@ -58,10 +58,10 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           </span>
           <div>
             <label htmlFor="park-input" className="park-title">
-              Something buzzing in your mind?
+              {task ? "Something buzzing in your mind?" : "Something on your mind before you start?"}
             </label>
             <p className="park-sub">
-              Write it here and let it go. It waits in your brain dump.
+              A worry, a to-do, an idea? Dump it here and come back to it later. Then focus on what you're doing.
             </p>
           </div>
           <span className="park-key">
@@ -79,7 +79,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           dispatch({ type: "park", text: value, now: Date.now() });
           if (!compact && formRef.current) floatToInbox(formRef.current, value);
           setText("");
-          setNote(`Off your mind. Back to ${task}.`);
+          setNote(task ? `Off your mind. Back to ${task}.` : "Off your mind. It's waiting in your brain dump.");
           (e.currentTarget.querySelector("input") as HTMLInputElement | null)?.blur();
         }}
       >

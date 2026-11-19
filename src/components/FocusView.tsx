@@ -229,6 +229,8 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         </button>
       )}
 
+      <ParkBox task={null} />
+
       {todays.length > 0 && (
         <ul className="today-line" aria-label="Today so far">
           <li>

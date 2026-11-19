@@ -22,7 +22,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 ## How it works
 
 1. **Pick one thing.** Type the task right on the timer screen, choose 15, 25 or 45 minutes (or an open session) and press Start.
-2. **Dump what buzzes.** A thought shows up mid-task? Press `P`, type it, press `Enter`. It's saved, and you're back on your task.
+2. **Dump what buzzes.** A worry, a to-do or an idea, before you start or mid-task? Press `P`, type it, press `Enter`. It's saved, and you're back on your task.
 3. **Deal with it later.** After the session, open your brain dump and decide for each thought: start it now, or let it go.
 
 <p align="center">

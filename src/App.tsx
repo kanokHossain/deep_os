@@ -84,13 +84,8 @@ export default function App() {
         focusSoon("task-input");
       } else if (k === "p" || k === "P") {
         e.preventDefault();
-        if (s.active) {
-          go("focus");
-          focusSoon("park-input");
-        } else {
-          go("inbox");
-          focusSoon("add-input");
-        }
+        go("focus");
+        focusSoon("park-input");
       } else if (k === " " && s.active) {
         e.preventDefault();
         dispatch({ type: s.active.pausedAt ? "resume" : "pause", now: Date.now() });
@@ -134,7 +129,7 @@ export default function App() {
       </div>
       <header className="topbar">
         <a className="brand" href="#focus" onClick={() => go("focus")} aria-label="DeepOS home">
-          <LogoMark size={30} />
+          <LogoMark size={36} />
           <span className="brand-name">DeepOS</span>
           <span className="brand-tag">
             Dump the noise, keep working.
