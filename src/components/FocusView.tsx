@@ -205,7 +205,11 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
       }}
     >
       <header className="session-head">
-        <span className="status ready">{greeting(Date.now())}. Everything else can wait.</span>
+        <span className="status ready">
+          {log.length === 0
+            ? "Focus on one task. Dump distracting thoughts for later."
+            : `${greeting(Date.now())}. Everything else can wait.`}
+        </span>
         <label htmlFor="task-input" className="title-hint">
           What deserves your focus now?
         </label>

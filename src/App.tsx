@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { DocIcon, GithubIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
+import { DocIcon, GithubIcon, InfoIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
 import { ShortcutsDialog } from "./components/Shortcuts";
+import { WelcomeDialog, markWelcomeSeen, welcomeSeen } from "./components/Welcome";
 import { SyncVote } from "./components/SyncVote";
 import { toast, Toaster } from "./components/Toast";
 import { useFloatingWindow } from "./hooks/useFloatingWindow";
@@ -36,6 +37,16 @@ export default function App() {
   const [view, setView] = useState<View>(readHash);
   const [help, setHelp] = useState(false);
   const active = useStore((s) => s.active);
+  const hasHistory = useStore((s) => s.log.length > 0);
+  // First-time visitors (no sessions yet, welcome not dismissed) get a one-screen explanation.
+  const [welcome, setWelcome] = useState(
+    () => !welcomeSeen() && !hasHistory && !getState().active && !["privacy", "terms"].includes(readHash()),
+  );
+  const closeWelcome = useCallback(() => {
+    markWelcomeSeen();
+    setWelcome(false);
+    if (readHash() === "focus") setTimeout(() => document.getElementById("task-input")?.focus(), 0);
+  }, []);
   const inbox = useStore((s) => s.inbox);
   const now = useNow();
   const floating = useFloatingWindow();
@@ -66,6 +77,7 @@ export default function App() {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       if (isTyping()) return;
+      if (document.querySelector(".welcome")) return;
       const s = getState();
       const k = e.key;
       const focusSoon = (id: string) => setTimeout(() => document.getElementById(id)?.focus(), 0);
@@ -209,6 +221,9 @@ export default function App() {
           <a href="https://github.com/kanokHossain/deep_os">
             <GithubIcon /> Source
           </a>
+          <button type="button" className="foot-link-btn" onClick={() => setWelcome(true)}>
+            <InfoIcon /> How it works
+          </button>
           <button type="button" className="foot-link-btn" onClick={() => setHelp(true)}>
             <KeyboardIcon /> Shortcuts <kbd>?</kbd>
           </button>
@@ -217,6 +232,7 @@ export default function App() {
       </footer>
 
       {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
+      {welcome && <WelcomeDialog onClose={closeWelcome} canPop={floating.supported} />}
       <Toaster />
     </div>
   );
