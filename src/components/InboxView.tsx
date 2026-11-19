@@ -34,7 +34,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
       <header className="page-head">
         <div>
           <h1>Brain dump</h1>
-          <p className="hint">Everything you dumped lives here, so your mind doesn't have to carry it. Start one when you're ready, or let it go.</p>
+          <p className="hint">Thoughts you dumped while working. Start one when you're ready, or let it go.</p>
         </div>
       </header>
 

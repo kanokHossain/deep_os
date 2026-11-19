@@ -795,3 +795,63 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .welcome-go { width: 100%; padding: 14px 20px; font-size: 16px; border-radius: 16px; }
 .welcome-note { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 14px 0 0; font-size: 13px; color: var(--muted); }
 .welcome-note svg { width: 14px; height: 14px; }
+
+/* ===== Redesign: a deliberate, quieter look =====
+   One typeface, flat surfaces instead of frosted glass, a calm two-tone background
+   and a watch-bezel dial as the one signature element. */
+:root {
+  --serif: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --glass: #fbfcfb;
+  --glass-line: #dbe3df;
+  --shadow: 0 1px 2px rgba(27, 36, 33, 0.05), 0 4px 14px -8px rgba(27, 36, 33, 0.12);
+  --page-top: #dde9e3;
+  --page-mid: #e8ece8;
+  --page-bottom: #efe7da;
+  --tick: #c3cdc8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --glass: #161e1c; --glass-line: #25302d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 18px -10px rgba(0, 0, 0, 0.5);
+    --page-top: #10201b; --page-mid: #101614; --page-bottom: #18140e; --tick: #34403c;
+  }
+}
+:root[data-theme="dark"] {
+  --glass: #161e1c; --glass-line: #25302d;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 18px -10px rgba(0, 0, 0, 0.5);
+  --page-top: #10201b; --page-mid: #101614; --page-bottom: #18140e; --tick: #34403c;
+}
+
+/* Background: a flat two-tone wash with fine grain, no blurry blobs */
+.aurora { background: linear-gradient(180deg, var(--page-top) 0%, var(--page-mid) 50%, var(--page-bottom) 100%); }
+.aurora i { display: none; }
+.aurora::after {
+  content: ""; position: absolute; inset: 0; opacity: 0.35; mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 0 0.5  0 0 0 .18 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Flat surfaces: no frosted glass */
+.tabs, .ghost, .round, .tile, .start-form, .park form, .card, .stat, .composer, .sync-strip, .presets .chip, .today-line, .waiting-chip, .pop-hint { backdrop-filter: none; }
+
+/* Type: one family, tight headings */
+h1, .title-input, .park-title, .welcome h2, .triage-text { font-family: var(--font); font-variation-settings: normal; }
+h1 { font-weight: 800; letter-spacing: -0.035em; }
+.title-input { font-weight: 700; letter-spacing: -0.03em; }
+.park-title { font-weight: 700; font-size: 18px; }
+.welcome h2 { font-weight: 800; letter-spacing: -0.03em; }
+
+/* The dial: a watch bezel. Ticks light up as time passes. */
+.ring-disc { background: var(--glass); border: 1px solid var(--glass-line); box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 18px 40px -24px rgba(27, 36, 33, 0.35); backdrop-filter: none; animation: none; inset: 13%; }
+.ring .tick { stroke: var(--tick); stroke-width: 1.4; stroke-linecap: round; transition: stroke 0.6s ease; }
+.ring .tick.major { stroke-width: 2.6; }
+.ring .tick.on { stroke: var(--accent); }
+.ring .tick.now { stroke: var(--accent); stroke-width: 3.4; }
+.ring.over .tick.on, .ring.over .tick.now { stroke: var(--sun); }
+.ring.paused .tick.on, .ring.paused .tick.now { opacity: 0.5; }
+.clock { font-weight: 300; letter-spacing: -0.04em; }
+
+/* Footer signature */
+.foot-made { color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: none; }
+.foot-made:hover { color: var(--ink); text-decoration: underline; }
+.ring .clock { font-size: clamp(54px, 11vw, 82px); }
+.ring-disc { inset: 12%; }

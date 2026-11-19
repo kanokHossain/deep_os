@@ -105,7 +105,7 @@ function ActiveSessionView({ active, now, pop }: { active: ActiveSession; now: n
         </button>
         <button type="button" className="primary big" onClick={() => {
             dispatch({ type: "end", outcome: "done", now: Date.now() });
-            toast("Done. Nice work.");
+            toast("Marked done");
           }}>
           <CheckIcon /> Done
         </button>
@@ -208,10 +208,10 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         <span className="status ready">
           {log.length === 0
             ? "Focus on one task. Dump distracting thoughts for later."
-            : `${greeting(Date.now())}. Everything else can wait.`}
+            : `${greeting(Date.now())}.`}
         </span>
         <label htmlFor="task-input" className="title-hint">
-          What deserves your focus now?
+          What are you working on?
         </label>
         <input
           ref={taskRef}
@@ -235,7 +235,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
         <div className="clock" aria-label="Planned length">
           {draft.plannedMin ? formatClock(draft.plannedMin * 60000) : "00:00"}
         </div>
-        <div className="clock-sub">{draft.plannedMin ? "Ready when you are" : "Open session, counts up"}</div>
+        <div className="clock-sub">{draft.plannedMin ? `${draft.plannedMin} minute session` : "Open session, counts up"}</div>
       </Ring>
 
       <div className="presets" role="group" aria-label="Session length">
@@ -268,7 +268,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
             <b>
               {waiting} thought{waiting > 1 ? "s" : ""} waiting
             </b>
-            <small>In your brain dump, ready when you are</small>
+            <small>In your brain dump</small>
           </span>
           <span className="waiting-go" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

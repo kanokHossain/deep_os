@@ -8,37 +8,40 @@ interface Props {
   children: ReactNode;
 }
 
-const R = 132;
-const C = 2 * Math.PI * R;
+const TICKS = 60;
+const OUTER = 146;
 
-/** The session dial: a soft disc with a gradient arc and a small marker at the tip. */
+/**
+ * The session dial: sixty minute ticks around a flat face, like a watch bezel.
+ * Ticks light up as the session runs; the current one stands out.
+ */
 export function Ring({ progress, over, paused, children }: Props) {
   const p = Math.max(0, Math.min(1, progress));
-  const a = p * 2 * Math.PI - Math.PI / 2;
-  const hx = 150 + R * Math.cos(a);
-  const hy = 150 + R * Math.sin(a);
+  const lit = p > 0 ? Math.max(1, Math.ceil(p * TICKS)) : 0;
   const cls = ["ring", over ? "over" : "", paused ? "paused" : ""].join(" ").trim();
   return (
     <div className={cls}>
       <div className="ring-disc" aria-hidden="true" />
       <svg viewBox="0 0 300 300" aria-hidden="true">
-        <defs>
-          <linearGradient id="dialGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="var(--dial-a)" />
-            <stop offset="100%" stopColor="var(--dial-b)" />
-          </linearGradient>
-        </defs>
-        <circle className="track" cx="150" cy="150" r={R} />
-        <circle
-          className="arc"
-          cx="150"
-          cy="150"
-          r={R}
-          strokeDasharray={C}
-          strokeDashoffset={C * (1 - p)}
-          transform="rotate(-90 150 150)"
-        />
-        {p > 0.003 && <circle className="tip" cx={hx} cy={hy} r="9" />}
+        {Array.from({ length: TICKS }, (_, i) => {
+          const major = i % 5 === 0;
+          const current = lit > 0 && i === lit - 1;
+          const len = current ? 18 : major ? 12 : 7;
+          const a = (i / TICKS) * 2 * Math.PI - Math.PI / 2;
+          const c = Math.cos(a);
+          const s = Math.sin(a);
+          const state = current ? "tick now" : i < lit ? "tick on" : "tick";
+          return (
+            <line
+              key={i}
+              className={`${state}${major ? " major" : ""}`}
+              x1={150 + OUTER * c}
+              y1={150 + OUTER * s}
+              x2={150 + (OUTER - len) * c}
+              y2={150 + (OUTER - len) * s}
+            />
+          );
+        })}
       </svg>
       <div className="ring-center">{children}</div>
     </div>

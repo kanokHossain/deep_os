@@ -103,7 +103,7 @@ export default function App() {
         dispatch({ type: s.active.pausedAt ? "resume" : "pause", now: Date.now() });
       } else if ((k === "d" || k === "D") && s.active) {
         dispatch({ type: "end", outcome: "done", now: Date.now() });
-        toast("Done. Nice work.");
+        toast("Marked done");
       } else if ((k === "s" || k === "S") && s.active) {
         dispatch({ type: "end", outcome: "stopped", now: Date.now() });
         toast("Stopped for now");
@@ -211,6 +211,9 @@ export default function App() {
         <span className="foot-note">
           <LockIcon /> Free and open source. Your thoughts never leave your device.
         </span>
+        <a className="foot-made" href="https://www.linkedin.com/in/kanokhossain">
+          Made by Kanok Hossain
+        </a>
         <nav className="foot-links" aria-label="About DeepOS">
           <a href="#privacy">
             <ShieldIcon /> Privacy

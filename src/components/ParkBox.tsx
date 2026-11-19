@@ -76,7 +76,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           dispatch({ type: "park", text: value, now: Date.now() });
           if (!compact && formRef.current) floatToInbox(formRef.current, value);
           setText("");
-          setNote(task ? `Off your mind. Back to ${task}.` : "Off your mind. It's waiting in your brain dump.");
+          setNote(task ? `Saved. Back to ${task}.` : "Saved to your brain dump.");
           (e.currentTarget.querySelector("input") as HTMLInputElement | null)?.blur();
         }}
       >
@@ -110,7 +110,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
         <div className="park-note" aria-live="polite">
           {note ||
             (parked > 0
-              ? `${parked} thought${parked > 1 ? "s" : ""} dumped this session. Your mind is lighter.`
+              ? `${parked} thought${parked > 1 ? "s" : ""} dumped this session.`
               : "")}
         </div>
       )}

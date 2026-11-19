@@ -22,7 +22,7 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
   if (!active) {
     return (
       <div className="mini">
-        <p className="mini-title">What deserves your focus now?</p>
+        <p className="mini-title">What are you working on?</p>
         <form
           className="mini-start"
           autoComplete="off"
