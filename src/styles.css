@@ -764,3 +764,18 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .pop-hint-close { display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; flex: none; }
 .pop-hint-close:hover { background: var(--line); color: var(--ink); }
 .pop-hint-close svg { width: 14px; height: 14px; }
+
+/* Full-screen colour wash: mint top, soft blue middle, warm bottom.
+   On phones the blobs already cover the screen; this gives wide screens the same rich look. */
+.aurora {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--blob-1) 75%, var(--bg)) 0%,
+      color-mix(in srgb, var(--blob-3) 45%, var(--bg)) 48%,
+      color-mix(in srgb, var(--blob-2) 70%, var(--bg)) 100%);
+}
+@media (min-width: 700px) {
+  .aurora i:nth-child(1) { width: 70vw; height: 70vh; top: -18vh; left: -8vw; }
+  .aurora i:nth-child(2) { width: 70vw; height: 70vh; bottom: -22vh; right: -8vw; }
+  .aurora i:nth-child(3) { width: 50vw; height: 55vh; top: 18vh; right: 20vw; }
+}
