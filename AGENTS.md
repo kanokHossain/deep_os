@@ -26,7 +26,7 @@ The app is for people under mental pressure, so copy is calm, plain and short.
 - Session lengths are **15m, 25m, 45m and Open**.
 - Never say local data is encrypted. Data lives in the browser's localStorage. "End-to-end encrypted" only describes sync, which doesn't exist yet.
 - Never track what people type. Analytics events carry counts and choices only.
-- The project is on Vercel's free plan, where custom events can be sent but not read. Anything the owner needs to count (like sync votes) is also recorded as a page view of a virtual path, e.g. `/vote/sync`, which shows under Analytics > Pages.
+- The project is on Vercel's free plan, where custom events can be sent but not read. Anything the owner needs to count (like sync votes) is also recorded as a page view of a virtual path, e.g. `/vote/sync`, which shows under Analytics > Pages. Launch links use `?ref=<channel>` and show up as `/ref/<channel>`.
 - Keep the Privacy Policy (`src/components/LegalPage.tsx`) true whenever data handling changes.
 
 ## Design

@@ -50,7 +50,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 
 - **No account, no sign-up.**
 - **Your tasks and thoughts stay in your browser** (localStorage). They are never sent to a server.
-- The site counts anonymous page views with Vercel Web Analytics. It uses no cookies and never sees what you type.
+- The site counts anonymous page views with Vercel Web Analytics. It uses no cookies and never sees what you type. Launch links such as `deepos.app/?ref=linkedin` only add the channel name.
 - To move to another device, use **Analytics → Download backup**, then **Restore backup** on the other device.
 
 Full details are in the Privacy Policy inside the app.

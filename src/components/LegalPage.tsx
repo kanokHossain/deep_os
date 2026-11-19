@@ -25,7 +25,8 @@ export function PrivacyPage() {
       <h2>Anonymous usage counts</h2>
       <p>
         To learn whether DeepOS is useful, we use <b>Vercel Web Analytics</b>. It uses no cookies and doesn't identify you. It counts
-        page visits (with country, device type and the page that sent you) and a few actions:
+        page visits (with country, device type, the page that sent you, and the channel name in a launch link such as
+        ?ref=linkedin) and a few actions:
       </p>
       <ul>
         <li>a focus session started or completed, and its planned length</li>
