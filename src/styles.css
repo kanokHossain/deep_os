@@ -891,3 +891,10 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 .welcome-keys:hover { color: var(--ink); background: var(--accent-soft); }
 .welcome-keys svg { width: 15px; height: 15px; }
 @media (hover: none) and (pointer: coarse) { .welcome-keys { display: none; } }
+
+/* Sticky header: a solid strip in the page's top colour, so content scrolling underneath never
+   shows through. In a session only the header's contents fade, not its background. */
+.topbar { background: var(--page-top); backdrop-filter: none; }
+.zen .topbar { opacity: 1; }
+.zen .topbar > * { opacity: 0.35; transition: opacity 0.5s; }
+.zen .topbar:hover > *, .zen .topbar:focus-within > * { opacity: 1; }
