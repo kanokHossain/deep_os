@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { DocIcon, GithubIcon, InfoIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
+import { AutoThemeIcon, DocIcon, GithubIcon, InfoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
@@ -10,6 +10,7 @@ import { WelcomeDialog, markWelcomeSeen, welcomeSeen } from "./components/Welcom
 import { SyncVote } from "./components/SyncVote";
 import { toast, Toaster } from "./components/Toast";
 import { useFloatingWindow } from "./hooks/useFloatingWindow";
+import { useTheme } from "./hooks/useTheme";
 import { useNow } from "./hooks/useNow";
 import { useTimeUpChime } from "./hooks/useTimeUpChime";
 import { dispatch, elapsedMs, getState, useStore } from "./lib/store";
@@ -50,6 +51,7 @@ export default function App() {
   const inbox = useStore((s) => s.inbox);
   const now = useNow();
   const floating = useFloatingWindow();
+  const { theme, cycle: cycleTheme } = useTheme();
   useTimeUpChime(active, now);
 
   useEffect(() => {
@@ -168,6 +170,15 @@ export default function App() {
         </nav>
         <div className="top-actions">
           <InstallButton />
+          <button
+            type="button"
+            className="ghost small icon-btn theme-btn"
+            onClick={cycleTheme}
+            aria-label={`Theme: ${theme === "auto" ? "follows your device" : theme}. Change theme`}
+            title={theme === "auto" ? "Theme: follows your device" : theme === "light" ? "Theme: light" : "Theme: dark"}
+          >
+            {theme === "auto" ? <AutoThemeIcon /> : theme === "light" ? <SunIcon /> : <MoonIcon />}
+          </button>
           <button
             type="button"
             className="ghost small icon-btn"

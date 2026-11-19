@@ -37,6 +37,9 @@
   }
   </script>
   <meta name="theme-color" content="#2F7D6D" />
+  <script>
+    try { var t = localStorage.getItem("deepos.theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+  </script>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />

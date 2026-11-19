@@ -855,3 +855,6 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 .foot-made:hover { color: var(--ink); text-decoration: underline; }
 .ring .clock { font-size: clamp(54px, 11vw, 82px); }
 .ring-disc { inset: 12%; }
+.theme-btn svg { width: 19px; height: 19px; }
+/* Shortcuts need a keyboard: hide that button on touch-only screens to keep the header roomy */
+@media (hover: none) and (pointer: coarse) { .top-actions .icon-btn[aria-label="Keyboard shortcuts"] { display: none; } }
