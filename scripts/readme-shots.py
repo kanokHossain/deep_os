@@ -46,7 +46,7 @@ def main():
     shots = [("focus", idle, "focus", False, 960), ("session-dark", running, "focus", True, 1000),
              ("brain-dump", idle, "inbox", False, 820), ("analytics-dark", idle, "analytics", True, 900)]
     for name, state, route, dark, height in shots:
-        seed = '<script>localStorage.setItem("deepos.v1",%s);location.hash="%s"</script>' % (
+        seed = '<script>localStorage.setItem("deepos.tip.popout","1");localStorage.setItem("deepos.v1",%s);location.hash="%s"</script>' % (
             json.dumps(json.dumps(state)), route)
         page = os.path.join(TMP, name + ".html")
         open(page, "w").write(src.replace("<head>", "<head>" + seed, 1))

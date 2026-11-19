@@ -61,12 +61,9 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
               {task ? "Something buzzing in your mind?" : "Something on your mind before you start?"}
             </label>
             <p className="park-sub">
-              A worry, a to-do, an idea? Dump it here and come back to it later. Then focus on what you're doing.
+              A worry, a to-do, an idea? Dump it here and come back to it later.
             </p>
           </div>
-          <span className="park-key">
-            Press <kbd>P</kbd>
-          </span>
         </div>
       )}
       <form

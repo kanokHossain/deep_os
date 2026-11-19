@@ -565,7 +565,6 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .park-badge svg { width: 22px; height: 22px; }
 .park-title { display: block; font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
 .park-sub { margin: 2px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
-.park-key { color: var(--muted); font-size: 13px; font-weight: 600; white-space: nowrap; }
 .park:not(.park-compact) form { padding: 7px; border-radius: 18px; background: var(--surface); border-color: color-mix(in srgb, var(--sun) 30%, var(--line)); box-shadow: none; }
 .park:not(.park-compact) input { font-size: 16px; padding: 12px 14px; }
 .park:not(.park-compact) button { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; padding: 0 18px; }
@@ -573,7 +572,6 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 @media (max-width: 600px) {
   .park:not(.park-compact) { padding: 16px 14px 10px; }
   .park-head { grid-template-columns: auto 1fr; }
-  .park-key { display: none; }
   .park-title { font-size: 18px; }
 }
 @media (prefers-reduced-motion: reduce) { .park:not(.park-compact) { animation: none; } }
@@ -675,7 +673,6 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .park-badge svg { width: 18px; height: 18px; }
 .park-title { font-family: var(--font); font-size: 15.5px; font-weight: 700; letter-spacing: 0; }
 .park-sub { font-size: 13.5px; margin-top: 1px; }
-.park-key { font-size: 12.5px; font-weight: 500; opacity: 0.8; }
 .park:not(.park-compact) form { background: color-mix(in srgb, var(--surface) 70%, transparent); border-color: var(--line); border-radius: 14px; padding: 5px; }
 .park:not(.park-compact) form:focus-within { border-color: color-mix(in srgb, var(--sun) 60%, var(--line)); box-shadow: 0 0 0 3px var(--sun-soft); }
 .park:not(.park-compact) input { font-size: 15px; padding: 10px 12px; }
