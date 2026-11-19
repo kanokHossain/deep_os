@@ -56,7 +56,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
           id="add-input"
           type="text"
           maxLength={280}
-          placeholder="Anything else buzzing in your mind? Write it down and let it go"
+          placeholder="Anything on your mind?"
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -69,7 +69,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
         <section className="card column" aria-labelledby="waiting-heading">
           <div className="column-head">
             <h2 id="waiting-heading">Waiting for you</h2>
-            <span className="pill sun">{fresh.length}</span>
+            {fresh.length > 0 && <span className="pill sun">{fresh.length}</span>}
           </div>
           {fresh.length ? (
             <ItemList items={fresh} onAct={act} />
@@ -77,7 +77,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
             <div className="empty-big">
               <ThoughtIcon />
               <b>Your mind is clear.</b>
-              <span>When something buzzes during a focus session, park it and it lands here.</span>
+              <span>When something buzzes during a focus session, dump it and it lands here.</span>
             </div>
           )}
         </section>

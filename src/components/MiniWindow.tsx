@@ -9,7 +9,7 @@ import { ParkBox } from "./ParkBox";
 
 /**
  * The pop-out window. It floats above every app on the computer and can be dragged anywhere.
- * With no task running it lets you start one; during a task it shows the clock and a park box.
+ * With no task running it lets you start one; during a task it shows the clock and a dump box.
  */
 export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
   const active = useStore((s) => s.active);

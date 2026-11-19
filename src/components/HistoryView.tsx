@@ -118,7 +118,7 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
             </div>
             <div>
               <dt>Daily average</dt>
-              <dd>{week.avg ? shortHours(week.avg) : "0m"}</dd>
+              <dd>{week.avg ? shortHours(week.avg) : "0h 00m"}</dd>
             </div>
             <div>
               <dt>Best day</dt>
@@ -126,7 +126,15 @@ export function HistoryView({ now, goFocus }: { now: number; goFocus: () => void
             </div>
           </dl>
         </div>
-        <LineChart points={week.days.map((d, i) => ({ label: d === today ? "Today" : wd(d), value: week.mins[i], highlight: d === today }))} />
+        {week.total > 0 ? (
+          <LineChart points={week.days.map((d, i) => ({ label: d === today ? "Today" : wd(d), value: week.mins[i], highlight: d === today }))} />
+        ) : (
+          <div className="chart-empty">
+            <ClockIcon />
+            <b>No focus time this week yet.</b>
+            <span>Finish your first session and your week starts filling in here.</span>
+          </div>
+        )}
       </section>
 
       <div className="history-grid">

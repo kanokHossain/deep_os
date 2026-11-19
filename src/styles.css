@@ -726,3 +726,15 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .foot-links a:hover, .foot-link-btn:hover { color: var(--ink); background: color-mix(in srgb, var(--surface) 60%, transparent); }
 .foot-link-btn kbd { margin-left: 2px; }
 @media (hover: none) and (pointer: coarse) { .foot-link-btn { display: none; } }
+
+/* release polish */
+.tabs a { white-space: nowrap; }
+@media (max-width: 420px) {
+  .tabs a { padding: 7px 10px; font-size: 13.5px; }
+  .tabs a svg { display: none; }
+}
+.composer .primary:disabled { background: transparent; color: var(--muted); opacity: 0.75; box-shadow: none; }
+.chart-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; min-height: 200px; margin-top: 12px; border-radius: 16px; border: 1px dashed var(--line); color: var(--muted); text-align: center; padding: 24px; }
+.chart-empty svg { width: 22px; height: 22px; color: var(--accent); margin-bottom: 4px; }
+.chart-empty b { color: var(--ink); font-size: 15px; }
+.chart-empty span { font-size: 13.5px; }
