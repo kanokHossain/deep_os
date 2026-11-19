@@ -36,7 +36,7 @@ function copyStyles(target: Window) {
 
 /**
  * An always-on-top mini timer using the Document Picture-in-Picture API
- * (Chrome and Edge 116+). It stays above every other app while you work.
+ * (Chrome, Edge, Brave and other Chromium browsers, version 116+). It stays above every other app while you work.
  */
 export function useFloatingWindow() {
   const supported = typeof window !== "undefined" && "documentPictureInPicture" in window;

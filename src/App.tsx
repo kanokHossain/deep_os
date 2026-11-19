@@ -54,7 +54,7 @@ export default function App() {
 
   const popOut = useCallback(async () => {
     if (!floating.supported) {
-      toast("Pop out works in Chrome and Edge on a computer");
+      toast("Pop out works in Chrome, Edge, Brave and other Chrome-based browsers on a computer");
       return;
     }
     if (floating.isOpen) floating.close();
@@ -165,20 +165,28 @@ export default function App() {
           >
             <KeyboardIcon />
           </button>
-          <button
-            type="button"
-            className={floating.isOpen ? "pop on" : "pop"}
-            onClick={() => void popOut()}
-            title="A small timer that stays on top of all your apps. Drag it anywhere. (O)"
-          >
-            <PopoutIcon />
-            <span>{floating.isOpen ? "Close pop-out" : "Pop out"}</span>
-          </button>
+          <span className="pop-wrap">
+            <button
+              type="button"
+              className={floating.isOpen ? "pop on" : "pop"}
+              onClick={() => void popOut()}
+              aria-describedby="pop-tooltip"
+            >
+              <PopoutIcon />
+              <span>{floating.isOpen ? "Close pop-out" : "Pop out"}</span>
+            </button>
+            <span id="pop-tooltip" role="tooltip" className="pop-tooltip">
+              Keep your task floating over every app
+              <kbd className="key-chip" aria-label="Keyboard shortcut O">
+                <KeyboardIcon />O
+              </kbd>
+            </span>
+          </span>
         </div>
       </header>
 
       <main className={`stage stage-${view}`}>
-        {view === "focus" && <FocusView now={now} goInbox={() => go("inbox")} />}
+        {view === "focus" && <FocusView now={now} goInbox={() => go("inbox")} pop={{ canPop: floating.supported, popOpen: floating.isOpen, onPop: () => void popOut() }} />}
         {view === "inbox" && <InboxView goFocus={() => go("focus")} />}
         {view === "analytics" && <HistoryView now={now} goFocus={() => go("focus")} />}
         {view === "privacy" && <PrivacyPage />}

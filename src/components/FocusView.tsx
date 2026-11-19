@@ -3,7 +3,7 @@ import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
 import { dayKey, formatClock, formatDuration, formatTime } from "../lib/time";
 import { toast } from "./Toast";
-import { CheckIcon, ClockIcon, LayersIcon, PauseIcon, PlayIcon, StopIcon, ThoughtIcon } from "./Icons";
+import { CheckIcon, ClockIcon, CloseIcon, KeyboardIcon, LayersIcon, PauseIcon, PlayIcon, PopoutIcon, StopIcon, ThoughtIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
 
@@ -18,12 +18,55 @@ const EXAMPLES = [
   "Sprint planning notes",
 ];
 
-export function FocusView({ now, goInbox }: { now: number; goInbox: () => void }) {
+type PopProps = { canPop: boolean; popOpen: boolean; onPop: () => void };
+
+export function FocusView({ now, goInbox, pop }: { now: number; goInbox: () => void; pop: PopProps }) {
   const active = useStore((s) => s.active);
-  return active ? <ActiveSessionView active={active} now={now} /> : <StartScreen goInbox={goInbox} />;
+  return active ? <ActiveSessionView active={active} now={now} pop={pop} /> : <StartScreen goInbox={goInbox} />;
 }
 
-function ActiveSessionView({ active, now }: { active: ActiveSession; now: number }) {
+// One-time tip that points people to the floating window. Hidden for good once dismissed or used.
+const POP_TIP_KEY = "deepos.tip.popout";
+function readTipSeen() {
+  try {
+    return localStorage.getItem(POP_TIP_KEY) === "1";
+  } catch {
+    return true;
+  }
+}
+function PopTip({ canPop, popOpen, onPop }: PopProps) {
+  const [seen, setSeen] = useState(readTipSeen);
+  const hide = () => {
+    setSeen(true);
+    try {
+      localStorage.setItem(POP_TIP_KEY, "1");
+    } catch {
+      /* storage unavailable: the tip simply shows again next visit */
+    }
+  };
+  useEffect(() => {
+    if (popOpen && !seen) hide();
+  }, [popOpen, seen]);
+  if (!canPop || popOpen || seen) return null;
+  return (
+    <div className="pop-hint" role="note">
+      <button type="button" className="pop-hint-main" onClick={onPop}>
+        <PopoutIcon />
+        <span>
+          <b>Tip:</b> Pop out keeps your task floating over every app
+        </span>
+        <kbd className="key-chip" aria-label="Keyboard shortcut O">
+          <KeyboardIcon />O
+        </kbd>
+      </button>
+      <button type="button" className="pop-hint-close" onClick={hide} aria-label="Dismiss tip">
+        <CloseIcon />
+      </button>
+    </div>
+  );
+}
+
+function ActiveSessionView({ active, now, pop }: { active: ActiveSession; now: number; pop: PopProps }) {
   const parkRef = useRef<HTMLInputElement>(null);
   const el = elapsedMs(active, now);
   const planned = active.plannedMin * 60000;
@@ -100,6 +143,8 @@ function ActiveSessionView({ active, now }: { active: ActiveSession; now: number
         Started {formatTime(active.startedAt)}
         {active.plannedMin ? ` for ${active.plannedMin} min` : ""}
       </div>
+
+      <PopTip {...pop} />
 
       <ParkBox ref={parkRef} task={active.task} />
     </section>

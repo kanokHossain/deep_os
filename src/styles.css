@@ -746,3 +746,24 @@ h3 { margin: 0; font-size: 13px; font-weight: 800; letter-spacing: 0.02em; color
 .session.idle .park { margin-top: 4px; }
 @media (max-width: 1100px) { .brand { row-gap: 4px; } .brand .brand-tag { display: block; } }
 @media (max-width: 760px) { .brand .brand-tag { font-size: 12px; } .brand .brand-name { font-size: 19px; } }
+
+/* Shortcut key chip: keyboard icon + key, so it reads as a shortcut */
+.key-chip { display: inline-flex; align-items: center; gap: 4px; flex: none; }
+.key-chip svg { width: 13px; height: 13px; }
+
+/* Pop out button tooltip */
+.pop-wrap { position: relative; display: inline-flex; }
+.pop-tooltip { position: absolute; top: calc(100% + 10px); right: 0; z-index: 30; display: flex; align-items: center; gap: 10px; white-space: nowrap; padding: 9px 12px; border-radius: 12px; background: var(--surface); color: var(--ink); font-size: 13px; font-weight: 500; box-shadow: var(--shadow); border: 1px solid var(--line); opacity: 0; transform: translateY(-4px); pointer-events: none; transition: opacity .15s ease, transform .15s ease; }
+.pop-wrap:hover .pop-tooltip, .pop-wrap:has(.pop:focus-visible) .pop-tooltip { opacity: 1; transform: none; }
+@media (hover: none) { .pop-tooltip { display: none; } }
+@media (prefers-reduced-motion: reduce) { .pop-tooltip { transition: none; } }
+
+/* One-time pop-out tip under the session time */
+.pop-hint { display: flex; align-items: center; gap: 4px; margin: 14px auto 0; width: fit-content; max-width: 100%; padding: 4px 4px 4px 6px; border-radius: 999px; background: color-mix(in srgb, var(--surface) 75%, transparent); border: 1px solid var(--line); }
+.pop-hint-main { display: flex; align-items: center; gap: 10px; padding: 6px 8px; border: 0; background: none; color: var(--muted); font: 500 13.5px var(--font); cursor: pointer; border-radius: 999px; text-align: left; }
+.pop-hint-main b { color: var(--ink); font-weight: 600; }
+.pop-hint-main > svg { width: 16px; height: 16px; color: var(--accent); flex: none; }
+.pop-hint-main:hover span { color: var(--ink); }
+.pop-hint-close { display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 999px; background: none; color: var(--muted); cursor: pointer; flex: none; }
+.pop-hint-close:hover { background: var(--line); color: var(--ink); }
+.pop-hint-close svg { width: 14px; height: 14px; }
