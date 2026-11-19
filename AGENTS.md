@@ -31,10 +31,18 @@ The app is for people under mental pressure, so copy is calm, plain and short.
 
 ## Design
 
-- Calm, neutral glass surfaces. Amber (`--sun`) is an accent for thoughts, not a background. Teal (`--accent`) is for focus and primary actions.
+The look should feel designed, not generated. Keep these choices:
+
+- **One signature element: the dial.** Sixty minute ticks like a watch bezel that light up as the session runs. Keep everything around it quiet.
+- **Flat surfaces.** Solid cards with thin borders and small shadows. No frosted glass, no blurry gradient blobs.
+- **Background:** a calm two-tone wash (mint top, warm bottom) with fine grain, from `--page-top`, `--page-mid` and `--page-bottom`.
+- **One typeface** (Manrope) for headings and body. No serif.
+- Amber (`--sun`) is an accent for thoughts, not a background. Teal (`--accent`) is for focus and primary actions.
+- **Copy is plain and direct.** No soothing filler ("Everything else can wait", "Your mind is lighter").
+- Themes: Auto (follows the device, default), Light or Dark from the header button. Check all three for every visual change.
 - Every page uses the same frame: 8 of 12 columns on desktop, 10 of 12 on tablet, full width on phones.
 - Long lists scroll inside their card (brain dump, sessions) instead of growing the page.
-- Check light and dark mode, and a 390px-wide phone, for every visual change.
+- Check a 390px-wide phone for every visual change.
 
 ## Working on the code
 

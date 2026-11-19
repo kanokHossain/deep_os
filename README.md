@@ -40,7 +40,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 - **Accurate timer.** Time is calculated from timestamps, so background tabs, sleep and refreshes don't skew it. Paused time isn't counted.
 - **Installable.** Add it to your home screen or dock as an app (PWA). Works offline once loaded.
 - **Keyboard friendly.** `N` new task, `P` dump a thought, `Space` pause, `D` done, `O` pop out, `?` all shortcuts.
-- Light and dark themes that follow your system, and a layout that works on phones.
+- Light and dark themes. Auto follows your device, or pick Light or Dark with the theme button in the header. The layout works on phones.
 
 <p align="center">
   <img src="docs/analytics-dark.jpg" alt="Analytics: focused time today, a 7-day chart and past sessions" width="760">
