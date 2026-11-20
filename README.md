@@ -38,6 +38,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 - **Pop out.** A small floating window with the timer, the session lengths and its own dump box stays on top of your other apps, so you always see what you're working on. Works in Chrome, Edge, Brave and other Chrome-based browsers on desktop.
 - **Analytics.** Today's focused time, a 7-day chart, and every past session with a **Resume** button that fills in the task and length for you.
 - **Accurate timer.** Time is calculated from timestamps, so background tabs, sleep and refreshes don't skew it. Paused time isn't counted.
+- **Forgot the timer?** A soft chime and a desktop notification tell you when time is up. If you end a session that ran well past its plan, DeepOS asks whether to count the planned time or the full time, so your stats stay honest.
 - **Installable.** Add it to your home screen or dock as an app (PWA). Works offline once loaded.
 - **Keyboard friendly.** `N` new task, `P` dump a thought, `Space` pause, `D` done, `O` pop out, `?` all shortcuts.
 - Light and dark themes. Auto follows your device, or pick Light or Dark with the theme button in the header. The layout works on phones.

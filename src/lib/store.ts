@@ -46,7 +46,7 @@ export type Action =
   | { type: "start"; task: string; startedAt: number; plannedMin: number; now: number }
   | { type: "pause"; now: number }
   | { type: "resume"; now: number }
-  | { type: "end"; outcome: LogEntry["outcome"]; now: number }
+  | { type: "end"; outcome: LogEntry["outcome"]; now: number; focusedMs?: number }
   | { type: "chimed" }
   | { type: "extend"; minutes: number }
   | { type: "park"; text: string; now: number }
@@ -111,7 +111,7 @@ export function reduce(state: State, action: Action): State {
         task: a.task,
         startedAt: a.startedAt,
         endedAt: action.now,
-        focusedMs: elapsedMs(a, action.now),
+        focusedMs: action.focusedMs ?? elapsedMs(a, action.now),
         plannedMin: a.plannedMin,
         parked: a.parked,
         outcome: action.outcome,

@@ -11,6 +11,8 @@ import { SyncVote } from "./components/SyncVote";
 import { toast, Toaster } from "./components/Toast";
 import { useFloatingWindow } from "./hooks/useFloatingWindow";
 import { useTheme } from "./hooks/useTheme";
+import { finishSession } from "./lib/finish";
+import { OverrunChoice } from "./components/OverrunChoice";
 import { useNow } from "./hooks/useNow";
 import { useTimeUpChime } from "./hooks/useTimeUpChime";
 import { dispatch, elapsedMs, getState, useStore } from "./lib/store";
@@ -104,11 +106,9 @@ export default function App() {
         e.preventDefault();
         dispatch({ type: s.active.pausedAt ? "resume" : "pause", now: Date.now() });
       } else if ((k === "d" || k === "D") && s.active) {
-        dispatch({ type: "end", outcome: "done", now: Date.now() });
-        toast("Marked done");
+        if (finishSession("done")) toast("Marked done");
       } else if ((k === "s" || k === "S") && s.active) {
-        dispatch({ type: "end", outcome: "stopped", now: Date.now() });
-        toast("Stopped for now");
+        if (finishSession("stopped")) toast("Stopped for now");
       } else if (k === "o" || k === "O") {
         void popOut();
       }
@@ -257,6 +257,7 @@ export default function App() {
       </footer>
 
       {help && <ShortcutsDialog onClose={() => setHelp(false)} />}
+      <OverrunChoice />
       {welcome && (
         <WelcomeDialog
           onClose={closeWelcome}

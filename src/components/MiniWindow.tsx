@@ -6,6 +6,8 @@ import { dispatch, elapsedMs, useStore } from "../lib/store";
 import { formatClock } from "../lib/time";
 import { CheckIcon, PauseIcon, PlayIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
+import { OverrunChoice } from "./OverrunChoice";
+import { finishSession, usePendingFinish } from "../lib/finish";
 
 /**
  * The pop-out window. It floats above every app on the computer and can be dragged anywhere.
@@ -18,6 +20,7 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
   const now = useNow(win);
   const [task, setTask] = useState(draft.task);
   useTimeUpChime(active, now);
+  const pending = usePendingFinish();
 
   if (!active) {
     return (
@@ -83,7 +86,7 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
             type="button"
             className="round small-round done"
             aria-label="Done"
-            onClick={() => dispatch({ type: "end", outcome: "done", now: Date.now() })}
+            onClick={() => finishSession("done")}
           >
             <CheckIcon />
           </button>
@@ -95,7 +98,7 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
       <div className={over ? "mini-bar over" : "mini-bar"}>
         <i style={{ width: `${pct}%` }} />
       </div>
-      <ParkBox task={active.task} compact />
+      {pending ? <OverrunChoice inline /> : <ParkBox task={active.task} compact />}
     </div>
   );
 }

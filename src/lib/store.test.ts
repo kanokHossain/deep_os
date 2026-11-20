@@ -38,6 +38,12 @@ describe("session timing", () => {
     expect(s.active).toBeNull();
     expect(s.log[0]).toMatchObject({ task: "Write spec", focusedMs: 30 * 60000, parked: 1, outcome: "done" });
   });
+
+  it("can count only the planned time when a forgotten session ran long", () => {
+    let s = started();
+    s = reduce(s, { type: "end", outcome: "done", now: T + 165 * 60000, focusedMs: 25 * 60000 });
+    expect(s.log[0]).toMatchObject({ focusedMs: 25 * 60000, endedAt: T + 165 * 60000 });
+  });
 });
 
 describe("inbox", () => {

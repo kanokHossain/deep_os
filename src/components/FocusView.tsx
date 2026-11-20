@@ -3,6 +3,7 @@ import { unlockAudio } from "../lib/chime";
 import { dispatch, elapsedMs, useStore, type ActiveSession } from "../lib/store";
 import { dayKey, formatClock, formatDuration, formatTime } from "../lib/time";
 import { toast } from "./Toast";
+import { finishSession } from "../lib/finish";
 import { CheckIcon, ClockIcon, CloseIcon, KeyboardIcon, LayersIcon, PauseIcon, PlayIcon, PopoutIcon, StopIcon, ThoughtIcon } from "./Icons";
 import { ParkBox } from "./ParkBox";
 import { Ring } from "./Ring";
@@ -105,8 +106,7 @@ function ActiveSessionView({ active, now, pop }: { active: ActiveSession; now: n
           {paused ? <PlayIcon /> : <PauseIcon />}
         </button>
         <button type="button" className="primary big" onClick={() => {
-            dispatch({ type: "end", outcome: "done", now: Date.now() });
-            toast("Marked done");
+            if (finishSession("done")) toast("Marked done");
           }}>
           <CheckIcon /> Done
         </button>
@@ -116,8 +116,7 @@ function ActiveSessionView({ active, now, pop }: { active: ActiveSession; now: n
           aria-label="Stop for now"
           title="Stop for now (S)"
           onClick={() => {
-            dispatch({ type: "end", outcome: "stopped", now: Date.now() });
-            toast("Stopped for now");
+            if (finishSession("stopped")) toast("Stopped for now");
           }}
         >
           <StopIcon />
