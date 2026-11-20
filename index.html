@@ -37,6 +37,14 @@
   }
   </script>
   <meta name="theme-color" content="#2F7D6D" />
+  <style>
+    /* Paint the page colour before the app loads, so the first visit doesn't flash white. */
+    html { background: #e8ece8; }
+    @media (prefers-color-scheme: dark) { html:not([data-theme="light"]) { background: #101614; } }
+    html[data-theme="dark"] { background: #101614; }
+    /* Text for search engines and screen readers; hidden on screen until the app replaces it. */
+    .boot { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+  </style>
   <script>
     try { var t = localStorage.getItem("deepos.theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
   </script>
@@ -47,13 +55,13 @@
   <meta name="apple-mobile-web-app-title" content="DeepOS" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <title>DeepOS: Free Focus Timer with a Brain Dump</title>
 </head>
 <body>
   <div id="root">
-    <!-- Shown to search engines and before the app loads; React replaces it. -->
-    <main style="max-width:640px;margin:15vh auto;padding:0 24px;font-family:system-ui,sans-serif">
+    <!-- For search engines and screen readers (visually hidden); React replaces it. -->
+    <main class="boot">
       <h1>DeepOS: a free focus timer with a brain dump</h1>
       <p>Dump the noise, keep working. Pick one task, start a 15, 25 or 45 minute focus session, and when a distracting thought shows up, write it down in one line and get back to work.</p>
       <h2>How it works</h2>
