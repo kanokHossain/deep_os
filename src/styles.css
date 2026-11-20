@@ -898,3 +898,8 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 .zen .topbar { opacity: 1; }
 .zen .topbar > * { opacity: 0.35; transition: opacity 0.5s; }
 .zen .topbar:hover > *, .zen .topbar:focus-within > * { opacity: 1; }
+
+/* Pop-out: session length choices, same as the home screen */
+.mini-lengths { display: flex; gap: 6px; }
+.mini-lengths .chip { flex: 1; padding: 6px 0; font-size: 13px; font-weight: 700; border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; text-align: center; }
+.mini-lengths .chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }

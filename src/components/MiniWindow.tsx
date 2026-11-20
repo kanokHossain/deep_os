@@ -37,9 +37,22 @@ export function MiniWindow({ win }: { win: Window; onClose: () => void }) {
         >
           <input value={task} onChange={(e) => setTask(e.target.value)} placeholder="Name your task" aria-label="Task" />
           <button type="submit" className="primary small">
-            Start {draft.plannedMin ? `${draft.plannedMin}m` : ""}
+            Start
           </button>
         </form>
+        <div className="mini-lengths" role="group" aria-label="Session length">
+          {[15, 25, 45, 0].map((m) => (
+            <button
+              key={m}
+              type="button"
+              className="chip"
+              aria-pressed={draft.plannedMin === m}
+              onClick={() => dispatch({ type: "setDraft", plannedMin: m })}
+            >
+              {m ? `${m}m` : "Open"}
+            </button>
+          ))}
+        </div>
         <ParkBox task="your day" compact />
         {waiting > 0 && <p className="mini-note">{waiting} thought{waiting > 1 ? "s" : ""} in your brain dump</p>}
       </div>
