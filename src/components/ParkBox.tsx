@@ -1,6 +1,6 @@
-import { forwardRef, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { dispatch, useStore } from "../lib/store";
-import { ArrowUpIcon, ThoughtIcon } from "./Icons";
+import { ArrowUpIcon, CheckIcon, ThoughtIcon } from "./Icons";
 
 interface Props {
   task: string | null;
@@ -48,6 +48,12 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
   const [note, setNote] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
   const parked = useStore((s) => s.active?.parked ?? 0);
+  // In the small pop-out, the confirmation fades after a few seconds so the window stays calm.
+  useEffect(() => {
+    if (!compact || !note) return;
+    const id = setTimeout(() => setNote(""), 3500);
+    return () => clearTimeout(id);
+  }, [compact, note]);
 
   return (
     <div className={compact ? "park park-compact" : "park"}>
@@ -76,7 +82,7 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           dispatch({ type: "park", text: value, now: Date.now() });
           if (!compact && formRef.current) floatToInbox(formRef.current, value);
           setText("");
-          setNote(task ? `Saved. Back to ${task}.` : "Saved to your brain dump.");
+          setNote(compact ? "Dumped. It's waiting in your brain dump." : task ? `Dumped. Back to ${task}.` : "Dumped. It's waiting in your brain dump.");
           (e.currentTarget.querySelector("input") as HTMLInputElement | null)?.blur();
         }}
       >
@@ -106,6 +112,15 @@ export const ParkBox = forwardRef<HTMLInputElement, Props>(function ParkBox({ ta
           )}
         </button>
       </form>
+      {compact && (
+        <div className="mini-dumped" aria-live="polite">
+          {note && (
+            <>
+              <CheckIcon /> {note}
+            </>
+          )}
+        </div>
+      )}
       {!compact && (
         <div className="park-note" aria-live="polite">
           {note ||
