@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FocusView } from "./components/FocusView";
 import { HistoryView } from "./components/HistoryView";
-import { AutoThemeIcon, DocIcon, GithubIcon, HelpIcon, InfoIcon, LinkedInIcon, XLogoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
+import { AutoThemeIcon, DocIcon, MailIcon, GithubIcon, HelpIcon, InfoIcon, LinkedInIcon, XLogoIcon, MoonIcon, SunIcon, FocusIcon, HistoryIcon, KeyboardIcon, LockIcon, LogoMark, PopoutIcon, ShieldIcon, ThoughtIcon } from "./components/Icons";
 import { InboxView } from "./components/InboxView";
 import { InstallButton } from "./components/InstallButton";
 import { PrivacyPage, TermsPage } from "./components/LegalPage";
@@ -242,6 +242,9 @@ export default function App() {
           </a>
           <a href="#terms">
             <DocIcon /> Terms
+          </a>
+          <a href="mailto:kanokhossain.tech@gmail.com?subject=DeepOS%20feedback">
+            <MailIcon /> Feedback
           </a>
           <a href="https://github.com/kanokHossain/deep_os">
             <GithubIcon /> Source

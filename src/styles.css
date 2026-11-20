@@ -922,3 +922,6 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 .overrun-inline .overrun-actions { flex-direction: row; gap: 6px; }
 .overrun-inline .overrun-actions button { padding: 7px 8px; font-size: 12.5px; border-radius: 10px; }
 .overrun-inline .overrun-cancel { margin-top: 4px; padding: 0; font-size: 12px; }
+
+.copy-all { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; }
+.copy-all svg { width: 15px; height: 15px; }

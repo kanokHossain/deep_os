@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { dispatch, useStore, type InboxItem } from "../lib/store";
 import { dayKey, dayLabel, formatTime } from "../lib/time";
-import { LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
+import { CopyIcon, LeafIcon, PlayIcon, ThoughtIcon } from "./Icons";
 import { toast } from "./Toast";
 
 export function InboxView({ goFocus }: { goFocus: () => void }) {
@@ -70,6 +70,23 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
           <div className="column-head">
             <h2 id="waiting-heading">Waiting for you</h2>
             {fresh.length > 0 && <span className="pill sun">{fresh.length}</span>}
+            {fresh.length > 0 && (
+              <button
+                type="button"
+                className="ghost small copy-all"
+                onClick={async () => {
+                  const text = fresh.map((i) => `- ${i.text}`).join("\n");
+                  try {
+                    await navigator.clipboard.writeText(text);
+                    toast(`Copied ${fresh.length} thought${fresh.length > 1 ? "s" : ""}. Paste them into any to-do app.`);
+                  } catch {
+                    toast("Couldn't copy. Your browser blocked the clipboard.");
+                  }
+                }}
+              >
+                <CopyIcon /> Copy all
+              </button>
+            )}
           </div>
           {fresh.length ? (
             <ItemList items={fresh} onAct={act} />

@@ -134,6 +134,12 @@ export const HelpIcon = (p: SVGProps<SVGSVGElement>) => (
     <path d="M9.6 9.3a2.5 2.5 0 0 1 4.86.83c0 1.67-2.46 2.2-2.46 3.6M12 17h.01" />
   </svg>
 );
+export const MailIcon = (p: SVGProps<SVGSVGElement>) => (
+  <svg {...base(p)}>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m3 7 9 6 9-6" />
+  </svg>
+);
 export const InfoIcon = (p: SVGProps<SVGSVGElement>) => (
   <svg {...base(p)}>
     <circle cx="12" cy="12" r="9" />
