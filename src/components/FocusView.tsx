@@ -195,15 +195,17 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
   };
 
   return (
-    <form
-      className="session idle"
-      aria-label="Start a focus session"
-      autoComplete="off"
-      onSubmit={(e) => {
-        e.preventDefault();
-        start();
-      }}
-    >
+    <div className="session idle">
+      {/* Only the task and Start sit in this form. The Dump box below has its own form, and a form inside a form breaks it. */}
+      <form
+        className="start-form"
+        aria-label="Start a focus session"
+        autoComplete="off"
+        onSubmit={(e) => {
+          e.preventDefault();
+          start();
+        }}
+      >
       <header className="session-head">
         <span className="status ready">
           {log.length === 0
@@ -257,6 +259,7 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           <PlayIcon /> Start focus
         </button>
       </div>
+      </form>
 
       {waiting > 0 && (
         <button type="button" className="waiting-chip" onClick={goInbox} aria-label={`Open brain dump, ${waiting} thought${waiting > 1 ? "s" : ""} waiting`}>
@@ -293,7 +296,6 @@ function StartScreen({ goInbox }: { goInbox: () => void }) {
           </li>
         </ul>
       )}
-
-    </form>
+    </div>
   );
 }

@@ -925,3 +925,6 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 
 .copy-all { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; }
 .copy-all svg { width: 15px; height: 15px; }
+
+/* The start form only groups the task and Start button; it must not change the layout. */
+.start-form { display: contents; }
