@@ -32,6 +32,9 @@ def demo_state(now):
                 ("Idea: a weekly review template", "Write the project report"), ("Book the dentist", None)]
     inbox = [{"id": f"i{i}", "text": t, "createdAt": now - (i + 1) * 900000, "fromTask": f, "status": "new"}
              for i, (t, f) in enumerate(thoughts)]
+    # A task stopped before it was finished waits at the top, marked Stopped.
+    inbox.insert(0, {"id": "s0", "text": "Study for the exam", "createdAt": now - 600000, "fromTask": None,
+                     "status": "new", "stopped": True})
     return {"version": 1, "active": None, "draft": {"task": "", "plannedMin": 25}, "inbox": inbox, "log": log}
 
 

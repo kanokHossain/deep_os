@@ -34,7 +34,7 @@ So I built a tool for my own workday: pick one task, start the timer, and when a
 
 - **Timer-first home.** The task, the dial and the lengths are on one screen. Nothing else in the way.
 - **Quick welcome.** First-time visitors get a one-screen explanation of how it works. Reopen it any time with the **?** button in the header.
-- **Brain dump.** Every thought remembers when it came up and which task you were on. Start it when you're ready, or let it go. **Copy all** puts your waiting thoughts on the clipboard for any to-do app.
+- **Brain dump.** Every thought remembers when it came up and which task you were on. Start it when you're ready, or let it go. Stop a task before it's done and it waits there too, marked **Stopped**, until you finish it. **Copy all** puts your waiting thoughts on the clipboard for any to-do app.
 - **Pop out.** A small floating window with the timer, the session lengths and its own dump box stays on top of your other apps, so you always see what you're working on. Works in Chrome, Edge, Brave and other Chrome-based browsers on desktop.
 - **Analytics.** Today's focused time, a 7-day chart, and every past session with a **Resume** button that fills in the task and length for you.
 - **Accurate timer.** Time is calculated from timestamps, so background tabs, sleep and refreshes don't skew it. Paused time isn't counted.

@@ -20,7 +20,7 @@ export function OverrunChoice({ inline = false }: { inline?: boolean }) {
   const now = Date.now();
   const elapsed = elapsedMs(active, now);
   const over = elapsed - active.plannedMin * 60000;
-  const done = pending.outcome === "done" ? "Marked done" : "Stopped for now";
+  const done = pending.outcome === "done" ? "Marked done" : "Stopped. It's waiting in your brain dump.";
   const choose = (count: "planned" | "full") => {
     resolveFinish(count);
     toast(done);

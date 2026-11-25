@@ -928,3 +928,6 @@ h1 { font-weight: 800; letter-spacing: -0.035em; }
 
 /* The start form only groups the task and Start button; it must not change the layout. */
 .start-form { display: contents; }
+
+/* A task that was stopped before it was finished, waiting in the brain dump. */
+.stopped-tag { display: inline-block; margin-right: 8px; padding: 1px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 700; vertical-align: 2px; color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }

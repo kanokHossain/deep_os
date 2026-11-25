@@ -21,6 +21,8 @@ export interface InboxItem {
   createdAt: number;
   fromTask: string | null;
   status: "new" | "later";
+  /** Set when this is a task that was stopped before it was finished. */
+  stopped?: true;
 }
 
 export interface LogEntry {
@@ -116,7 +118,15 @@ export function reduce(state: State, action: Action): State {
         parked: a.parked,
         outcome: action.outcome,
       };
-      return { ...state, active: null, log: [entry, ...state.log].slice(0, 1000) };
+      // An unfinished task waits in the brain dump until it's done. One entry per task:
+      // stopping it again moves it back to the top, and finishing it removes it.
+      const task = a.task.trim();
+      const same = (i: InboxItem) => i.stopped && i.text.trim().toLowerCase() === task.toLowerCase();
+      let inbox = task ? state.inbox.filter((i) => !same(i)) : state.inbox;
+      if (task && action.outcome === "stopped") {
+        inbox = [{ id: uid(), text: task, createdAt: action.now, fromTask: null, status: "new", stopped: true }, ...inbox];
+      }
+      return { ...state, active: null, inbox, log: [entry, ...state.log].slice(0, 1000) };
     }
     case "extend": {
       const a = state.active;

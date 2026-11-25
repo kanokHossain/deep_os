@@ -116,7 +116,7 @@ function ActiveSessionView({ active, now, pop }: { active: ActiveSession; now: n
           aria-label="Stop for now"
           title="Stop for now (S)"
           onClick={() => {
-            if (finishSession("stopped")) toast("Stopped for now");
+            if (finishSession("stopped")) toast("Stopped. It's waiting in your brain dump.");
           }}
         >
           <StopIcon />

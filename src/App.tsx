@@ -108,7 +108,7 @@ export default function App() {
       } else if ((k === "d" || k === "D") && s.active) {
         if (finishSession("done")) toast("Marked done");
       } else if ((k === "s" || k === "S") && s.active) {
-        if (finishSession("stopped")) toast("Stopped for now");
+        if (finishSession("stopped")) toast("Stopped. It's waiting in your brain dump.");
       } else if (k === "o" || k === "O") {
         void popOut();
       }

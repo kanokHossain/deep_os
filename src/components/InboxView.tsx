@@ -106,6 +106,7 @@ export function InboxView({ goFocus }: { goFocus: () => void }) {
 
 function source(i: InboxItem) {
   const when = `${dayLabel(dayKey(i.createdAt)).toLowerCase()} at ${formatTime(i.createdAt)}`;
+  if (i.stopped) return `Stopped ${when}, not finished yet`;
   return i.fromTask ? `Came up ${when} while you were on “${i.fromTask}”` : `Added ${when}`;
 }
 
@@ -117,6 +118,7 @@ function ItemList({ items, onAct }: { items: InboxItem[]; onAct: ActFn }) {
       {items.map((i) => (
         <li key={i.id}>
           <div className="item-text">
+            {i.stopped && <span className="stopped-tag">Stopped</span>}
             {i.text}
             <small>{source(i)}</small>
           </div>

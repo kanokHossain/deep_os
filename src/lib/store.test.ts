@@ -46,6 +46,36 @@ describe("session timing", () => {
   });
 });
 
+describe("stopped tasks", () => {
+  it("puts a stopped task in the brain dump, marked as stopped", () => {
+    const s = reduce(started(), { type: "end", outcome: "stopped", now: T + 10 * 60000 });
+    expect(s.inbox[0]).toMatchObject({ text: "Write spec", stopped: true, status: "new" });
+    expect(s.log[0].outcome).toBe("stopped");
+  });
+
+  it("keeps one entry per task when it is stopped again", () => {
+    let s = reduce(started(), { type: "end", outcome: "stopped", now: T + 60000 });
+    s = reduce(s, { type: "start", task: "write spec ", startedAt: T + 120000, plannedMin: 25, now: T + 120000 });
+    s = reduce(s, { type: "end", outcome: "stopped", now: T + 180000 });
+    expect(s.inbox.filter((i) => i.stopped)).toHaveLength(1);
+  });
+
+  it("removes the stopped entry once the task is done", () => {
+    let s = reduce(started(), { type: "end", outcome: "stopped", now: T + 60000 });
+    s = reduce(s, { type: "addInbox", text: "Call the bank", now: T + 70000 });
+    s = reduce(s, { type: "start", task: "Write spec", startedAt: T + 120000, plannedMin: 25, now: T + 120000 });
+    s = reduce(s, { type: "end", outcome: "done", now: T + 180000 });
+    expect(s.inbox.map((i) => i.text)).toEqual(["Call the bank"]);
+  });
+
+  it("leaves a dumped thought with the same words alone", () => {
+    let s = reduce(emptyState(), { type: "addInbox", text: "Write spec", now: T });
+    s = reduce(s, { type: "start", task: "Write spec", startedAt: T + 1, plannedMin: 25, now: T + 1 });
+    s = reduce(s, { type: "end", outcome: "done", now: T + 60000 });
+    expect(s.inbox).toHaveLength(1);
+  });
+});
+
 describe("inbox", () => {
   it("records which task a parked thought came from", () => {
     const s = reduce(started(), { type: "park", text: "  Call the bank ", now: T + 1 });
